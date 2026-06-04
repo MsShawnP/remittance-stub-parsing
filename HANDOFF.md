@@ -24,3 +24,15 @@ TBD). Ready for /clarify to scope the work.
 /ce:brainstorm and /ce:plan.
 
 ---
+
+## 2026-06-04 17:50 — /clarify completed
+
+**What changed:** Project scaffolded and /clarify completed. All five deliverables confirmed, scope boundaries locked down, five architecture decisions recorded.
+
+**Why:** Need 95% confidence on requirements before brainstorm and planning. Confirmed all 5 deliverables required, dropped OCR pipeline, scoped demo to 4 known formats only, confirmed broken stubs for review queue, confirmed demo as educational walkthrough.
+
+**State:** Scaffold complete (git, GitHub remote, all state files). PLAN.md has confirmed goal, scope, and definition of done. DECISIONS.md has 5 architecture decisions. No code yet. Tech stack is Python; all libraries and frameworks TBD.
+
+**Next:** Run /ce:brainstorm to spec out architecture and tool choices.
+
+---
