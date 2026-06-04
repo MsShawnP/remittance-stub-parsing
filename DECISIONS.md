@@ -84,7 +84,29 @@ Each entry:
 
 ## Data & Schema
 
-[Decisions about data sources, schemas, transformations]
+### 2026-06-04 — Canonical Cinderhaven figures locked from current Postgres SSOT (option a)
+
+- **Why:** Legacy figures ($5.4M / 464 chargebacks / 18 months) were wrong on all three counts. 464 was a misquoted per-channel deduction count from the deduction-recovery project (DPI Northwest's deductions), not total chargebacks. $5.4M was from a pre-May-2026 data seed, superseded by a May 2026 regen ($7.2M), then superseded again by the current Postgres regen ($3.4M annualized). "18 months" was always 36 months. Verified by querying cinderhaven-db Postgres directly on 2026-06-04.
+- **Scope:** Global — all references to Cinderhaven trade cost, chargeback count, and time window
+- **Canonical values:**
+  - All-in trade cost: $3.4M annualized / $10.3M over 36 months (structural trade + operational waste excl promo_billback)
+  - Rate: ~10.8% of trailing-52w scan revenue ($32.5M)
+  - Chargebacks: 864 (690 retailer + 174 distributor, gross = net, no reversals)
+  - Window: 2024-01-01 to 2027-01-02 (36 months)
+  - EBITDA check: plausible (13.7% trade + 11% EBITDA = 24.7%, leaves 75.3% for COGS+SGA)
+- **Do not:** Use $5.4M, $7.2M, 464, or "18 months" anywhere. All are dead.
+
+### 2026-06-04 — All-in trade cost definition: structural + operational waste (excl promo_billback)
+
+- **Why:** Matches the trade-spend-data-diagnostic methodology exactly. Structural = AVG(trade_spend_pct) × trailing-52w scan revenue per channel. Operational waste = trailing-365 deductions excluding promo_billback (already captured in structural rates — including it would double-count). Chargebacks (separate table) overlap with deduction types and are NOT added to all-in.
+- **Scope:** Global — any computation or citation of "all-in trade cost"
+- **Do not:** Add chargebacks on top of all-in. Do not include promo_billback in operational waste.
+
+### 2026-06-04 — Trade-spend-data-diagnostic SQLite export is stale; needs re-lock in a separate session
+
+- **Why:** The Postgres data was intentionally regenerated after the May 2026 SQLite export. Trade_spend_pct values dropped ~50% (e.g. Walmart 21.5% → 12.0%), chargebacks went from 3,441 → 864, deductions from 7,837 → 15,898. The diagnostic's locked $7,174,939 / 26.1% no longer matches the SSOT.
+- **Scope:** trade-spend-data-diagnostic project (separate repo)
+- **Do not:** Cite the diagnostic's old numbers ($7.17M, 26.1%) as current
 
 ---
 

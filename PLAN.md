@@ -33,8 +33,8 @@ past the dispute window before anyone reconciles it?
 - Intentionally broken stubs (mismatched amounts, unmapped reason
   codes) to exercise the review queue
 - Deterministic validation: net + sum(deductions) = gross invoice
-- Reconciliation against Cinderhaven SSOT (Postgres) — 464
-  chargebacks, $5.4M all-in trade cost
+- Reconciliation against Cinderhaven SSOT (Postgres) — 864
+  chargebacks, $3.4M annualized all-in trade cost
 - Demo as educational walkthrough of the full reconciliation process
 - Tech stack: Python, everything else decided during /ce:plan
 - Deployment: Fly.io or Cloudflare, decided during planning
@@ -54,7 +54,7 @@ past the dispute window before anyone reconciles it?
 Full plan at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md.
 9 implementation units, executed via /ce:work.
 
-- [ ] **Pre-work:** Verify Cinderhaven canonical figures ($5.4M → $7.2M?) against current SSOT
+- [x] **Pre-work:** Verify Cinderhaven canonical figures — DONE. Phase A locked: $3.4M annualized / 864 chargebacks / 36 months. Phase B (propagate edits) pending next session.
 - [ ] U1. Foundation — project setup, data models, configs
 - [ ] U2. Synthetic stub generation — FPDF2 stubs for 4 formats
 - [ ] U3. PDF table extraction — pdfplumber with per-format tuning
@@ -75,7 +75,7 @@ Full plan at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md.
 - [ ] FastAPI+HTMX demo tells the full parsing → validation →
       reconciliation story as an educational walkthrough
 - [ ] Review queue shows flagged rows with side-by-side PDF + form
-- [ ] Case study (HTML+PDF) with Cinderhaven findings, ties to $5.4M
+- [ ] Case study (HTML+PDF) with Cinderhaven findings, ties to $3.4M annualized
 - [ ] All numbers match Cinderhaven canonical figures exactly
 - [ ] Deployed (Fly.io or Cloudflare) with lailarallc.com subdomain
 

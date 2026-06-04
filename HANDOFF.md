@@ -9,6 +9,35 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-04 — Phase A canonical figures verified and locked
+
+**What changed:** Queried cinderhaven-db Postgres SSOT directly (via flyctl proxy). Verified all-in trade cost, chargeback count, and data window. Found that legacy figures ($5.4M / 464 / 18 months) were wrong on all three counts. Also found that the May 2026 diagnostic figures ($7.17M / 26.1%) are stale — Postgres was regenerated with different seed_config.py parameters (trade_spend_pct values dropped ~50%).
+
+**Locked canonical figures:**
+- All-in trade cost: $3.4M annualized / $10.3M over 36 months / $3.5M trailing-52w
+- Rate: ~10.8% of trailing-52w scan revenue ($32.5M)
+- Components: structural trade ($8.8M/36mo) + operational waste ($1.4M/36mo, excl promo_billback)
+- Chargebacks: 864 (690 retailer + 174 distributor, no reversals)
+- Window: 2024-01-01 to 2027-01-02 (36 months, not 18)
+- EBITDA check: plausible (24.7% trade+EBITDA, 75.3% COGS+SGA)
+
+**What 464 actually was:** DPI Northwest's deduction count in the deduction-recovery project's summary.json. Misquoted as "total chargebacks" in the remittance brief.
+
+**State:** Phase A (verify + report) complete. DECISIONS.md and FAILURES.md updated. PLAN.md pre-work task marked done, stale figures replaced. No code yet.
+
+**Phase B (propagate) — first action next session:**
+1. Grep this repo for $5.4M / 464 / "18 month" / $7.2M / 7,174,939 — print all hits, replace confirmed matches in: portfolio brief, requirements doc, plan doc, PLAN.md scope section
+2. Do NOT edit other repos — but these external pieces cite stale figures and need separate sessions:
+   - trade-spend-data-diagnostic (re-export SQLite, re-lock all 15+ hardcoded refs)
+   - dimension-weight-integrity (cites "464 chargebacks" and "$5.4M")
+   - Possibly: deduction-recovery, contract-to-cash, where-the-money-comes-from
+3. Open question: headline number for case study copy — "$3.4M annualized" vs "$10.3M over 36 months" vs trailing-52w "$3.5M"
+4. After Phase B propagation, run /ce:work to start U1
+
+**Next concrete action:** grep + replace stale figures in this repo (Phase B), then /ce:work for U1.
+
+---
+
 ## 2026-06-04 17:35 — Project initialized
 
 **Started from:** New project setup via /new-project.
