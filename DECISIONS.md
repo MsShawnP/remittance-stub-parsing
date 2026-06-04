@@ -50,6 +50,38 @@ Each entry:
 
 ---
 
+### 2026-06-04 — Use pdfplumber for PDF table extraction
+- **Why:** MIT licensed, best table detection from layout geometry for financial PDFs with inconsistent headers. Visual debugging (`debug_tablefinder()`) invaluable during development. PyMuPDF is faster but AGPL-licensed (source disclosure for web apps) and weaker at table grouping. camelot-py struggles with borderless tables common in remittance stubs.
+- **Scope:** Extraction engine (src/extraction/pdf_extractor.py)
+- **Do not:** Use PyMuPDF (AGPL license incompatible with web app deployment)
+
+### 2026-06-04 — Use Claude API with Pydantic structured outputs for LLM extraction
+- **Why:** Schema-guaranteed output via constrained decoding — model cannot produce tokens violating the Pydantic schema. `messages.parse()` returns typed Python objects. Haiku 4.5 is cost-effective (~$2 for 500 stubs). Hybrid pipeline: pdfplumber first (deterministic, free), Claude API second for variable line-item tables.
+- **Scope:** Extraction engine (src/extraction/llm_extractor.py)
+
+### 2026-06-04 — Use FastAPI + HTMX + Jinja2 for demo surface
+- **Why:** Native SSE for streaming pipeline progress. Pydantic models shared across extraction and API layers. No build step — ~5KB JS total. Side-by-side PDF viewer + editable form is snappy in HTMX where Streamlit is clunky.
+- **Scope:** Demo surface (app/)
+
+### 2026-06-04 — Use WeasyPrint for dynamic PDF reports
+- **Why:** CSS Paged Media for professional print layout (page breaks, running headers/footers, page counters). SVG rendered as vectors — matches Lailara design system requirement. Jinja2 templates shared with web layer. Requires Debian-based Docker (not Alpine).
+- **Scope:** Case study generation (app/routes/report.py)
+
+### 2026-06-04 — Use FPDF2 for synthetic stub generation
+- **Why:** Pure Python, zero system deps. Canvas-based API gives pixel-level control over PDF internals the parser will encounter. Intentional error injection is straightforward. ReportLab is more powerful but unnecessarily complex for fixed-layout test data.
+- **Scope:** Synthetic stubs (src/stub_generator/)
+
+### 2026-06-04 — Deploy on Fly.io (not Cloudflare Workers)
+- **Why:** WeasyPrint requires pango/cairo system libraries unavailable in Cloudflare Workers/Pages. Fly.io supports custom Dockerfiles, persistent volumes for SQLite, and custom domains. `fly scale count 1` ensures single-writer SQLite integrity.
+- **Scope:** Deployment (Dockerfile, fly.toml)
+- **Do not:** Use Cloudflare Workers for this project
+
+### 2026-06-04 — Reason-code mapping as YAML config per retailer
+- **Why:** Follows config-as-artifact pattern from other Lailara projects (Dimension & Weight's cost_params.yml, Item Setup Form's partner schemas). Per-retailer YAML files readable by practitioners, serve as a deliverable.
+- **Scope:** Config (src/config/reason_codes/)
+
+---
+
 ## Data & Schema
 
 [Decisions about data sources, schemas, transformations]

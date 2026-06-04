@@ -51,10 +51,19 @@ past the dispute window before anyone reconciles it?
 
 ## Tasks
 
-Work in vertical slices — one section/feature end-to-end before moving
-to the next. To be broken down via /ce:brainstorm and /ce:plan.
+Full plan at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md.
+9 implementation units, executed via /ce:work.
 
-- [ ] Tasks to be decomposed during planning
+- [ ] **Pre-work:** Verify Cinderhaven canonical figures ($5.4M → $7.2M?) against current SSOT
+- [ ] U1. Foundation — project setup, data models, configs
+- [ ] U2. Synthetic stub generation — FPDF2 stubs for 4 formats
+- [ ] U3. PDF table extraction — pdfplumber with per-format tuning
+- [ ] U4. LLM structured extraction — Claude API for variable line items
+- [ ] U5. Validation, ledger, and reconciliation
+- [ ] U6. FastAPI web app — skeleton, templates, HTMX, SSE
+- [ ] U7. Interactive demo — guided tour, free exploration, review queue
+- [ ] U8. Dynamic case study — report generation with WeasyPrint
+- [ ] U9. Design system polish and Fly.io deployment
 
 ## Definition of done for this arc
 

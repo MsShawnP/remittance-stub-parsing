@@ -36,3 +36,18 @@ TBD). Ready for /clarify to scope the work.
 **Next:** Run /ce:brainstorm to spec out architecture and tool choices.
 
 ---
+
+## 2026-06-04 19:15 — /ce:brainstorm + /ce:plan completed, doc review done
+
+**What changed:** Full requirements doc written (docs/brainstorms/), 9-unit implementation plan written (docs/plans/), tech stack decided via research agents, doc review applied 3 auto-fixes and surfaced 21 findings (2 at P0).
+
+**Why:** Completing the Medium-tier workflow: /clarify → /ce:brainstorm → /ce:plan. Plan now defines the full build from foundation through deployment with researched tech choices.
+
+**State:** Plan complete at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md. 9 implementation units (U1-U9). Tech stack decided: pdfplumber, Claude API + Pydantic, FastAPI + HTMX + Jinja2, WeasyPrint, FPDF2, Fly.io. No code yet. Two P0 findings from doc review need attention before implementation:
+1. **CRITICAL: $5.4M figure may be stale.** Feasibility reviewer found cinderhaven-data README shows $7.2M (26.1%) all-in trade cost and ~381-391 chargebacks, not $5.4M/464. Must verify against current Postgres SSOT and update plan, PLAN.md, requirements doc, and brief before U1.
+2. R24 in Requirements section should preserve origin's open framing (Fly.io decision is correctly documented in Key Technical Decisions section).
+3. SSE requires sse-starlette package (not built into FastAPI) — add to dependencies in U1.
+
+**Next:** Start new session. First action: verify Cinderhaven canonical figures against current SSOT (query Postgres), update all docs with correct numbers, then run /ce:work on the plan.
+
+---
