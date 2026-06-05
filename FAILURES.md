@@ -55,7 +55,7 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **What we tried instead:** Rebuilt workbook + validation clean (59/59), deferred narrative rewrite to dedicated session.
 
-**Status:** Open — narrative rewrite pending.
+**Status:** Resolved. Narrative docs rewritten with waste-magnitude framing (`1a8de45`), then reconciled to workbook figures (`25107c8`).
 
 **Tags:** trade-spend-diagnostic, scope-escalation, narrative, canonical-v2
 
@@ -82,3 +82,27 @@ quarto" or "scope, scrollytelling, decoration"]
 **Status:** Resolved. Lesson: when adapting rates across datasets with different order counts and economics, always check dollar output after first run, not just deduction counts.
 
 **Tags:** distressed-scenario, calibration, vague-deductions, rate-tuning
+
+### 2026-06-05 — Narrative docs carried "10.8% structural" but 10.8% was the baseline ALL-IN rate
+
+**Attempted:** Rewrote all narrative docs using "structural trade rate is 10.8%" — copied from cinderhaven-data README and CINDERHAVEN_CANONICAL.md baseline block.
+
+**Why it didn't work:** The canonical baseline section says "All-in trade rate: 10.8%." The cinderhaven-data README mislabeled it as "Structural trade rate: 10.8%." The workbook correctly computes structural as 9.2% ($3,005,686 / $32,539,868). The 10.8% = structural $3.0M + baseline waste $0.48M = $3.5M / $32.5M. Every narrative doc (README, EXECUTIVE_MEMO, walkthrough) inherited the mislabel.
+
+**What we tried instead:** Reconciliation pass — set all docs to workbook-computed 9.2% structural, added explicit all-in 12.2% framing, stated the 3-point delta as the recoverable waste.
+
+**Status:** Resolved (`25107c8`).
+
+**Tags:** trade-spend-diagnostic, figure-mismatch, structural-rate, all-in-rate, mislabel
+
+### 2026-06-05 — Three repos diverged on push (URL cleanup batch on remote)
+
+**Attempted:** Push 6 repos in dependency order after local commits.
+
+**Why it didn't work:** trade-spend-data-diagnostic, retailer-deduction-recovery, and contract-to-cash all had URL cleanup/README standardization commits pushed to their remotes from a separate session. Local copies didn't have these. Push rejected with "remote contains work that you do not have locally."
+
+**What we tried instead:** Pushed the 3 repos that weren't diverged. Deferred pull-rebase on the 3 blocked repos to next session.
+
+**Status:** Open. Next session: `git pull --rebase origin main` on each, resolve conflicts, push.
+
+**Tags:** git, push-rejected, divergence, url-cleanup, multi-repo

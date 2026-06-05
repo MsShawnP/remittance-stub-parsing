@@ -9,6 +9,22 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-05 — Figure reconciliation + multi-repo push (3 of 6 complete)
+
+**Started from:** Compacted session. Distressed repoint + narrative rewrite done, needed commit + report + push.
+
+**Did:** Committed distressed repoint (`1a8de45`, 11 files). Diagnosed 5 figure mismatches between workbook and narrative docs — structural rate 10.8% was baseline ALL-IN mislabeled as structural (actual: 9.2%), vague count 967 was 36mo total not trailing-365 (actual: 318), no-PO % was wrong denominator. Reconciled all docs to workbook values (`25107c8`). Pushed 3 of 6 repos (cinderhaven-data-platform, remittance-stub-parsing, dimension-weight-integrity already pushed). 3 repos blocked by remote divergence from URL cleanup batch.
+
+**State:**
+- Pushed: cinderhaven-data-platform (3 commits), remittance-stub-parsing (4 commits), dimension-weight-integrity (already current)
+- Blocked: trade-spend-data-diagnostic, retailer-deduction-recovery, contract-to-cash — all have remote URL cleanup commits that need pull-rebase
+- Canonical guard: GREEN (864 chargebacks, $32.5M, $3.4M)
+- This repo: clean, no code yet
+
+**Next:** Pull-rebase 3 diverged repos (trade-spend-data-diagnostic, retailer-deduction-recovery, contract-to-cash), resolve README conflicts, push. Then start U1 build in this repo.
+
+---
+
 ## 2026-06-05 — Distressed scenario infra built in cinderhaven-data-platform
 
 **Started from:** Prior session left trade-spend-diagnostic with workbook clean but 5 narrative docs still stale. contract-to-cash og:meta fixed. This session's goal: build scenario-branch infrastructure so the diagnostic can have its exposé back without touching baseline data.
