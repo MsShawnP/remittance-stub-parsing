@@ -122,6 +122,18 @@ Each entry:
 - **Scope:** cinderhaven-data-platform freeze guard
 - **Do not:** Hardcode expected values in the guard script
 
+### 2026-06-05 — Scenario-branch pattern: baseline (default) vs distressed (trade-spend-diagnostic only)
+
+- **Why:** The v2 canonical data ($480K/yr waste, 44% recovery, 0 vague, 0 double-dips) is correct for all 11+ portfolio pieces but makes the trade-spend-diagnostic's exposé narrative impossible — the story depends on finding messy operational waste. Rather than re-baselining v2 (which would break every other piece), a named scenario generates an alternate deduction layer consumed only by the diagnostic. Baseline stays untouched as the default.
+- **Scope:** cinderhaven-data-platform (SCENARIO flag, generate_distressed_scenario.py); trade-spend-diagnostic (consumer)
+- **Do not:** Change baseline data. Do not let any piece other than trade-spend-diagnostic read the distressed dataset.
+
+### 2026-06-05 — Distressed scenario uses isolated RNG (SEED=200) to avoid cascade to baseline
+
+- **Why:** seed_retailer.py uses a single RNG stream (seed=100) for orders → shipments → deductions → disputes → chargebacks. Modifying deduction parameters mid-stream would shift every subsequent RNG call, cascading to chargeback counts and dispute outcomes. The distressed generator uses a completely separate RNG (seed=200) operating on a COPY of the baseline SQLite, so baseline tables are byte-identical.
+- **Scope:** generate_distressed_scenario.py
+- **Do not:** Share RNG state between baseline and distressed generation
+
 ---
 
 ## Visualization

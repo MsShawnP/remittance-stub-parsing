@@ -70,3 +70,15 @@ quarto" or "scope, scrollytelling, decoration"]
 **Status:** Resolved. Lesson: check for existing fixup/migration scripts in untracked files before attempting manual fixes.
 
 **Tags:** trade-spend-diagnostic, schema, postgres, sqlite, fixup
+
+### 2026-06-05 — First distressed scenario run had vague deductions at 3x target ($1.1M/yr vs $400K target)
+
+**Attempted:** Used v1's original per-retailer vague rates (walmart 0.060, whole_foods 0.070, etc.) directly as unconditional per-order probabilities.
+
+**Why it didn't work:** v2 has ~46K orders (vs v1's different dataset), and the bimodal vague_amount averages $1,255/event. At 2,639 vague deductions the total was $3.3M/36mo ($1.1M/yr) — nearly 3x the v1 target of ~$400K/yr. The high per-event average means small rate changes have outsized dollar impact.
+
+**What we tried instead:** Cut vague rates by ~2.7x (e.g. walmart 0.060 → 0.022) and boosted non-vague operational types (short_ship, damaged, spoilage, late_delivery) by ~1.5x to compensate. Also widened amount ranges for short_ship (0.03-0.12 → 0.05-0.18) and late_delivery (0.03 → 0.05 Walmart). Second run: 967 vague/$419K/yr, $965K total waste/yr.
+
+**Status:** Resolved. Lesson: when adapting rates across datasets with different order counts and economics, always check dollar output after first run, not just deduction counts.
+
+**Tags:** distressed-scenario, calibration, vague-deductions, rate-tuning

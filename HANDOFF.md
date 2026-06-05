@@ -9,6 +9,44 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-05 — Distressed scenario infra built in cinderhaven-data-platform
+
+**Started from:** Prior session left trade-spend-diagnostic with workbook clean but 5 narrative docs still stale. contract-to-cash og:meta fixed. This session's goal: build scenario-branch infrastructure so the diagnostic can have its exposé back without touching baseline data.
+
+**Did:**
+1. Committed trade-spend-diagnostic workbook rebuild (`88825ee` — 7 files)
+2. Committed contract-to-cash og:meta fix (`ca6f31e` — 86.5¢/$17.8M)
+3. Read-only narrative diagnosis: all 5 docs classified PROBLEM-DEPENDENT (need messy data, not just string replacement)
+4. Blast-radius analysis: confirmed waste-only re-baseline is surgically achievable — revenue, structural trade, chargebacks all isolated
+5. Phase 0: Studied v1 deduction generator machinery (PROFILES, VAGUE_TEMPLATES, double-dip injection, per-retailer rates)
+6. **Phase 1 (Stage 1): Built distressed scenario in cinderhaven-data-platform** (`18d1b77`):
+   - `seed_config.py`: SCENARIO flag + DISTRESSED_DEDUCTION_TYPES + VAGUE_TEMPLATES (additive, frozen blocks untouched)
+   - `generate_distressed_scenario.py`: standalone script, copies baseline SQLite, replaces deductions/disputes with v1-style mess
+   - `CINDERHAVEN_CANONICAL.md`: distressed figure table added below baseline block
+   - `.gitignore`: data/*.db
+   - Generated `data/cinderhaven_distressed.db` (gitignored artifact)
+
+**Distressed scenario figures:**
+- Waste: ~$965K/yr (excl promo_billback)
+- Vague: 967 deductions, $419K/yr, 295 w/o PO link (30.5%)
+- Double-dips: 3 / $19,062
+- Ghost promos: 3,258 / $361K
+- Recovery rate: 20.9%
+- Baseline provably unchanged: 690 chargebacks, 46,414 orders, $32.54M scan revenue
+
+**State:**
+- cinderhaven-data-platform: committed at `18d1b77`, NOT pushed
+- trade-spend-diagnostic: workbook committed at `88825ee`, 5 narrative docs UNCOMMITTED (waiting for Stage 2)
+- contract-to-cash: og:meta committed at `ca6f31e`, NOT pushed
+- This repo (remittance-stub-parsing): clean, no pending changes, no code yet
+
+**Next (in order):**
+1. **Stage 2 (user-gated):** Rewrite trade-spend-diagnostic's 5 narrative docs using distressed scenario figures. Shawn reviews distressed numbers first.
+2. Push all repos in dependency order (cinderhaven-data-platform first)
+3. Start U1 build in this repo via /ce:work
+
+---
+
 ## 2026-06-05 — Guard verified, artifact audit clean, trade-spend diagnostic partially rebuilt
 
 **Started from:** Session interrupted last night mid-commit. Needed to verify guard, audit rendered artifacts, rebuild trade-spend-diagnostic.
