@@ -95,6 +95,18 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** trade-spend-diagnostic, figure-mismatch, structural-rate, all-in-rate, mislabel
 
+### 2026-06-05 — trade-spend-leakage Fly.io deploy failed: app suspended
+
+**Attempted:** Triggered deploy via empty commit + push (after `gh workflow run` failed with HTTP 422 — workflow has no `workflow_dispatch` trigger). GitHub Actions workflow ran, Docker image built and pushed to Fly registry successfully.
+
+**Why it didn't work:** Fly.io health checks timed out (~5 min) and lease refresh returned 408. Root cause: the trade-spend-leakage app is suspended on Fly.io. Dashboard showed 5 deployed apps (cinderhaven-demand-forecast, competitive-shelf-intelligence, competitive-shelf-pg, retail-velocity-decision-tool, cinderhaven-db) — trade-spend-leakage was not among them, placing it in the 6 suspended apps.
+
+**What we tried instead:** Identified fix: `fly apps resume trade-spend-leakage` before redeploying. Not yet executed.
+
+**Status:** Open. Next session: unsuspend app, then redeploy.
+
+**Tags:** fly-io, deploy, health-check, suspended-app, trade-spend-leakage
+
 ### 2026-06-05 — Three repos diverged on push (URL cleanup batch on remote)
 
 **Attempted:** Push 6 repos in dependency order after local commits.

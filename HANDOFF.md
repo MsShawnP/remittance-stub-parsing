@@ -9,6 +9,32 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-05 — Channel-profitability annual framing complete; trade-spend-leakage deploy blocked
+
+**Started from:** Prior session completed figure reconciliation + multi-repo push (3/6). This session's goals: finish annual-framing pass on channel-profitability-analysis, trigger Fly.io deploy for trade-spend-leakage.
+
+**Did:**
+1. **Channel-profitability annual framing — COMPLETE.** Full data-layer conversion:
+   - `generate_json.py`: Added `YEARS = 3` constant, divided all cumulative values (revenue, deductions, fines, disputes, events, hours) by 3. Added Q1 2027 data to snapshot constants (was in committed trends.json but missing from generator).
+   - `channels.json` / `layers.json`: Now contain annual averages (e.g., Walmart revenue $3.6M/yr not $10.9M)
+   - All 8 MDX narrative sections updated: prose figures match annual data layer
+   - `test_prose_data.py`: All 21 expected values updated from cumulative to annual; all 34 checks pass
+   - Built, deployed to Cloudflare Pages, pushed to GitHub
+2. **Trade-spend-leakage deploy — BLOCKED.** `gh workflow run` failed (no `workflow_dispatch` trigger). Empty commit + push triggered on-push workflow, but Fly.io deploy failed on health check timeout. Diagnosed: app is suspended on Fly.io (not in deployed apps list on dashboard). Fix: `fly apps resume trade-spend-leakage` then redeploy.
+
+**State:**
+- channel-profitability-analysis: annual framing complete, deployed, pushed
+- trade-spend-leakage: needs `fly apps resume` before deploy will succeed
+- This repo (remittance-stub-parsing): clean, no code yet
+- 3 repos still need pull-rebase from prior session (trade-spend-data-diagnostic, retailer-deduction-recovery, contract-to-cash)
+
+**Next:**
+1. Unsuspend trade-spend-leakage on Fly.io, redeploy
+2. Pull-rebase 3 diverged repos, push
+3. Start U1 build in this repo via /ce:work
+
+---
+
 ## 2026-06-05 — Figure reconciliation + multi-repo push (3 of 6 complete)
 
 **Started from:** Compacted session. Distressed repoint + narrative rewrite done, needed commit + report + push.
