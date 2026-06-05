@@ -41,14 +41,14 @@ The reader meets a stack of remittance stubs — the thing piling up in their AP
 #### Structure
 
 - **Part 1 — The hook:** A side-by-side of four real remittance formats (Walmart, UNFI, KeHE, Costco — realistic stand-ins). Same underlying event — a payment with deductions — rendered four incompatible ways. The visceral "this is why nobody reconciles these" moment.
-- **Part 2 — The proof:** Cinderhaven case study. Run the parser across a quarter of stubs. Output: a unified deduction ledger, reason-code classification, a reconciliation against the AR/invoice records, and an **aging-vs-dispute-window** view showing dollars about to expire. The headline finding is a recoverable figure that ties back to the existing $5.4M all-in trade cost number.
+- **Part 2 — The proof:** Cinderhaven case study. Run the parser across a quarter of stubs. Output: a unified deduction ledger, reason-code classification, a reconciliation against the AR/invoice records, and an **aging-vs-dispute-window** view showing dollars about to expire. The headline finding is a recoverable figure that ties back to the ~$480K/yr operational deduction waste (864 chargebacks over 36 months).
 - **Part 3 — The evidence:** The extraction engine itself — hybrid parser (deterministic extraction for stable layout blocks + structured LLM extraction for variable line-item tables), OCR for scanned/image stubs, and a **deterministic validation loop** that proves each extraction before trusting it. The trust signal is *not* a model confidence percentage — raw LLM/OCR token confidence is unreliable on financial documents (a wrong number can come back at 99% confidence). Instead the pipeline enforces arithmetic: `net cash received + Σ line deductions = gross invoice amount`. If it balances to the penny and every reason code maps to a known category, the row is verified; if not, it routes to a human-review queue regardless of what the model claims. The credibility move is *not* claiming 100% automation — it's a pipeline that trusts the arithmetic over the model and knows exactly when to escalate.
 
 #### The Margin Math
 
-Anchor to Cinderhaven's existing numbers (464 chargebacks / 18 months, $5.4M all-in trade cost). Frame three layers:
+Anchor to Cinderhaven's existing numbers (864 chargebacks / 36 months, ~$3.5M/yr all-in trade spend, 10.8% of scan revenue). Frame three layers:
 
-- **Recovery:** A realistic slice of deductions are invalid/disputable. If even a low-single-digit percent of trade cost is wrongly deducted and currently un-disputed because it's never reconciled in time, that's tens of thousands of dollars a year walking out — quantify against the $5.4M base.
+- **Recovery:** A realistic slice of deductions are invalid/disputable. If even a low-single-digit percent of trade cost is wrongly deducted and currently un-disputed because it's never reconciled in time, that's tens of thousands of dollars a year walking out — quantify against the ~$480K/yr operational deduction waste.
 - **Labor:** Hours/month of manual keying eliminated, costed at a loaded controller/AP rate.
 - **The window:** The deductions that age out of the dispute window unrecovered — money that is *100% lost* purely because the manual pull was too slow. This is the sharpest number: it's not inefficiency, it's forfeit.
 
@@ -177,7 +177,7 @@ Remittance advices "downloaded from" retailer/distributor AP portals: **Walmart,
 ### 9. Cinderhaven Integration
 
 - **Extends the dataset** with a new asset: synthetic remittance stubs in four formats, reconcilable against the *existing* Cinderhaven invoice/AR/chargeback records. No new financial reality invented — the stubs must add up to the already-canonical numbers.
-- **Reuses** the deduction/chargeback records already built (464 chargebacks, $5.4M all-in trade cost). The stubs are a new *view* of money already in the dataset, not new money.
+- **Reuses** the deduction/chargeback records already built (864 chargebacks, ~$3.5M/yr all-in trade spend). The stubs are a new *view* of money already in the dataset, not new money.
 - **Same retailers** (Walmart, Costco, Whole Foods, UNFI, KeHE) — no new trading partners introduced.
 - **Consistency requirement:** The reconciled ledger output must tie exactly to existing Cinderhaven figures. This is the standing "consistent numbers across pieces" rule and it's load-bearing here.
 
@@ -186,7 +186,7 @@ Remittance advices "downloaded from" retailer/distributor AP portals: **Walmart,
 - Build the synthetic stubs *first* and make them realistically ugly — multi-page, inconsistent headers, at least one scanned image. A clean synthetic PDF undersells the whole problem.
 - Get reason codes right per source. UNFI promo deduction codes ≠ KeHE codes ≠ Walmart codes. Wrong codes = instant credibility loss with an AP person.
 - Show the failure mode honestly via the **validation loop**, not a confidence bar: a row is verified only when `net + Σ deductions = gross` balances and every code maps; everything else escalates. Claiming perfect extraction is the tell of someone who hasn't done it.
-- Reconcile to the existing Cinderhaven numbers — do not let parsed totals drift from the canonical $5.4M.
+- Reconcile to the existing Cinderhaven numbers — do not let parsed totals drift from the canonical ~$3.5M/yr all-in trade spend.
 
 #### The Credibility Marker
 
