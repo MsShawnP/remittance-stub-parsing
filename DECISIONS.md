@@ -102,11 +102,25 @@ Each entry:
 - **Scope:** Global — any computation or citation of "all-in trade cost"
 - **Do not:** Add chargebacks on top of all-in. Do not include promo_billback in operational waste.
 
-### 2026-06-04 — Trade-spend-data-diagnostic SQLite export is stale; needs re-lock in a separate session
+### ~~2026-06-04 — Trade-spend-data-diagnostic SQLite export is stale; needs re-lock in a separate session~~
 
-- **Why:** The Postgres data was intentionally regenerated after the May 2026 SQLite export. Trade_spend_pct values dropped ~50% (e.g. Walmart 21.5% → 12.0%), chargebacks went from 3,441 → 864, deductions from 7,837 → 15,898. The diagnostic's locked $7,174,939 / 26.1% no longer matches the SSOT.
-- **Scope:** trade-spend-data-diagnostic project (separate repo)
-- **Do not:** Cite the diagnostic's old numbers ($7.17M, 26.1%) as current
+~~- **Why:** The Postgres data was intentionally regenerated after the May 2026 SQLite export. Trade_spend_pct values dropped ~50% (e.g. Walmart 21.5% → 12.0%), chargebacks went from 3,441 → 864, deductions from 7,837 → 15,898. The diagnostic's locked $7,174,939 / 26.1% no longer matches the SSOT.~~
+~~- **Scope:** trade-spend-data-diagnostic project (separate repo)~~
+~~- **Do not:** Cite the diagnostic's old numbers ($7.17M, 26.1%) as current~~
+
+**Superseded 2026-06-05:** SQLite re-exported from Postgres v2. Workbook rebuilt and validated (59/59). Narrative docs still pending rewrite.
+
+### 2026-06-05 — Dimension-weight illustrative calc (121) kept as-is with uncalibrated note
+
+- **Why:** The `14% × 864 = 121` calc in build_spec_dimension_integrity.md is a recomputation from an illustrative `# PARAM` placeholder. Decision: keep the derived result but add inline note marking 14% attribution and $250/event as UNCALIBRATED placeholders to calibrate at build. Base 864 is canonical; derived 121 is not.
+- **Scope:** dimension-weight-integrity build spec, lines 91–92
+- **Do not:** Treat 121 or $30,250 as canonical figures. They are illustrative only.
+
+### 2026-06-05 — check_canonical.py reads expected values from CINDERHAVEN_CANONICAL.md, not hardcoded
+
+- **Why:** Expected figures are parsed from the canonical markdown file at runtime. This ensures the guard breaks if canonical.md is edited without a corresponding Postgres change (or vice versa), rather than silently passing against stale hardcoded values.
+- **Scope:** cinderhaven-data-platform freeze guard
+- **Do not:** Hardcode expected values in the guard script
 
 ---
 

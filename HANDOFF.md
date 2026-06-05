@@ -9,6 +9,26 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-05 — Guard verified, artifact audit clean, trade-spend diagnostic partially rebuilt
+
+**Started from:** Session interrupted last night mid-commit. Needed to verify guard, audit rendered artifacts, rebuild trade-spend-diagnostic.
+
+**Did:** Confirmed all 5 commits landed (nothing to redo). Verified freeze guard passes against live Postgres (GUARD GREEN, exit 0). Audited 6 shipped repos for stale rendered artifacts — no trade-cost figures baked in. Rebuilt trade-spend-data-diagnostic: re-exported SQLite from Postgres v2, fixed schema gaps (Kroger column, retailer_id compatibility), rebuilt workbook, recalibrated validation (59/59 pass). Identified contract-to-cash og:meta staleness. Confirmed "150 cases" = short-ship-cost. Confirmed retailer-deduction-recovery uncommitted changes don't conflict with canonical fix.
+
+**State:**
+- 4 doc/SSOT repos: committed, guard green, ready to push
+- trade-spend-data-diagnostic: workbook + validation clean, code fixes applied, but 5 narrative docs still have old figures (README, EXECUTIVE_MEMO, walkthrough, DEFENSIBILITY, cinderhaven-data/README) — UNCOMMITTED
+- contract-to-cash: og:meta fix identified, not applied
+- This repo (remittance-stub-parsing): clean, no pending changes
+
+**Next:** Two follow-up sessions:
+1. trade-spend-data-diagnostic narrative rewrite — rewrite 5 docs with v2 figures (workbook/data is clean, only prose). Commit.
+2. contract-to-cash og:meta fix — update index.html meta tags. Quick commit.
+3. Push all 6 repos in dependency order (cinderhaven-data-platform first).
+4. Then start U1 build in this repo.
+
+---
+
 ## 2026-06-04 — Phase A canonical figures verified and locked
 
 **What changed:** Queried cinderhaven-db Postgres SSOT directly (via flyctl proxy). Verified all-in trade cost, chargeback count, and data window. Found that legacy figures ($5.4M / 464 / 18 months) were wrong on all three counts. Also found that the May 2026 diagnostic figures ($7.17M / 26.1%) are stale — Postgres was regenerated with different seed_config.py parameters (trade_spend_pct values dropped ~50%).

@@ -46,3 +46,27 @@ quarto" or "scope, scrollytelling, decoration"]
 **Status:** Resolved. Phase A (verify) complete. Phase B (propagate edits to this repo's docs) pending next session.
 
 **Tags:** canonical-figures, cinderhaven, chargebacks, trade-cost, data-drift, misquote
+
+### 2026-06-05 — trade-spend-diagnostic narrative docs assumed to be "~15 string replacements" but need complete rewrites
+
+**Attempted:** Planned to update ~15 hardcoded narrative refs in trade-spend-data-diagnostic to canonical v2 figures as simple find-and-replace (same approach that worked for the other 4 repos).
+
+**Why it didn't work:** The v2 Postgres data changed the diagnostic's findings structurally, not just numerically. Old: "vague" = dominant category at $406K, 21.7% all-in, 3 double-dips, 18.6% recovery. New: 8 evenly-distributed categories at ~$50K each, 10.5% all-in, 0 double-dips, 44.5% recovery. Every paragraph in README, EXECUTIVE_MEMO, walkthrough, and DEFENSIBILITY encodes the old analytical narrative. String replacement would produce internally contradictory prose.
+
+**What we tried instead:** Rebuilt workbook + validation clean (59/59), deferred narrative rewrite to dedicated session.
+
+**Status:** Open — narrative rewrite pending.
+
+**Tags:** trade-spend-diagnostic, scope-escalation, narrative, canonical-v2
+
+### 2026-06-05 — trade-spend-diagnostic workbook failed to build after Postgres re-export (missing columns)
+
+**Attempted:** Re-exported SQLite from Postgres v2 and ran build_workbook.py directly.
+
+**Why it didn't work:** Three schema incompatibilities: (1) `stores.retailer` column doesn't exist in v2 (has `retailer_id`), (2) `trade_spend_pct_kroger` column doesn't exist in v2 sku_costs, (3) `wholesale_kroger` doesn't exist. The old SQLite had these columns from the local generation scripts; the Postgres export doesn't.
+
+**What we tried instead:** Ran the existing `scripts/fixup_extracted_db.py` (untracked, already written for this exact purpose) which adds compatibility columns. Then removed Kroger from CHANNEL_RATE_COLS and wholesale list since v2 has no dedicated Kroger columns. Also added Kroger and Sprouts to Tab 4's channel_order so all retailers appear.
+
+**Status:** Resolved. Lesson: check for existing fixup/migration scripts in untracked files before attempting manual fixes.
+
+**Tags:** trade-spend-diagnostic, schema, postgres, sqlite, fixup
