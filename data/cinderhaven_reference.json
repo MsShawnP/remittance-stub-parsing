@@ -1,0 +1,77 @@
+{
+  "_comment": "Synthetic Cinderhaven invoice reference data for reconciliation testing. Invoice numbers use the same prefix-format as the stub generators (WM-, CS-, UNF-, KH-). Some amounts match deduction amounts exactly, some differ slightly (partial matches), and some invoices are absent from this reference (unmatched).",
+  "invoices": {
+    "WM-388389": {
+      "amount": "2450.00",
+      "date": "2025-03-15"
+    },
+    "WM-541022": {
+      "amount": "1875.50",
+      "date": "2025-04-01"
+    },
+    "WM-672104": {
+      "amount": "980.25",
+      "date": "2025-05-10"
+    },
+    "WM-293847": {
+      "amount": "3200.00",
+      "date": "2025-02-20"
+    },
+    "WM-100456": {
+      "amount": "445.75",
+      "date": "2025-06-01"
+    },
+    "WM-889201": {
+      "amount": "1650.00",
+      "date": "2025-01-15"
+    },
+    "CS-174829": {
+      "amount": "3100.00",
+      "date": "2025-03-22"
+    },
+    "CS-392010": {
+      "amount": "2200.50",
+      "date": "2025-04-18"
+    },
+    "CS-550381": {
+      "amount": "1425.00",
+      "date": "2025-05-05"
+    },
+    "CS-661290": {
+      "amount": "890.75",
+      "date": "2025-06-12"
+    },
+    "UNF-388389": {
+      "amount": "1780.00",
+      "date": "2025-02-28"
+    },
+    "UNF-472935": {
+      "amount": "2950.25",
+      "date": "2025-03-10"
+    },
+    "UNF-591044": {
+      "amount": "620.50",
+      "date": "2025-04-22"
+    },
+    "UNF-700182": {
+      "amount": "1100.00",
+      "date": "2025-05-30"
+    },
+    "KH-388389": {
+      "amount": "1950.00",
+      "date": "2025-03-05"
+    },
+    "KH-250911": {
+      "amount": "2800.75",
+      "date": "2025-04-14"
+    },
+    "KH-419503": {
+      "amount": "750.25",
+      "date": "2025-05-20"
+    },
+    "KH-603882": {
+      "amount": "1320.00",
+      "date": "2025-06-08"
+    }
+  }
+}
