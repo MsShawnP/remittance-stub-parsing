@@ -1,0 +1,10 @@
+retailer: costco
+header_pattern: "COSTCO WHOLESALE"
+column_mapping:
+  invoice_number: 0
+  reason_code: 1
+  description: 2
+  inv_amount: 3
+  amount: 4
+amount_column: "amount"
+amount_format: "parenthesized"  # "($1,234.56)"

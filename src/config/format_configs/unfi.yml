@@ -1,0 +1,11 @@
+retailer: unfi
+header_pattern: "UNFI --"
+column_mapping:
+  invoice_number: 0
+  reason_code: 1
+  description: 2
+  qty: 3
+  unit_price: 4
+  amount: 5
+amount_column: "amount"
+amount_format: "plain"  # "$1,234.56"

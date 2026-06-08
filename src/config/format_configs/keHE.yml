@@ -1,0 +1,11 @@
+retailer: keHE
+header_pattern: "KeHE DISTRIBUTORS"
+column_mapping:
+  invoice_number: 0
+  po_number: 1
+  reason_code: 2
+  description: 3
+  amount: 4
+  category: 5
+amount_column: "amount"
+amount_format: "plain"  # "$1,234.56"
