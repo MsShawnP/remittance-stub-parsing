@@ -1,0 +1,105 @@
+{# Section 2: The Unified Ledger — deduction classification and breakdown #}
+<section class="report-section">
+    <h2 class="section-title">The Unified Ledger</h2>
+
+    <p class="report-body">
+        Deductions from {{ format_count }} formats collapse into six categories
+        once reason codes are mapped. The category breakdown reveals where the
+        money goes — and which categories carry the highest dispute potential.
+    </p>
+
+    {# Category breakdown table #}
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Count</th>
+                <th class="col-amount">Amount</th>
+                <th class="col-amount">Share</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cat_name, cat_data in sorted_categories %}
+            <tr>
+                <td class="category-name">{{ cat_name | replace("_", " ") | title }}</td>
+                <td>{{ cat_data.count }}</td>
+                <td class="col-amount">{{ cat_data.amount | format_currency }}</td>
+                <td class="col-amount">
+                    {% if total_deduction_amount > 0 %}
+                    {{ "%.1f" | format((cat_data.amount / total_deduction_amount * 100) | float) }}%
+                    {% else %}
+                    0.0%
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>{{ total_deduction_count }}</strong></td>
+                <td class="col-amount"><strong>{{ total_deduction_amount | format_currency }}</strong></td>
+                <td class="col-amount"><strong>100.0%</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {# Inline SVG horizontal bar chart #}
+    {% if sorted_categories %}
+    {% set max_amount = sorted_categories[0][1].amount if sorted_categories else 1 %}
+    {% set teal_scale = ["#063d32", "#0a5c4b", "#0e6e5a", "#158f75", "#1fa282", "#35b595", "#6dcdb5", "#b5e4d8"] %}
+    {% set bar_height = 28 %}
+    {% set row_height = 40 %}
+    {% set label_width = 120 %}
+    {% set chart_width = 700 %}
+    {% set bar_area_width = chart_width - label_width - 100 %}
+    {% set chart_height = sorted_categories | length * row_height + 40 %}
+
+    <div class="report-chart">
+        <h3 class="report-chart-title">Deduction Category Distribution</h3>
+        <svg viewBox="0 0 {{ chart_width }} {{ chart_height }}" class="report-svg-chart" role="img" aria-label="Horizontal bar chart showing deduction amounts by category">
+            {# Horizontal gridlines #}
+            {% for i in range(sorted_categories | length + 1) %}
+            <line x1="{{ label_width }}" y1="{{ i * row_height + 20 }}" x2="{{ chart_width - 10 }}" y2="{{ i * row_height + 20 }}" stroke="#d9d9d9" stroke-width="0.5" />
+            {% endfor %}
+
+            {% for cat_name, cat_data in sorted_categories %}
+            {% set y_pos = loop.index0 * row_height + 20 %}
+            {% set bar_width = (cat_data.amount / max_amount * bar_area_width) | int if max_amount > 0 else 0 %}
+            {% set color = teal_scale[loop.index0] if loop.index0 < teal_scale | length else teal_scale[-1] %}
+
+            {# Category label #}
+            <text x="{{ label_width - 8 }}" y="{{ y_pos + bar_height / 2 + 4 }}" text-anchor="end" font-family="'Source Sans 3', 'Helvetica Neue', sans-serif" font-size="12" fill="#333333">{{ cat_name | replace("_", " ") | title }}</text>
+
+            {# Bar #}
+            <rect x="{{ label_width }}" y="{{ y_pos + (row_height - bar_height) / 2 }}" width="{{ bar_width }}" height="{{ bar_height }}" fill="{{ color }}" rx="1" />
+
+            {# Amount label #}
+            <text x="{{ label_width + bar_width + 6 }}" y="{{ y_pos + bar_height / 2 + 4 }}" text-anchor="start" font-family="'Source Sans 3', 'Helvetica Neue', sans-serif" font-size="12" fill="#333333">{{ cat_data.amount | format_currency }}</text>
+            {% endfor %}
+        </svg>
+    </div>
+    {% endif %}
+
+    <p class="report-body">
+        {% if sorted_categories %}
+        {% set top_cat = sorted_categories[0] %}
+        {% set top_pct = "%.0f" | format((top_cat[1].amount / total_deduction_amount * 100) | float) if total_deduction_amount > 0 else "0" %}
+        {{ top_cat[0] | replace("_", " ") | title }} deductions account for
+        {{ top_pct }}% of total deductions
+        ({{ top_cat[1].amount | format_currency }}){%- if sorted_categories | length > 1 -%}
+        , followed by {{ sorted_categories[1][0] | replace("_", " ") | lower }}
+        at {{ sorted_categories[1][1].amount | format_currency }}
+        {%- endif %}.
+        {% endif %}
+        Against Cinderhaven's ~{{ annual_trade_spend | format_compact }}/yr all-in trade spend
+        and {{ total_chargebacks }} chargebacks, these deductions represent one
+        remittance cycle's contribution to the annual trade cost.
+    </p>
+
+    <p class="report-footnote">
+        Cinderhaven canonical figures: ~$3.5M/yr all-in trade spend, 864
+        chargebacks (690 retailer + 174 distributor), 36-month window. Category
+        assignment via per-retailer reason-code YAML configs.
+    </p>
+</section>

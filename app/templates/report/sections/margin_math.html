@@ -1,0 +1,119 @@
+{# Section 4: Recovery Potential — margin math and forfeit risk #}
+<section class="report-section">
+    <h2 class="section-title">Recovery Potential</h2>
+
+    <p class="report-body">
+        Reconciliation matches each deduction's invoice number against
+        Cinderhaven's accounts-receivable ledger. Unmatched deductions — those
+        with no corresponding invoice or a partial amount mismatch — represent
+        recoverable dollars, but only if disputed before the {{ dispute_window_days }}-day
+        window closes.
+    </p>
+
+    <div class="report-stat-row">
+        <div class="report-stat-card report-stat-recovery">
+            <span class="report-stat-number">{{ within_window | format_currency }}</span>
+            <span class="report-stat-label">Within the {{ dispute_window_days }}-day dispute window</span>
+        </div>
+        <div class="report-stat-card report-stat-forfeit">
+            <span class="report-stat-number">{{ past_window | format_currency }}</span>
+            <span class="report-stat-label">Past the dispute window (forfeit risk)</span>
+        </div>
+    </div>
+
+    {% if within_window > 0 %}
+    <div class="report-recovery-box">
+        <p class="report-recovery-text">
+            {{ within_window | format_currency }} in unreconciled deductions
+            remain inside the {{ dispute_window_days }}-day dispute window. Every week of delay
+            narrows the recovery margin.
+        </p>
+    </div>
+    {% endif %}
+
+    {% if past_window > 0 %}
+    <div class="report-forfeit-box">
+        <p class="report-forfeit-text">
+            {{ past_window | format_currency }} in deductions have passed the
+            {{ dispute_window_days }}-day dispute window. Without automated extraction, these
+            dollars expired before anyone reconciled them.
+        </p>
+    </div>
+    {% endif %}
+
+    {# Reconciliation summary table #}
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Stub</th>
+                <th>Retailer</th>
+                <th>Match Status</th>
+                <th class="col-amount">Matched</th>
+                <th class="col-amount">Unmatched</th>
+                <th>Days Remaining</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sd in stubs_data %}
+            <tr>
+                <td><code class="report-code">{{ sd.filename }}</code></td>
+                <td>{{ sd.stub.retailer.value | title }}</td>
+                <td>
+                    {% if sd.reconciliation.match_status.value == "matched" %}
+                    <span class="report-badge report-badge-pass">MATCHED</span>
+                    {% elif sd.reconciliation.match_status.value == "partial" %}
+                    <span class="report-badge report-badge-warn">PARTIAL</span>
+                    {% else %}
+                    <span class="report-badge report-badge-fail">UNMATCHED</span>
+                    {% endif %}
+                </td>
+                <td class="col-amount">{{ sd.reconciliation.matched_amount | format_currency }}</td>
+                <td class="col-amount">{{ sd.reconciliation.unmatched_amount | format_currency }}</td>
+                <td>
+                    {% if sd.reconciliation.dispute_window_days_remaining is not none %}
+                    {{ sd.reconciliation.dispute_window_days_remaining }} days
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="report-subsection-title">Labour Estimate</h3>
+
+    <p class="report-body">
+        Manual keying of a single remittance stub — opening the PDF, reading
+        each line item, typing invoice numbers and amounts into a spreadsheet,
+        checking arithmetic — takes an experienced analyst 8 to 15 minutes per
+        stub. At {{ stub_count }} stubs, that is {{ stub_count * 10 }} to
+        {{ stub_count * 15 }} minutes of manual work. The automated pipeline
+        processes the same set in under {{ stub_count }} seconds.
+    </p>
+
+    <div class="report-stat-row">
+        <div class="report-stat-card">
+            <span class="report-stat-number">{{ stub_count * 10 }}–{{ stub_count * 15 }} min</span>
+            <span class="report-stat-label">Manual keying estimate</span>
+        </div>
+        <div class="report-stat-card">
+            <span class="report-stat-number">&lt; {{ stub_count }} sec</span>
+            <span class="report-stat-label">Automated extraction</span>
+        </div>
+    </div>
+
+    <p class="report-body">
+        The cost is not the keying time. It is the delay. Every day a deduction
+        sits unreconciled is a day closer to the dispute window closing. Manual
+        processes create a bottleneck that turns recoverable dollars into
+        write-offs.
+    </p>
+
+    <p class="report-footnote">
+        Reconciliation against Cinderhaven reference invoices
+        (data/cinderhaven_reference.json). Dispute window: {{ dispute_window_days }} days
+        from deduction date. Labour estimates based on industry benchmarks for
+        manual remittance keying.
+    </p>
+</section>

@@ -1,0 +1,89 @@
+{# Section 3: The Validation Loop — verification results #}
+<section class="report-section">
+    <h2 class="section-title">The Validation Loop</h2>
+
+    <p class="report-body">
+        Every extracted stub passes two deterministic checks before it reaches
+        the ledger. First, arithmetic: does net cash plus the sum of deductions
+        equal the gross invoice? Second, code mapping: does every reason code
+        resolve to a known category in the retailer's configuration? A stub
+        that fails either check is flagged for human review.
+    </p>
+
+    <div class="report-stat-row">
+        <div class="report-stat-card report-stat-pass">
+            <span class="report-stat-number">{{ verified_count }}</span>
+            <span class="report-stat-label">Stubs verified</span>
+        </div>
+        <div class="report-stat-card report-stat-fail">
+            <span class="report-stat-number">{{ flagged_count }}</span>
+            <span class="report-stat-label">Stubs flagged for review</span>
+        </div>
+    </div>
+
+    {# Validation results table #}
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Stub</th>
+                <th>Retailer</th>
+                <th>Status</th>
+                <th>Arithmetic</th>
+                <th>Code Mapping</th>
+                <th>Issues</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sd in stubs_data %}
+            <tr>
+                <td><code class="report-code">{{ sd.filename }}</code></td>
+                <td>{{ sd.stub.retailer.value | title }}</td>
+                <td>
+                    {% if sd.validation.status.value == "verified" %}
+                    <span class="report-badge report-badge-pass">VERIFIED</span>
+                    {% else %}
+                    <span class="report-badge report-badge-fail">FLAGGED</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sd.validation.arithmetic_valid %}
+                    <span class="report-check-pass">Balanced</span>
+                    {% else %}
+                    <span class="report-check-fail">Discrepancy{% if sd.validation.discrepancy_amount %} ({{ sd.validation.discrepancy_amount | format_currency }}){% endif %}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sd.validation.all_codes_mapped %}
+                    <span class="report-check-pass">All mapped</span>
+                    {% else %}
+                    <span class="report-check-fail">Unmapped codes</span>
+                    {% endif %}
+                </td>
+                <td>{{ sd.validation.details | length }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="report-body">
+        Of {{ stub_count }} stubs processed, {{ verified_count }} balanced to the penny
+        and mapped to known reason codes. {{ flagged_count }} did not.
+        {% if flagged_count > 0 %}
+        Flagged stubs enter the review queue, where an analyst can inspect the
+        original PDF alongside the extracted data, correct errors, and revalidate.
+        The flags are not failures of the system — they are the system working.
+        Every flagged stub is a deduction that would otherwise have been keyed
+        wrong or missed entirely.
+        {% else %}
+        Every stub in this set passed both checks — arithmetic balanced and all
+        reason codes resolved to known categories.
+        {% endif %}
+    </p>
+
+    <p class="report-footnote">
+        Validation is deterministic: no model confidence scores, no probability
+        thresholds. If the arithmetic balances and the codes map, the stub is
+        verified. If not, it is flagged. The trust signal is the data, not the
+        model.
+    </p>
+</section>

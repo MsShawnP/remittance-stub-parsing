@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{% if show_selector %}Case Study Report{% else %}Case Study — Cinderhaven Foods{% endif %}{% endblock %}
+
+{% block content %}
+{% if show_selector %}
+{# Stub selection form #}
+<div class="report-selector">
+    <h1 class="section-title">Case Study Report</h1>
+    <p class="report-selector-intro">
+        Select the stubs to include in the case study, or generate the complete Cinderhaven story.
+    </p>
+
+    <div class="report-selector-actions">
+        <a href="/report?show_all=true" class="btn btn-primary">Show All Stubs</a>
+    </div>
+
+    <form action="/report" method="get" class="report-selector-form">
+        <p class="report-selector-label">Or select specific stubs:</p>
+        <div class="report-selector-grid">
+            {% for stub_file in available_stubs %}
+            <label class="report-selector-item">
+                <input type="checkbox" name="stub_select" value="{{ stub_file }}">
+                <span>{{ stub_file }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-secondary" onclick="
+            var checked = document.querySelectorAll('input[name=stub_select]:checked');
+            if (checked.length === 0) { alert('Select at least one stub.'); return false; }
+            var names = Array.from(checked).map(function(c) { return c.value; }).join(',');
+            window.location.href = '/report?stubs=' + encodeURIComponent(names);
+            return false;
+        ">Generate Report</button>
+    </form>
+</div>
+{% else %}
+{# Full report — HTML view #}
+<article class="report">
+    <header class="report-header">
+        <h1 class="report-title">Remittance Stub Parsing</h1>
+        <p class="report-subtitle">Automated extraction, validation, and reconciliation of retailer remittance advice — Cinderhaven Foods case study</p>
+        <div class="report-actions">
+            <a href="/report/pdf{% if show_all %}?show_all=true{% elif selected_stubs %}?stubs={{ selected_stubs | join(',') }}{% endif %}" class="btn btn-secondary" download>Download PDF</a>
+            {% if not show_all %}
+            <a href="/report?show_all=true" class="btn btn-secondary">Show All Stubs</a>
+            {% endif %}
+            <a href="/" class="btn btn-secondary">Back to Demo</a>
+        </div>
+    </header>
+
+    <hr class="report-divider">
+    {% include "report/sections/hook.html" %}
+
+    <hr class="report-divider">
+    {% include "report/sections/proof.html" %}
+
+    <hr class="report-divider">
+    {% include "report/sections/evidence.html" %}
+
+    <hr class="report-divider">
+    {% include "report/sections/margin_math.html" %}
+</article>
+{% endif %}
+{% endblock %}

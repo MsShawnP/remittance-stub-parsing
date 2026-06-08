@@ -1,0 +1,56 @@
+{# Section 1: The PDF Pile — opening hook #}
+<section class="report-section">
+    <h2 class="section-title">The PDF Pile</h2>
+
+    <p class="report-body">
+        Every dollar a retailer pays arrives with a remittance advice. Each format
+        buries deductions in different layouts, naming conventions, and reason codes.
+        A single supplier managing four retail channels receives four incompatible
+        PDF formats, each requiring manual keying before anyone can ask: did this
+        deduction match an invoice?
+    </p>
+
+    <div class="report-stat-row">
+        <div class="report-stat-card">
+            <span class="report-stat-number">{{ stub_count }}</span>
+            <span class="report-stat-label">Remittance stubs processed</span>
+        </div>
+        <div class="report-stat-card">
+            <span class="report-stat-number">{{ format_count }}</span>
+            <span class="report-stat-label">Distinct retailer formats</span>
+        </div>
+        <div class="report-stat-card">
+            <span class="report-stat-number">{{ total_deduction_count }}</span>
+            <span class="report-stat-label">Deduction line items extracted</span>
+        </div>
+        <div class="report-stat-card">
+            <span class="report-stat-number">{{ total_deduction_amount | format_currency }}</span>
+            <span class="report-stat-label">Total deductions identified</span>
+        </div>
+    </div>
+
+    <p class="report-body">
+        {% if format_count == 4 %}
+        The {{ format_count }} remittance formats — {{ formats | join(", ") }} — produced
+        {{ total_deduction_count }} deduction entries totalling
+        {{ total_deduction_amount | format_currency }}. Each format uses its own
+        reason-code taxonomy, column layout, and arithmetic conventions. The pipeline
+        normalises all four into a single typed ledger in under a second per stub.
+        {% elif format_count == 1 %}
+        The {{ formats[0] }} format produced {{ total_deduction_count }} deduction entries
+        totalling {{ total_deduction_amount | format_currency }}. Even a single format
+        contains enough variation in reason codes and line-item structures to
+        demonstrate the extraction and validation pipeline.
+        {% else %}
+        The {{ format_count }} formats ({{ formats | join(", ") }}) produced
+        {{ total_deduction_count }} deduction entries totalling
+        {{ total_deduction_amount | format_currency }}.
+        {% endif %}
+    </p>
+
+    <p class="report-footnote">
+        Source: synthetic Cinderhaven Foods remittance stubs generated to match
+        production-format PDFs from each retailer/distributor. All figures derived
+        from automated extraction — no manual keying.
+    </p>
+</section>
