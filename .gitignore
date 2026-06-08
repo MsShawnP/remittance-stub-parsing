@@ -18,3 +18,4 @@ build/
 *.sqlite3
 .DS_Store
 Thumbs.db
+stubs/

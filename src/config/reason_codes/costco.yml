@@ -23,7 +23,7 @@ codes:
     description: Quality allowance
   "RJ":
     category: compliance
-    description: Rejection — product return
+    description: Rejection - product return
   "SH":
     category: logistics
     description: Shortage claim
