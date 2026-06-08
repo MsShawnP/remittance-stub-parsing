@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 19:16 — Deployed to Fly.io, custom domain remittance.lailarallc.com live with SSL
+
+**What changed:** Deployed to Fly.io (IAD, shared-cpu-1x, 512MB). Fixed missing sse-starlette in requirements.txt that crashed the container. Added DNS records (A + AAAA) via Cloudflare API. SSL cert issued (Let's Encrypt, RSA+ECDSA).
+
+**Why:** Final Definition of Done item — "Deployed with lailarallc.com subdomain." App now publicly accessible.
+
+**State:** All routes live at https://remittance.lailarallc.com. Health check passing. No ANTHROPIC_API_KEY set (pdfplumber-only extraction). All 9 units complete, 206 tests passing, deployed. .claude/launch.json in .dockerignore (excluded from image).
+
+**Next:** Run /ce:review for code quality pass before shipping.
+
+---
+
 ## 2026-06-08 18:57 — Visual verification complete, brand name fix, font self-hosting
 
 **What changed:** Visually verified all 5 routes in browser (landing, tour, explore, review, report). Fixed header brand from "Lailara" to "Lailara LLC". Self-hosted Playfair Display + Source Sans 3 as woff2 in app/static/fonts/ with @font-face in main.css and PDF template.
