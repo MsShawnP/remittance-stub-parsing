@@ -1,6 +1,55 @@
 /* Lailara Design System — CSS Custom Properties
-   Colors, typography, and layout tokens from the design system.
-   Fonts: system fallbacks until self-hosted fonts arrive in U9. */
+   Colors, typography, and layout tokens from the design system. */
+
+/* --- Self-hosted fonts --- */
+
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/static/fonts/PlayfairDisplay-400.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/static/fonts/PlayfairDisplay-500.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/static/fonts/PlayfairDisplay-700.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/static/fonts/SourceSans3-400.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/static/fonts/SourceSans3-600.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/static/fonts/SourceSans3-700.woff2') format('woff2');
+}
 
 :root {
     /* Canvas & London greyscale */

@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 18:57 — Visual verification complete, brand name fix, font self-hosting
+
+**What changed:** Visually verified all 5 routes in browser (landing, tour, explore, review, report). Fixed header brand from "Lailara" to "Lailara LLC". Self-hosted Playfair Display + Source Sans 3 as woff2 in app/static/fonts/ with @font-face in main.css and PDF template.
+
+**Why:** HANDOFF.md listed visual verification as the first next step. Fonts were using system fallbacks; design system requires self-hosted fonts with no Google Fonts CDN dependency.
+
+**State:** All routes working, design system fonts loading correctly, zero console/server errors. 206 tests still passing. NOT yet deployed to Fly.io. .claude/launch.json added for preview tooling.
+
+**Next:** Fly.io deploy — provision app, set ANTHROPIC_API_KEY secret, deploy, configure lailarallc.com subdomain. Then run /ce:review.
+
+---
+
 ## 2026-06-08 — Full 9-unit build complete (U1–U9), 206 tests passing
 
 **Started from:** Plan complete, no code. All 9 implementation units defined in docs/plans/.
