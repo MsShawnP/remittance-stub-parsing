@@ -9,6 +9,26 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 — Session wrap: 12-reviewer code review, 17 findings fixed, redeployed
+
+**Started from:** All 9 units built, 206 tests passing, deployed to Fly.io. HANDOFF.md said "Run /ce:review for code quality pass."
+
+**Did:** Full /ce:code-review with 12 parallel reviewer personas (6 always-on + 6 conditional). Raw output: ~75 findings across reviewers. After dedup/merge: 18 findings (1×P0, 6×P1, 8×P2, 3×P3). Fixed 17 of 18 — #18 (SQLite ledger not wired to web routes) is by-design.
+
+Key fixes:
+- **P0:** Path traversal in all file-serving endpoints — added `resolve().is_relative_to()` checks
+- **P1:** Sync blocking in async handlers (asyncio.to_thread), Dockerfile non-root user, Claude API 30s timeout, YAML caching (lru_cache), threading.Lock on review cache, form-field iteration cap (200)
+- **P2:** Eliminated double PDF file open (extract_stub_with_text), removed unused import, payment_date made Optional, WeasyPrint URL fetcher restricted, narrowed exception types, cached _scan_stubs, added 10MB file size limit
+- **P3:** Fixed _format_compact negative sign, normalized keHE case detection
+
+Committed as `9b74782`, pushed to origin, redeployed to Fly.io. Updated project-health.md (Tests=yes, code-review=yes, date=2026-06-08).
+
+**State:** All routes live at https://remittance.lailarallc.com. 206 tests passing. All Definition of Done items complete. Code review complete. Container now runs as non-root.
+
+**Next:** Run /improve when due (set next-improve-due date). Consider setting ANTHROPIC_API_KEY on Fly.io. Consider /ce:compound to extract learnings.
+
+---
+
 ## 2026-06-08 19:17 — Session wrap: visual verification, font self-hosting, Fly.io deploy with custom domain
 
 **Started from:** All 9 units built (U1–U9), 206 tests passing. No visual verification, no self-hosted fonts, not deployed.

@@ -160,6 +160,24 @@ Each entry:
 - **Scope:** app/templates/report/case_study.html, case_study_pdf.html
 - **Do not:** Try to combine into a single template with conditional extends
 
+### 2026-06-08 — All user-supplied filenames must pass path traversal validation before filesystem access
+
+- **Why:** 12-reviewer code review found P0 path traversal across 7 endpoints. `STUBS_DIR / user_input` allows directory escape via `../../`. Added `_safe_stub_path()` using `resolve().is_relative_to()` in every route module. Also added 10MB file-size cap in demo routes.
+- **Scope:** All file-serving endpoints in app/routes/ (demo, tour, review, report)
+- **Do not:** Construct paths from user input without `resolve().is_relative_to()` validation
+
+### 2026-06-08 — All synchronous extraction calls in async handlers must use asyncio.to_thread
+
+- **Why:** pdfplumber reads are synchronous and block the event loop when called from `async def` handlers. Under concurrent requests the server becomes unresponsive. All `extract()` and `extract_stub()` calls wrapped with `asyncio.to_thread()`.
+- **Scope:** All async route handlers that call extraction functions
+- **Do not:** Call `extract()`, `extract_stub()`, or `_process_stubs()` directly from async handlers
+
+### 2026-06-08 — payment_date is Optional on RemittanceStub (not required)
+
+- **Why:** Header extraction returns None when payment date regex doesn't match. Making the field required would crash on malformed PDFs. Downstream code (reconciliation) already handles None gracefully via `if deduction_date:` guard.
+- **Scope:** src/models.py, all consumers of RemittanceStub.payment_date
+- **Do not:** Assume payment_date is always present — check for None before date arithmetic
+
 ---
 
 ## Visualization
