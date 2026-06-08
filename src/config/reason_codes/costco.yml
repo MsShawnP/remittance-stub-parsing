@@ -1,0 +1,29 @@
+retailer: costco
+codes:
+  "AD":
+    category: promotional
+    description: Advertising allowance
+  "DM":
+    category: logistics
+    description: Damage claim
+  "FR":
+    category: logistics
+    description: Freight allowance
+  "MK":
+    category: promotional
+    description: Markdown
+  "NS":
+    category: operational
+    description: New warehouse opening
+  "PR":
+    category: promotional
+    description: Promotion allowance
+  "QA":
+    category: compliance
+    description: Quality allowance
+  "RJ":
+    category: compliance
+    description: Rejection — product return
+  "SH":
+    category: logistics
+    description: Shortage claim

@@ -1,0 +1,29 @@
+retailer: walmart
+codes:
+  "22":
+    category: logistics
+    description: Shortage - quantities received differ from invoice
+  "24":
+    category: compliance
+    description: Quality rejection
+  "25":
+    category: operational
+    description: New store discount
+  "41":
+    category: promotional
+    description: Advertising allowance
+  "42":
+    category: promotional
+    description: Markdown allowance
+  "51":
+    category: logistics
+    description: Damage claim
+  "52":
+    category: logistics
+    description: Freight allowance
+  "72":
+    category: financial
+    description: Cash discount - early payment
+  "86":
+    category: compliance
+    description: Reclaim - defective product

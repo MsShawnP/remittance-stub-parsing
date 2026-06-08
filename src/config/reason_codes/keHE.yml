@@ -1,0 +1,29 @@
+retailer: keHE
+codes:
+  "MKD":
+    category: promotional
+    description: Markdown
+  "PRO":
+    category: promotional
+    description: Promotion allowance
+  "SLT":
+    category: operational
+    description: Slotting fee
+  "DMG":
+    category: logistics
+    description: Damage claim
+  "SHR":
+    category: logistics
+    description: Shortage
+  "FRE":
+    category: logistics
+    description: Freight allowance
+  "SPO":
+    category: logistics
+    description: Spoilage claim
+  "ADV":
+    category: promotional
+    description: Advertising allowance
+  "MCB":
+    category: promotional
+    description: Marketing contribution

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "remittance-stub-parsing"
+version = "0.1.0"
+description = "Multi-format retailer remittance-advice parser for deduction extraction and reconciliation"
+requires-python = ">=3.12"
+dependencies = [
+    "pdfplumber>=0.11",
+    "anthropic>=0.52",
+    "pydantic>=2.7",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
+    "aiosqlite>=0.20",
+    "weasyprint>=62",
+    "fpdf2>=2.8",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.27",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*", "app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

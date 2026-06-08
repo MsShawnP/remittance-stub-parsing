@@ -1,0 +1,29 @@
+retailer: unfi
+codes:
+  "MCB":
+    category: promotional
+    description: Marketing contribution
+  "OSD":
+    category: logistics
+    description: Over/short/damage
+  "SPA":
+    category: promotional
+    description: Special pricing allowance
+  "VOL":
+    category: financial
+    description: Volume discount
+  "PRO":
+    category: promotional
+    description: Promotional allowance
+  "FRT":
+    category: logistics
+    description: Freight deduction
+  "DAM":
+    category: logistics
+    description: Damage claim
+  "SPO":
+    category: logistics
+    description: Spoilage
+  "NEW":
+    category: operational
+    description: New item introduction fee
