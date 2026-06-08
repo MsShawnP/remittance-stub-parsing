@@ -1,18 +1,57 @@
-"""SSE endpoint for streaming pipeline progress during guided tour."""
+"""Guided tour routes: tour page, step endpoints, and SSE streaming."""
 
 import asyncio
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from sse_starlette.sse import EventSourceResponse
 
+from src.extraction.pipeline import extract
 from src.extraction.pdf_extractor import extract_stub
 from src.validation.reason_codes import validate_stub
 
 router = APIRouter(prefix="/tour")
 
 STUBS_DIR = Path(__file__).parent.parent.parent / "stubs"
+TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+
+# Tour steps: one per retailer, plus a broken stub to demonstrate flagging.
+TOUR_STEPS = [
+    {
+        "step": 1,
+        "retailer": "Walmart",
+        "filename": "walmart_stub_01.pdf",
+        "description": "Table-heavy layout with promotional allowances, freight claims, and compliance fines. Reason codes mapped to 12 deduction categories.",
+    },
+    {
+        "step": 2,
+        "retailer": "Costco",
+        "filename": "costco_stub_01.pdf",
+        "description": "Structured two-column layout with volume rebates and warehouse handling deductions. Gross/net reconciliation with multi-line items.",
+    },
+    {
+        "step": 3,
+        "retailer": "UNFI",
+        "filename": "unfi_stub_01.pdf",
+        "description": "Distributor chargebacks for spoilage, short-ships, and invoice discrepancies. Variable-length line items that sometimes span multiple pages.",
+    },
+    {
+        "step": 4,
+        "retailer": "KeHE",
+        "filename": "keHE_stub_01.pdf",
+        "description": "Promotional billbacks, new-item slotting fees, and reclamation deductions. Compact single-page format with merged header rows.",
+    },
+    {
+        "step": 5,
+        "retailer": "Walmart (Broken)",
+        "filename": "walmart_stub_broken_arithmetic.pdf",
+        "description": "Deliberately broken stub with arithmetic that does not balance. Demonstrates how the validation pipeline flags errors and routes stubs to the review queue.",
+    },
+]
 
 
 async def _stream_pipeline(stub_filename: str):
@@ -78,6 +117,70 @@ async def _stream_pipeline(stub_filename: str):
             "issue_count": len(validation.details),
         }),
     }
+
+
+@router.get("", response_class=HTMLResponse)
+async def tour_page(request: Request):
+    """Guided tour page with step indicator and progressive walkthrough."""
+    return templates.TemplateResponse(
+        request,
+        "tour.html",
+        context={
+            "steps": TOUR_STEPS,
+            "total_steps": len(TOUR_STEPS),
+        },
+    )
+
+
+@router.get("/step/{step_number}", response_class=HTMLResponse)
+async def tour_step(step_number: int, request: Request):
+    """Return HTMX partial for a specific tour step.
+
+    Renders the step content area with SSE connection info so the
+    frontend can stream the pipeline for this step's stub.
+    """
+    if step_number < 1 or step_number > len(TOUR_STEPS):
+        raise HTTPException(status_code=404, detail=f"Invalid step: {step_number}")
+
+    step = TOUR_STEPS[step_number - 1]
+
+    return templates.TemplateResponse(
+        request,
+        "partials/step_result.html",
+        context={
+            "step": step,
+            "step_number": step_number,
+            "total_steps": len(TOUR_STEPS),
+            "is_last": step_number == len(TOUR_STEPS),
+        },
+    )
+
+
+@router.get("/step/{step_number}/result", response_class=HTMLResponse)
+async def tour_step_result(step_number: int, request: Request):
+    """Process the stub for a tour step and return the result partial.
+
+    Called after SSE streaming completes to get the full rendered result.
+    """
+    if step_number < 1 or step_number > len(TOUR_STEPS):
+        raise HTTPException(status_code=404, detail=f"Invalid step: {step_number}")
+
+    step = TOUR_STEPS[step_number - 1]
+    pdf_path = STUBS_DIR / step["filename"]
+
+    extraction_result = extract(pdf_path, skip_llm=True)
+    validation = validate_stub(extraction_result.stub, stub_id=step["filename"])
+
+    return templates.TemplateResponse(
+        request,
+        "partials/stub_card.html",
+        context={
+            "stub": extraction_result.stub,
+            "validation": validation,
+            "extraction_method": extraction_result.method,
+            "filename": step["filename"],
+        },
+    )
 
 
 @router.get("/stream/{stub_filename}")

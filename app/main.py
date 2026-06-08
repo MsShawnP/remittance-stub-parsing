@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.routes import demo, tour
+from app.routes import demo, review, tour
 
 APP_DIR = Path(__file__).parent
 
@@ -19,6 +19,7 @@ templates = Jinja2Templates(directory=str(APP_DIR / "templates"))
 
 app.include_router(demo.router)
 app.include_router(tour.router)
+app.include_router(review.router)
 
 
 @app.get("/health")

@@ -553,6 +553,519 @@ a:hover {
     text-decoration: underline;
 }
 
+/* --- Tour --- */
+
+.tour-header {
+    margin-bottom: 32px;
+}
+
+.tour-intro {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    max-width: 660px;
+}
+
+.tour-steps {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--gridline);
+    padding-bottom: 0;
+}
+
+.tour-step-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 20px 14px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    margin-bottom: -2px;
+    transition: border-color 150ms ease, color 150ms ease;
+}
+
+.tour-step-btn:hover {
+    color: var(--text-primary);
+}
+
+.tour-step-active {
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+}
+
+.tour-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--gridline);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tour-step-active .tour-step-number {
+    background-color: var(--navy);
+    color: #ffffff;
+}
+
+.tour-step-label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.tour-step-content {
+    background-color: #ffffff;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    margin-bottom: 24px;
+    min-height: 200px;
+}
+
+.tour-step-retailer {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+
+.tour-step-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    max-width: 660px;
+}
+
+.step-progress {
+    margin-bottom: 16px;
+}
+
+.tour-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.tour-summary {
+    background-color: var(--pass-bg);
+    border: 1px solid var(--pass-text);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    margin-top: 24px;
+}
+
+.tour-summary-text {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--pass-text);
+    margin-bottom: 20px;
+    max-width: 660px;
+}
+
+.tour-summary-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* --- Explore --- */
+
+.explore-header {
+    margin-bottom: 32px;
+}
+
+.explore-intro {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    max-width: 660px;
+}
+
+.explore-retailer-group {
+    margin-bottom: 32px;
+}
+
+.explore-retailer-name {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+}
+
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.explore-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    background-color: #ffffff;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-align: left;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.explore-card:hover {
+    border-color: var(--navy);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.explore-card-broken {
+    border-color: var(--fail-text);
+    border-style: dashed;
+}
+
+.explore-card-broken:hover {
+    border-color: var(--fail-text);
+}
+
+.explore-card-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.explore-card-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.explore-card-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--border-radius);
+    width: fit-content;
+}
+
+.tag-broken {
+    background-color: var(--fail-bg);
+    color: var(--fail-text);
+}
+
+.explore-results {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--gridline);
+}
+
+.explore-empty {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* --- Review Queue --- */
+
+.review-header {
+    margin-bottom: 32px;
+}
+
+.review-intro {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    max-width: 660px;
+}
+
+.review-empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-secondary);
+}
+
+.review-empty p {
+    margin-bottom: 16px;
+}
+
+.review-list {
+    margin-bottom: 32px;
+}
+
+.review-list-title {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+}
+
+.review-list-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: border-color 150ms ease;
+}
+
+.review-list-item:hover {
+    border-color: var(--navy);
+}
+
+.review-list-item-active {
+    border-color: var(--navy);
+    background-color: var(--info-bg);
+}
+
+.review-list-retailer {
+    font-weight: 600;
+    color: var(--ink);
+    min-width: 80px;
+}
+
+.review-list-check {
+    font-size: 14px;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.review-list-issues {
+    font-size: 13px;
+    color: var(--fail-text);
+}
+
+/* --- Split Layout (Review Detail) --- */
+
+.split-layout {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 24px;
+    margin-top: 24px;
+    min-height: 600px;
+}
+
+.split-left {
+    min-height: 600px;
+}
+
+.split-right {
+    min-height: 600px;
+    overflow-y: auto;
+}
+
+/* --- PDF Viewer --- */
+
+.pdf-viewer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdf-viewer-header {
+    padding: 8px 12px;
+    background-color: var(--card-dark-bg);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.pdf-viewer-title {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--card-dark-text);
+}
+
+.pdf-viewer-frame {
+    flex: 1;
+    width: 100%;
+    min-height: 560px;
+    border: 1px solid var(--gridline);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* --- Review Form --- */
+
+.review-form {
+    background-color: #ffffff;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    padding: 24px;
+}
+
+.review-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.review-form-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.review-issues {
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: var(--fail-bg);
+    border-radius: var(--border-radius);
+}
+
+.review-issues-title {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fail-text);
+    margin-bottom: 8px;
+}
+
+.review-issues-list {
+    list-style: none;
+    padding: 0;
+}
+
+.review-issue-item {
+    font-size: 13px;
+    color: var(--fail-text);
+    padding: 4px 0;
+}
+
+.review-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.review-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.review-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.review-input {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    background-color: #ffffff;
+    color: var(--text-primary);
+    width: 100%;
+}
+
+.review-input:focus {
+    outline: 2px solid var(--navy);
+    outline-offset: 1px;
+    border-color: var(--navy);
+}
+
+.review-input-narrow {
+    max-width: 120px;
+}
+
+.review-input-amount {
+    text-align: right;
+    max-width: 120px;
+}
+
+.review-discrepancy {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fail-text);
+    padding: 8px 12px;
+    background-color: var(--fail-bg);
+    border-radius: var(--border-radius);
+    margin-bottom: 16px;
+}
+
+.review-deductions {
+    margin-bottom: 20px;
+}
+
+.review-deductions-title {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+}
+
+.review-deductions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.review-deductions-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 6px 8px;
+    border-bottom: 2px solid var(--gridline);
+}
+
+.review-deductions-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--gridline);
+    vertical-align: middle;
+}
+
+.review-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.review-success-msg {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pass-text);
+}
+
+/* --- Field States --- */
+
+.field-flagged {
+    border-color: var(--fail-text) !important;
+    background-color: var(--fail-bg);
+}
+
+.field-verified {
+    border-color: var(--pass-text) !important;
+    background-color: var(--pass-bg);
+}
+
 /* --- HTMX indicators --- */
 
 .htmx-indicator {
@@ -605,6 +1118,39 @@ a:hover {
 
     .section-title {
         font-size: 18px;
+    }
+
+    .tour-steps {
+        overflow-x: auto;
+    }
+
+    .tour-step-btn {
+        padding: 8px 12px;
+    }
+
+    .tour-step-label {
+        font-size: 11px;
+    }
+
+    .explore-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .split-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .split-left {
+        min-height: 400px;
+    }
+
+    .review-totals {
+        grid-template-columns: 1fr;
+    }
+
+    .review-list-item {
+        flex-wrap: wrap;
+        gap: 8px;
     }
 }
 

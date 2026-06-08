@@ -1,9 +1,9 @@
-"""Demo routes: landing page, stub listing, and processing."""
+"""Demo routes: landing page, stub listing, processing, and exploration."""
 
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from src.extraction.pipeline import extract
@@ -58,6 +58,39 @@ async def landing_page(request: Request):
 async def list_stubs():
     """Return JSON list of available stubs in the stubs/ directory."""
     return _scan_stubs()
+
+
+@router.get("/explore", response_class=HTMLResponse)
+async def explore_page(request: Request):
+    """Free exploration page: pick any stub and run it through the pipeline."""
+    stubs = _scan_stubs()
+
+    # Group stubs by retailer for display
+    retailers = {}
+    for stub in stubs:
+        retailer = stub["retailer"]
+        if retailer not in retailers:
+            retailers[retailer] = []
+        retailers[retailer].append(stub)
+
+    return templates.TemplateResponse(
+        request,
+        "explore.html",
+        context={"retailers": retailers},
+    )
+
+
+@router.get("/stubs/pdf/{filename}")
+async def serve_pdf(filename: str):
+    """Serve a stub PDF file for iframe display in the review queue."""
+    pdf_path = STUBS_DIR / filename
+    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
+        raise HTTPException(status_code=404, detail=f"PDF not found: {filename}")
+    return FileResponse(
+        path=str(pdf_path),
+        media_type="application/pdf",
+        filename=filename,
+    )
 
 
 @router.post("/process/{stub_filename}", response_class=HTMLResponse)

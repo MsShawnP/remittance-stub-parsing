@@ -1,0 +1,10 @@
+<div class="pdf-viewer">
+    <div class="pdf-viewer-header">
+        <h4 class="pdf-viewer-title">{{ active_stub.filename }}</h4>
+    </div>
+    <iframe
+        src="/stubs/pdf/{{ active_stub.filename }}"
+        class="pdf-viewer-frame"
+        title="PDF preview of {{ active_stub.filename }}"
+    ></iframe>
+</div>

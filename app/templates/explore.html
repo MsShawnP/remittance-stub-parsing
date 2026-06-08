@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Stubs{% endblock %}
+
+{% block content %}
+<section class="explore-header">
+    <h1 class="section-title">Free Exploration</h1>
+    <p class="explore-intro">
+        Pick any stub from the grid below. Each one runs through the full
+        extraction and validation pipeline. Results stack below so you can
+        compare across retailers and formats.
+    </p>
+</section>
+
+{% for retailer, stubs in retailers.items() %}
+<section class="explore-retailer-group">
+    <h2 class="explore-retailer-name">{{ retailer }}</h2>
+    <div class="explore-grid">
+        {% for stub in stubs %}
+        <button
+            class="explore-card {% if stub.is_broken %}explore-card-broken{% endif %}"
+            hx-post="/process/{{ stub.filename }}"
+            hx-target="#results"
+            hx-swap="afterbegin"
+            hx-indicator="#loading-{{ stub.filename | replace('.', '-') }}"
+        >
+            <span class="explore-card-name">{{ stub.name }}</span>
+            <span class="explore-card-meta">{{ stub.size_kb }} KB</span>
+            {% if stub.is_broken %}
+            <span class="explore-card-tag tag-broken">Broken</span>
+            {% endif %}
+            <span class="htmx-indicator" id="loading-{{ stub.filename | replace('.', '-') }}">
+                Processing...
+            </span>
+        </button>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+
+<section class="explore-results" id="results-section">
+    <h2 class="section-title">Results</h2>
+    <div id="results">
+        <p class="explore-empty" id="results-empty">
+            Click a stub above to process it through the pipeline.
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // Hide the empty message when the first result arrives
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        if (evt.detail.target && evt.detail.target.id === 'results') {
+            var empty = document.getElementById('results-empty');
+            if (empty) {
+                empty.style.display = 'none';
+            }
+        }
+    });
+})();
+</script>
+{% endblock %}

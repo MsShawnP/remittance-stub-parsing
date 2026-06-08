@@ -1,0 +1,8 @@
+<div class="step-result-container" data-step="{{ step_number }}">
+    <div class="step-result-header">
+        <h3 class="step-result-retailer">Step {{ step_number }} of {{ total_steps }}: {{ step.retailer }}</h3>
+        <p class="step-result-desc">{{ step.description }}</p>
+    </div>
+    <div class="step-result-progress" id="step-{{ step_number }}-progress"></div>
+    <div class="step-result-output" id="step-{{ step_number }}-output"></div>
+</div>

@@ -1,0 +1,105 @@
+<div class="review-form" id="review-form-{{ filename }}">
+    <div class="review-form-header">
+        <h3 class="review-form-title">
+            {{ stub.retailer.value | title }} &mdash; Check #{{ stub.check_number }}
+        </h3>
+        <span class="status-badge status-{{ validation.status.value }}">
+            {{ validation.status.value | upper }}
+        </span>
+    </div>
+
+    {% if validation.details %}
+    <div class="review-issues">
+        <h4 class="review-issues-title">Validation Issues ({{ validation.details | length }})</h4>
+        <ul class="review-issues-list">
+            {% for detail in validation.details %}
+            <li class="review-issue-item">
+                <span class="issue-field">{{ detail.field }}</span>: {{ detail.issue }}
+                {% if detail.expected and detail.actual %}
+                    <span class="issue-expected">(expected: {{ detail.expected }}, got: {{ detail.actual }})</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form hx-post="/review/{{ filename }}/revalidate"
+          hx-target="#review-form-container"
+          hx-swap="innerHTML">
+
+        <div class="review-totals">
+            <div class="review-field {% if not validation.arithmetic_valid %}field-flagged{% else %}field-verified{% endif %}">
+                <label for="gross_invoice">Gross Invoice</label>
+                <input type="text" name="gross_invoice" id="gross_invoice"
+                       value="{{ '{:,.2f}'.format(stub.gross_invoice) }}"
+                       class="review-input">
+            </div>
+            <div class="review-field {% if not validation.arithmetic_valid %}field-flagged{% else %}field-verified{% endif %}">
+                <label for="net_cash">Net Cash</label>
+                <input type="text" name="net_cash" id="net_cash"
+                       value="{{ '{:,.2f}'.format(stub.net_cash) }}"
+                       class="review-input">
+            </div>
+        </div>
+
+        {% if validation.discrepancy_amount %}
+        <div class="review-discrepancy">
+            Arithmetic discrepancy: ${{ "{:,.2f}".format(validation.discrepancy_amount) }}
+        </div>
+        {% endif %}
+
+        <div class="review-deductions">
+            <h4 class="review-deductions-title">Deduction Line Items</h4>
+            <table class="review-deductions-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Reason Code</th>
+                        <th>Description</th>
+                        <th class="col-amount">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in stub.deductions %}
+                    {% set code_flagged = not validation.all_codes_mapped and d.reason_code in (validation.details | selectattr('field', 'equalto', 'reason_code') | map(attribute='actual') | list) %}
+                    <tr>
+                        <td>
+                            <input type="text"
+                                   name="deduction_{{ loop.index0 }}_invoice"
+                                   value="{{ d.invoice_number }}"
+                                   class="review-input review-input-narrow">
+                        </td>
+                        <td>
+                            <input type="text"
+                                   name="deduction_{{ loop.index0 }}_reason_code"
+                                   value="{{ d.reason_code }}"
+                                   class="review-input review-input-narrow {% if code_flagged %}field-flagged{% endif %}"
+                                   {% if code_flagged %}title="Unmapped reason code"{% endif %}>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   name="deduction_{{ loop.index0 }}_description"
+                                   value="{{ d.reason_description }}"
+                                   class="review-input">
+                        </td>
+                        <td>
+                            <input type="text"
+                                   name="deduction_{{ loop.index0 }}_amount"
+                                   value="{{ '{:,.2f}'.format(d.amount) }}"
+                                   class="review-input review-input-amount {% if not validation.arithmetic_valid %}field-flagged{% endif %}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="review-actions">
+            <button type="submit" class="btn btn-primary">Re-validate</button>
+            {% if validation.status.value == 'verified' %}
+            <span class="review-success-msg">All checks passed.</span>
+            {% endif %}
+        </div>
+    </form>
+</div>
