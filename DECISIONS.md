@@ -136,6 +136,32 @@ Each entry:
 
 ---
 
+### 2026-06-08 — Claude LLM extraction uses forced tool_choice, not JSON mode
+
+- **Why:** `tool_choice: {type: "tool", name: "record_deductions"}` forces the model to call the tool with the exact schema. This guarantees structured output matching the Pydantic model without post-hoc parsing or retry loops. JSON mode alone can produce valid JSON that doesn't match the expected schema.
+- **Scope:** src/extraction/llm_extractor.py
+- **Do not:** Use JSON mode or unstructured text extraction for the LLM path
+
+### 2026-06-08 — SQLite stores Decimal amounts as TEXT strings, not REAL
+
+- **Why:** IEEE 754 floats cannot represent $42.50 exactly. Storing as TEXT preserves the exact decimal representation through round-trips. The validation layer compares penny-exact totals — floating-point drift would cause false validation failures.
+- **Scope:** src/ledger/database.py, all amount columns
+- **Do not:** Use REAL or FLOAT column types for monetary amounts
+
+### 2026-06-08 — Hybrid extraction pipeline: pdfplumber first, LLM second, winner by deduction count
+
+- **Why:** pdfplumber is deterministic, free, and fast. LLM extraction costs money and adds latency. The pipeline runs pdfplumber first; if an API key is available, it also runs the LLM path and picks whichever found more deductions. This means the demo works without an API key (graceful degradation) while getting better results when one is available.
+- **Scope:** src/extraction/pipeline.py
+- **Do not:** Require an API key for the demo to function
+
+### 2026-06-08 — Separate Jinja2 templates for web case study (extends base) and PDF (standalone)
+
+- **Why:** Jinja2 does not allow `{% extends %}` inside `{% if %}` blocks — extends must be the first tag. The web version needs the base layout (nav, CSS, scripts); the WeasyPrint PDF version needs a self-contained HTML document with embedded CSS for print. Two templates sharing the same section partials (hook, proof, evidence, margin_math).
+- **Scope:** app/templates/report/case_study.html, case_study_pdf.html
+- **Do not:** Try to combine into a single template with conditional extends
+
+---
+
 ## Visualization
 
 [Chart conventions, palette decisions, interactivity choices]

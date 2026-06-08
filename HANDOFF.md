@@ -9,6 +9,46 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 — Full 9-unit build complete (U1–U9), 206 tests passing
+
+**Started from:** Plan complete, no code. All 9 implementation units defined in docs/plans/.
+
+**Did:**
+1. **U1 Foundation** — pyproject.toml, requirements.txt, Pydantic models (RetailerFormat, DeductionCategory, RemittanceStub, ValidationResult, ReconciliationResult), 4 retailer reason-code YAML configs, 20 model tests
+2. **U2 Synthetic stubs** — FPDF2 generators for Walmart, Costco, UNFI, KeHE with clean + broken variants (arithmetic mismatch, unmapped codes, multi-page). 15 PDFs, 20 tests. sanitize_for_pdf() to handle encoding.
+3. **U3 PDF extraction** — pdfplumber extractor with detect_format(), per-retailer column mapping, multi-page table merging. 47 tests.
+4. **U4 LLM extraction** — Claude Haiku 4.5 via forced tool_choice (record_deductions). Hybrid pipeline: pdfplumber first (free), LLM second (picks winner by deduction count). 30 tests.
+5. **U5 Validation + ledger** — Arithmetic check (net + deductions = gross), reason-code validation, SQLite ledger (WAL mode, Decimal-as-string), reconciliation against Cinderhaven SSOT ($3.5M/yr, 864 chargebacks, 90-day window). 37 tests.
+6. **U6 FastAPI skeleton** — Routes for demo, tour, review, report. Jinja2 templates, HTMX partials, SSE via sse-starlette. 15 tests.
+7. **U7 Interactive demo** — Guided tour (SSE streaming), free exploration, review queue with side-by-side PDF viewer + editable form. 19 tests.
+8. **U8 Case study** — Dynamic report with hook/proof/evidence/margin_math sections. WeasyPrint PDF export. Separate templates for web (extends base) and PDF (standalone). 18 tests.
+9. **U9 Polish + deploy config** — Lailara design system CSS (Canvas, Navy, Hong Kong teal, Playfair Display + Source Sans 3), Dockerfile (python:3.13-slim + pango/cairo), fly.toml (IAD, 8080, health check).
+
+**Artifacts:** 62 source files, 206 passing tests, 15 synthetic PDFs, 9 commits.
+
+**Fixes during build:**
+- pyproject.toml: `setuptools.backends._legacy:_Backend` → `setuptools.build_meta`
+- Em-dash encoding in walmart.yml crashed on Windows; replaced with ASCII hyphen
+- Costco.yml had mojibake (UTF-8 em-dash as 3 codepoints) that crashed FPDF2 latin-1 font
+- Starlette 1.0.1 changed TemplateResponse signature; fixed to pass request as first positional arg
+- Jinja2 `{% extends %}` inside `{% if %}` not allowed; split into web + PDF templates
+
+**State:**
+- All 9 units built and committed on main
+- 206/206 tests pass
+- Dockerfile and fly.toml ready
+- NOT yet deployed to Fly.io
+- Fonts not yet self-hosted (using system fallbacks)
+- App not yet visually verified in browser
+
+**Next:**
+1. Visual verification: `uvicorn app.main:app --reload`, test all routes in browser
+2. Self-host Playfair Display + Source Sans 3 (download woff2, serve from static/)
+3. Fly.io deploy: provision app, set secrets, deploy, configure custom domain
+4. Run /ce:review for code quality pass
+
+---
+
 ## 2026-06-05 — Channel-profitability annual framing complete; trade-spend-leakage deploy blocked
 
 **Started from:** Prior session completed figure reconciliation + multi-repo push (3/6). This session's goals: finish annual-framing pass on channel-profitability-analysis, trigger Fly.io deploy for trade-spend-leakage.

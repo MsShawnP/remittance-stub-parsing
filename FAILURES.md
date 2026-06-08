@@ -107,6 +107,66 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** fly-io, deploy, health-check, suspended-app, trade-spend-leakage
 
+### 2026-06-08 — pyproject.toml build backend `setuptools.backends._legacy:_Backend` doesn't exist
+
+**Attempted:** Used `setuptools.backends._legacy:_Backend` as the build-backend in pyproject.toml.
+
+**Why it didn't work:** That module path doesn't exist in setuptools. `pip install -e .` failed with an import error.
+
+**What we tried instead:** Changed to `setuptools.build_meta`, which is the standard setuptools build backend. Installed cleanly.
+
+**Status:** Resolved.
+
+**Tags:** pyproject, setuptools, build-backend, pip
+
+### 2026-06-08 — Em-dash in walmart.yml caused test assertion mismatch on Windows
+
+**Attempted:** Used Unicode em-dash `—` in reason code descriptions in walmart.yml.
+
+**Why it didn't work:** On Windows, encoding differences between file write (UTF-8) and YAML read caused the em-dash to not round-trip identically in test assertions.
+
+**What we tried instead:** Replaced all em-dashes with ASCII hyphens `-` in both YAML configs and test expectations.
+
+**Status:** Resolved.
+
+**Tags:** encoding, unicode, em-dash, yaml, windows
+
+### 2026-06-08 — Costco.yml RJ description had mojibake that crashed FPDF2
+
+**Attempted:** Wrote Costco reason code descriptions containing a UTF-8 em-dash.
+
+**Why it didn't work:** The em-dash was stored as 3 separate codepoints (U+00E2, U+20AC, U+201D) instead of a single U+2014. FPDF2's built-in Courier font uses latin-1 encoding, which can't render those codepoints → crash.
+
+**What we tried instead:** Replaced with ASCII hyphen. Added `sanitize_for_pdf()` in the base stub generator as a safety net that strips non-latin-1 characters before rendering.
+
+**Status:** Resolved.
+
+**Tags:** encoding, mojibake, fpdf2, latin-1, costco
+
+### 2026-06-08 — Starlette 1.0.1 TemplateResponse signature change broke all routes
+
+**Attempted:** Used `TemplateResponse(name, {"request": request, ...})` — the old Starlette pattern.
+
+**Why it didn't work:** Starlette 1.0.1 changed the signature. The dict-as-second-arg pattern caused `unhashable type: 'dict'` because `name` was now expected to be the template name and the dict was being used as the `request` parameter.
+
+**What we tried instead:** Switched to `TemplateResponse(request, name, context={...})` — request as first positional arg, template name second, context as keyword.
+
+**Status:** Resolved.
+
+**Tags:** starlette, fastapi, template-response, api-change
+
+### 2026-06-08 — Jinja2 extends inside if block is not allowed
+
+**Attempted:** Single case_study.html template with `{% if standalone %}` controlling whether to use `{% extends "base.html" %}` (web) or render a standalone HTML document (PDF).
+
+**Why it didn't work:** Jinja2 requires `{% extends %}` to be the very first tag in a template. It cannot appear inside any block, conditional, or loop.
+
+**What we tried instead:** Split into two templates: case_study.html (extends base.html for web) and case_study_pdf.html (standalone for WeasyPrint). Both include the same section partials.
+
+**Status:** Resolved.
+
+**Tags:** jinja2, extends, template-inheritance, weasyprint
+
 ### 2026-06-05 — Three repos diverged on push (URL cleanup batch on remote)
 
 **Attempted:** Push 6 repos in dependency order after local commits.

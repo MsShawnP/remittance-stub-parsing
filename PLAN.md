@@ -55,28 +55,28 @@ Full plan at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md.
 9 implementation units, executed via /ce:work.
 
 - [x] **Pre-work:** Verify Cinderhaven canonical figures — DONE. Phase A locked: $3.4M annualized / 864 chargebacks / 36 months. Phase B (propagate edits) pending next session.
-- [ ] U1. Foundation — project setup, data models, configs
-- [ ] U2. Synthetic stub generation — FPDF2 stubs for 4 formats
-- [ ] U3. PDF table extraction — pdfplumber with per-format tuning
-- [ ] U4. LLM structured extraction — Claude API for variable line items
-- [ ] U5. Validation, ledger, and reconciliation
-- [ ] U6. FastAPI web app — skeleton, templates, HTMX, SSE
-- [ ] U7. Interactive demo — guided tour, free exploration, review queue
-- [ ] U8. Dynamic case study — report generation with WeasyPrint
-- [ ] U9. Design system polish and Fly.io deployment
+- [x] U1. Foundation — project setup, data models, configs
+- [x] U2. Synthetic stub generation — FPDF2 stubs for 4 formats
+- [x] U3. PDF table extraction — pdfplumber with per-format tuning
+- [x] U4. LLM structured extraction — Claude API for variable line items
+- [x] U5. Validation, ledger, and reconciliation
+- [x] U6. FastAPI web app — skeleton, templates, HTMX, SSE
+- [x] U7. Interactive demo — guided tour, free exploration, review queue
+- [x] U8. Dynamic case study — report generation with WeasyPrint
+- [x] U9. Design system polish and Fly.io deployment
 
 ## Definition of done for this arc
 
-- [ ] Synthetic stubs exist for all 4 formats, including intentionally
+- [x] Synthetic stubs exist for all 4 formats, including intentionally
       broken ones, reconciling against Cinderhaven SSOT
-- [ ] Extraction engine parses all 4 formats into typed records
-- [ ] Deterministic validation catches mismatches and routes to review
-- [ ] SQLite ledger populated, reconciled against invoice/AR records
-- [ ] FastAPI+HTMX demo tells the full parsing → validation →
+- [x] Extraction engine parses all 4 formats into typed records
+- [x] Deterministic validation catches mismatches and routes to review
+- [x] SQLite ledger populated, reconciled against invoice/AR records
+- [x] FastAPI+HTMX demo tells the full parsing → validation →
       reconciliation story as an educational walkthrough
-- [ ] Review queue shows flagged rows with side-by-side PDF + form
-- [ ] Case study (HTML+PDF) with Cinderhaven findings, ties to $3.4M annualized
-- [ ] All numbers match Cinderhaven canonical figures exactly
+- [x] Review queue shows flagged rows with side-by-side PDF + form
+- [x] Case study (HTML+PDF) with Cinderhaven findings, ties to $3.4M annualized
+- [x] All numbers match Cinderhaven canonical figures exactly
 - [ ] Deployed (Fly.io or Cloudflare) with lailarallc.com subdomain
 
 ---
