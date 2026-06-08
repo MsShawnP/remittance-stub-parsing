@@ -178,3 +178,15 @@ quarto" or "scope, scrollytelling, decoration"]
 **Status:** Open. Next session: `git pull --rebase origin main` on each, resolve conflicts, push.
 
 **Tags:** git, push-rejected, divergence, url-cleanup, multi-repo
+
+### 2026-06-08 — sse-starlette missing from requirements.txt crashed first Fly.io deploy
+
+**Attempted:** Deployed to Fly.io with existing requirements.txt.
+
+**Why it didn't work:** `sse-starlette` was imported by `app/routes/tour.py` but never listed in requirements.txt. It was installed in the local venv (transitive or manual install) so local development worked fine. The Docker build installed only declared dependencies — container crashed on startup with `ModuleNotFoundError: No module named 'sse_starlette'`. Machine restarted 10 times before giving up.
+
+**What we tried instead:** Added `sse-starlette>=2.0` to requirements.txt, committed, redeployed. Second deploy succeeded.
+
+**Status:** Resolved. Lesson: diff `pip freeze` against requirements.txt before first deploy to catch undeclared dependencies.
+
+**Tags:** fly-io, deploy, requirements, sse-starlette, missing-dependency

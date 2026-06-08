@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 19:17 — Session wrap: visual verification, font self-hosting, Fly.io deploy with custom domain
+
+**Started from:** All 9 units built (U1–U9), 206 tests passing. No visual verification, no self-hosted fonts, not deployed.
+
+**Did:** Verified all 5 routes in browser. Fixed header brand to "Lailara LLC". Self-hosted Playfair Display + Source Sans 3 woff2. Deployed to Fly.io — fixed missing sse-starlette in requirements.txt. Added DNS records via Cloudflare API. SSL cert issued.
+
+**State:** All routes live at https://remittance.lailarallc.com. 206 tests passing. All Definition of Done items complete. No ANTHROPIC_API_KEY on Fly (pdfplumber-only). project-health.md needs Tests column updated to "yes".
+
+**Next:** Run /ce:review for code quality pass. Update project-health.md. Consider setting ANTHROPIC_API_KEY on Fly.
+
+---
+
 ## 2026-06-08 19:16 — Deployed to Fly.io, custom domain remittance.lailarallc.com live with SSL
 
 **What changed:** Deployed to Fly.io (IAD, shared-cpu-1x, 512MB). Fixed missing sse-starlette in requirements.txt that crashed the container. Added DNS records (A + AAAA) via Cloudflare API. SSL cert issued (Let's Encrypt, RSA+ECDSA).

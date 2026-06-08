@@ -77,7 +77,7 @@ Full plan at docs/plans/2026-06-04-001-feat-remittance-stub-parsing-plan.md.
 - [x] Review queue shows flagged rows with side-by-side PDF + form
 - [x] Case study (HTML+PDF) with Cinderhaven findings, ties to $3.4M annualized
 - [x] All numbers match Cinderhaven canonical figures exactly
-- [ ] Deployed (Fly.io or Cloudflare) with lailarallc.com subdomain
+- [x] Deployed (Fly.io or Cloudflare) with lailarallc.com subdomain
 
 ---
 
