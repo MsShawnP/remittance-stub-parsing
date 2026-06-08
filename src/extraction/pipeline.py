@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.extraction.llm_extractor import extract_with_llm, is_llm_available
-from src.extraction.pdf_extractor import extract_stub
+from src.extraction.pdf_extractor import extract_stub, extract_stub_with_text
 from src.models import RemittanceStub
 
 logger = logging.getLogger(__name__)
@@ -65,8 +65,8 @@ def extract(
     """
     path = Path(pdf_path)
 
-    # Step 1: Always run pdfplumber first
-    pdfplumber_stub = extract_stub(path)
+    # Step 1: Always run pdfplumber first (captures full text in one read)
+    pdfplumber_stub, full_text = extract_stub_with_text(path)
     pdfplumber_count = len(pdfplumber_stub.deductions)
 
     result = ExtractionResult(
@@ -90,17 +90,9 @@ def extract(
         )
         return result
 
-    # Step 3: Run LLM extraction
+    # Step 3: Run LLM extraction using text from the same file read
     try:
-        # Get full text from the pdfplumber stub's source for LLM
-        import pdfplumber as _pdfplumber
-
-        with _pdfplumber.open(str(path)) as pdf:
-            all_text = "\n".join(
-                page.extract_text() or "" for page in pdf.pages
-            )
-
-        llm_deductions = extract_with_llm(all_text, client=client)
+        llm_deductions = extract_with_llm(full_text, client=client)
         llm_count = len(llm_deductions)
         result.llm_count = llm_count
         result.llm_used = True

@@ -7,6 +7,7 @@ degrades gracefully when WeasyPrint is unavailable (common on
 Windows without system deps).
 """
 
+import asyncio
 import json
 from collections import defaultdict
 from datetime import date
@@ -47,12 +48,13 @@ def _format_currency(value) -> str:
 def _format_compact(value) -> str:
     """Format a number compactly: $1.2M, $300K, etc."""
     d = Decimal(str(value))
+    sign = "-" if d < 0 else ""
     abs_val = abs(d)
     if abs_val >= 1_000_000:
-        return f"${abs_val / 1_000_000:,.1f}M"
+        return f"{sign}${abs_val / 1_000_000:,.1f}M"
     elif abs_val >= 1_000:
-        return f"${abs_val / 1_000:,.0f}K"
-    return f"${abs_val:,.2f}"
+        return f"{sign}${abs_val / 1_000:,.0f}K"
+    return f"{sign}${abs_val:,.2f}"
 
 
 # Register Jinja2 filters
@@ -100,9 +102,12 @@ def _process_stubs(filenames: list[str]) -> dict:
     flagged_count = 0
     formats_seen = set()
 
+    stubs_dir_resolved = STUBS_DIR.resolve()
     for filename in filenames:
-        pdf_path = STUBS_DIR / filename
-        if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
+        pdf_path = (STUBS_DIR / filename).resolve()
+        if not pdf_path.is_relative_to(stubs_dir_resolved):
+            continue
+        if not pdf_path.exists() or pdf_path.suffix != ".pdf":
             continue
 
         # Extract
@@ -240,7 +245,7 @@ async def report_page(
     else:
         filenames = [s.strip() for s in stubs.split(",") if s.strip()]
 
-    report_data = _process_stubs(filenames)
+    report_data = await asyncio.to_thread(_process_stubs, filenames)
 
     return templates.TemplateResponse(
         request,
@@ -277,7 +282,7 @@ async def report_pdf(
             media_type="text/plain",
         )
 
-    report_data = _process_stubs(filenames)
+    report_data = await asyncio.to_thread(_process_stubs, filenames)
 
     # Render the standalone PDF template (no base.html dependency)
     template = templates.get_template("report/case_study_pdf.html")
@@ -290,9 +295,21 @@ async def report_pdf(
 
     try:
         from weasyprint import HTML
+        from weasyprint import default_url_fetcher
 
-        base_url = str(Path(__file__).parent.parent / "static")
-        pdf_bytes = HTML(string=html_content, base_url=base_url).write_pdf()
+        static_dir = Path(__file__).parent.parent / "static"
+        static_prefix = static_dir.resolve().as_uri()
+
+        def _restricted_fetcher(url):
+            if url.startswith(static_prefix) or url.startswith("data:"):
+                return default_url_fetcher(url)
+            return {"string": "", "mime_type": "text/plain"}
+
+        pdf_bytes = HTML(
+            string=html_content,
+            base_url=str(static_dir),
+            url_fetcher=_restricted_fetcher,
+        ).write_pdf()
 
         return Response(
             content=pdf_bytes,

@@ -1,3 +1,4 @@
+import functools
 from datetime import date
 from decimal import Decimal
 from enum import Enum
@@ -41,7 +42,7 @@ class DeductionEntry(BaseModel):
 class RemittanceStub(BaseModel):
     retailer: RetailerFormat
     check_number: str
-    payment_date: date
+    payment_date: Optional[date] = None
     gross_invoice: Decimal = Field(ge=0)
     net_cash: Decimal
     payer_name: str
@@ -89,6 +90,7 @@ CONFIG_DIR = Path(__file__).parent / "config"
 REASON_CODES_DIR = CONFIG_DIR / "reason_codes"
 
 
+@functools.lru_cache(maxsize=8)
 def load_reason_codes(retailer: RetailerFormat) -> dict[str, ReasonCode]:
     """Load reason-code mapping from the retailer's YAML config.
 

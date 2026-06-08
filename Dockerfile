@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fontconfig \
     && rm -rf /var/lib/apt/lists/*
 
+RUN groupadd -r appuser && useradd -r -g appuser -d /app appuser
+
 WORKDIR /app
 
 COPY requirements.txt .
@@ -22,6 +24,10 @@ RUN pip install --no-cache-dir -e .
 RUN python -c "from src.stub_generator import generate_all_stubs; from pathlib import Path; generate_all_stubs(Path('stubs'))"
 
 RUN fc-cache -fv
+
+RUN chown -R appuser:appuser /app
+
+USER appuser
 
 EXPOSE 8080
 

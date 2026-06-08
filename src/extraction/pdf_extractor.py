@@ -229,24 +229,17 @@ def extract_deductions(tables: list, format_config: dict) -> list[DeductionEntry
     return deductions
 
 
-def extract_stub(pdf_path: Path) -> RemittanceStub:
-    """Extract a complete RemittanceStub from a PDF file.
+def extract_stub_with_text(pdf_path: Path) -> tuple[RemittanceStub, str]:
+    """Extract a RemittanceStub and full PDF text in a single file open.
 
-    Top-level orchestrator that:
-    1. Detects the retailer format
-    2. Loads the format config
-    3. Extracts header fields
-    4. Extracts tables from all pages (handles multi-page UNFI stubs)
-    5. Maps table rows to DeductionEntry models
-    6. Extracts footer totals
-    7. Returns a complete RemittanceStub model
+    Returns (stub, full_text). Use this when you need both the structured
+    stub and the raw text (e.g., for LLM extraction in the pipeline).
     """
     path = Path(pdf_path)
     retailer = detect_format(path)
     config = load_format_config(retailer)
 
     with pdfplumber.open(str(path)) as pdf:
-        # Collect full text from all pages (for header/footer extraction)
         all_text_parts = []
         all_tables = []
 
@@ -259,17 +252,11 @@ def extract_stub(pdf_path: Path) -> RemittanceStub:
 
     full_text = "\n".join(all_text_parts)
 
-    # Extract header from first page text
     header = extract_header(all_text_parts[0] if all_text_parts else "", retailer)
-
-    # Extract totals from full text (footer may be on last page)
     totals = extract_totals(full_text)
-
-    # Extract deductions from all tables across all pages
     deductions = extract_deductions(all_tables, config)
 
-    # Build the RemittanceStub
-    return RemittanceStub(
+    stub = RemittanceStub(
         retailer=retailer,
         check_number=header["check_number"],
         payment_date=header["payment_date"],
@@ -279,3 +266,20 @@ def extract_stub(pdf_path: Path) -> RemittanceStub:
         deductions=deductions,
         source_file=str(path),
     )
+    return stub, full_text
+
+
+def extract_stub(pdf_path: Path) -> RemittanceStub:
+    """Extract a complete RemittanceStub from a PDF file.
+
+    Top-level orchestrator that:
+    1. Detects the retailer format
+    2. Loads the format config
+    3. Extracts header fields
+    4. Extracts tables from all pages (handles multi-page UNFI stubs)
+    5. Maps table rows to DeductionEntry models
+    6. Extracts footer totals
+    7. Returns a complete RemittanceStub model
+    """
+    stub, _ = extract_stub_with_text(pdf_path)
+    return stub

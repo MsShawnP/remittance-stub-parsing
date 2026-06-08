@@ -1,5 +1,7 @@
 """Demo routes: landing page, stub listing, processing, and exploration."""
 
+import asyncio
+import functools
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
@@ -16,27 +18,32 @@ TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
-def _scan_stubs() -> list[dict]:
-    """Scan the stubs/ directory and return metadata for each PDF."""
+@functools.cache
+def _scan_stubs() -> tuple[dict, ...]:
+    """Scan the stubs/ directory and return metadata for each PDF.
+
+    Cached because the stubs directory is static at runtime.
+    Returns a tuple (hashable) for cache compatibility.
+    """
     if not STUBS_DIR.exists():
-        return []
+        return ()
 
     stubs = []
     for pdf in sorted(STUBS_DIR.glob("*.pdf")):
-        # Derive retailer from filename prefix
         name = pdf.stem
-        if name.startswith("walmart"):
+        name_lower = name.lower()
+        if name_lower.startswith("walmart"):
             retailer = "Walmart"
-        elif name.startswith("costco"):
+        elif name_lower.startswith("costco"):
             retailer = "Costco"
-        elif name.startswith("unfi"):
+        elif name_lower.startswith("unfi"):
             retailer = "UNFI"
-        elif name.startswith("keHE") or name.startswith("kehe"):
+        elif name_lower.startswith("kehe"):
             retailer = "KeHE"
         else:
             retailer = "Unknown"
 
-        is_broken = "broken" in name
+        is_broken = "broken" in name_lower
         stubs.append({
             "filename": pdf.name,
             "name": name.replace("_", " ").title(),
@@ -45,7 +52,7 @@ def _scan_stubs() -> list[dict]:
             "size_kb": round(pdf.stat().st_size / 1024, 1),
         })
 
-    return stubs
+    return tuple(stubs)
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -80,12 +87,25 @@ async def explore_page(request: Request):
     )
 
 
+_MAX_STUB_SIZE = 10 * 1024 * 1024  # 10 MB
+
+
+def _safe_stub_path(filename: str) -> Path:
+    """Resolve a stub filename and verify it stays within STUBS_DIR."""
+    pdf_path = (STUBS_DIR / filename).resolve()
+    if not pdf_path.is_relative_to(STUBS_DIR.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid filename")
+    if not pdf_path.exists() or pdf_path.suffix != ".pdf":
+        raise HTTPException(status_code=404, detail=f"PDF not found: {filename}")
+    if pdf_path.stat().st_size > _MAX_STUB_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+    return pdf_path
+
+
 @router.get("/stubs/pdf/{filename}")
 async def serve_pdf(filename: str):
     """Serve a stub PDF file for iframe display in the review queue."""
-    pdf_path = STUBS_DIR / filename
-    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-        raise HTTPException(status_code=404, detail=f"PDF not found: {filename}")
+    pdf_path = _safe_stub_path(filename)
     return FileResponse(
         path=str(pdf_path),
         media_type="application/pdf",
@@ -101,12 +121,10 @@ async def process_stub(stub_filename: str, request: Request):
     optionally LLM), validates arithmetic and reason codes, and
     returns a rendered stub_card partial for HTMX swap.
     """
-    pdf_path = STUBS_DIR / stub_filename
-    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-        raise HTTPException(status_code=404, detail=f"Stub not found: {stub_filename}")
+    pdf_path = _safe_stub_path(stub_filename)
 
     # Run extraction (skip LLM for demo speed)
-    extraction_result = extract(pdf_path, skip_llm=True)
+    extraction_result = await asyncio.to_thread(extract, pdf_path, skip_llm=True)
     stub = extraction_result.stub
 
     # Run validation

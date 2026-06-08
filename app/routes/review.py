@@ -1,5 +1,7 @@
 """Review queue routes: flagged stub listing, detail view, revalidation."""
 
+import asyncio
+import threading
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -20,24 +22,34 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 # In-memory store of processed results, keyed by filename.
 # Populated when stubs are processed via /process or /tour.
 _processed_stubs: dict[str, dict] = {}
+_processed_lock = threading.Lock()
+
+
+def _safe_stub_path(filename: str) -> Path:
+    """Resolve a stub filename and verify it stays within STUBS_DIR."""
+    pdf_path = (STUBS_DIR / filename).resolve()
+    if not pdf_path.is_relative_to(STUBS_DIR.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid filename")
+    if not pdf_path.exists() or pdf_path.suffix != ".pdf":
+        raise HTTPException(status_code=404, detail=f"Stub not found: {filename}")
+    return pdf_path
 
 
 def _ensure_processed(filename: str) -> dict:
     """Process a stub if it hasn't been processed yet, return cached result."""
-    if filename not in _processed_stubs:
-        pdf_path = STUBS_DIR / filename
-        if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-            raise HTTPException(status_code=404, detail=f"Stub not found: {filename}")
+    with _processed_lock:
+        if filename not in _processed_stubs:
+            pdf_path = _safe_stub_path(filename)
 
-        extraction_result = extract(pdf_path, skip_llm=True)
-        validation = validate_stub(extraction_result.stub, stub_id=filename)
-        _processed_stubs[filename] = {
-            "stub": extraction_result.stub,
-            "validation": validation,
-            "extraction_method": extraction_result.method,
-            "filename": filename,
-        }
-    return _processed_stubs[filename]
+            extraction_result = extract(pdf_path, skip_llm=True)
+            validation = validate_stub(extraction_result.stub, stub_id=filename)
+            _processed_stubs[filename] = {
+                "stub": extraction_result.stub,
+                "validation": validation,
+                "extraction_method": extraction_result.method,
+                "filename": filename,
+            }
+        return _processed_stubs[filename]
 
 
 def _get_flagged_stubs() -> list[dict]:
@@ -67,10 +79,7 @@ async def review_queue(request: Request):
 @router.get("/{stub_filename}", response_class=HTMLResponse)
 async def review_detail(stub_filename: str, request: Request):
     """Review detail page with side-by-side PDF viewer and editable form."""
-    pdf_path = STUBS_DIR / stub_filename
-    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-        raise HTTPException(status_code=404, detail=f"Stub not found: {stub_filename}")
-
+    _safe_stub_path(stub_filename)
     result = _ensure_processed(stub_filename)
 
     return templates.TemplateResponse(
@@ -95,9 +104,7 @@ async def revalidate_stub(stub_filename: str, request: Request):
     - deduction_{i}_description: description for row i
     - deduction_{i}_amount: Decimal string for row i
     """
-    pdf_path = STUBS_DIR / stub_filename
-    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-        raise HTTPException(status_code=404, detail=f"Stub not found: {stub_filename}")
+    _safe_stub_path(stub_filename)
 
     # Get the original stub for fields we don't edit
     original = _ensure_processed(stub_filename)
@@ -116,10 +123,11 @@ async def revalidate_stub(stub_filename: str, request: Request):
     except (InvalidOperation, ValueError):
         net_cash = original_stub.net_cash
 
-    # Parse deduction rows from form
+    # Parse deduction rows from form (capped to prevent abuse)
+    max_deductions = 200
     deductions = []
     i = 0
-    while f"deduction_{i}_invoice" in form_data:
+    while f"deduction_{i}_invoice" in form_data and i < max_deductions:
         invoice_number = str(form_data.get(f"deduction_{i}_invoice", ""))
         reason_code = str(form_data.get(f"deduction_{i}_reason_code", ""))
         description = str(form_data.get(f"deduction_{i}_description", ""))
@@ -156,12 +164,13 @@ async def revalidate_stub(stub_filename: str, request: Request):
     validation = validate_stub(updated_stub, stub_id=stub_filename)
 
     # Update the cache
-    _processed_stubs[stub_filename] = {
-        "stub": updated_stub,
-        "validation": validation,
-        "extraction_method": original["extraction_method"],
-        "filename": stub_filename,
-    }
+    with _processed_lock:
+        _processed_stubs[stub_filename] = {
+            "stub": updated_stub,
+            "validation": validation,
+            "extraction_method": original["extraction_method"],
+            "filename": stub_filename,
+        }
 
     # Return the review form partial with updated data
     return templates.TemplateResponse(

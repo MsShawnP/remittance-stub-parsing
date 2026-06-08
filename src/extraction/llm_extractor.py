@@ -10,7 +10,7 @@ API call fails, the pipeline falls back to pdfplumber-only extraction.
 
 import logging
 import os
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Optional
 
 from src.models import DeductionEntry
@@ -130,6 +130,7 @@ def extract_with_llm(
                     "content": f"Extract all deductions from this remittance stub:\n\n{pdf_text}",
                 }
             ],
+            timeout=30.0,
         )
     except Exception as e:
         raise RuntimeError(f"Claude API call failed: {e}") from e
@@ -180,7 +181,7 @@ def _convert_raw_deductions(raw_items: list[dict]) -> list[DeductionEntry]:
                     amount=amount,
                 )
             )
-        except Exception as e:
+        except (ValueError, KeyError, TypeError, InvalidOperation) as e:
             logger.warning(
                 "Skipping malformed LLM deduction item %r: %s", item, e
             )

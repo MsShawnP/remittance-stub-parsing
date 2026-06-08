@@ -54,15 +54,26 @@ TOUR_STEPS = [
 ]
 
 
+def _safe_stub_path(filename: str) -> Path:
+    """Resolve a stub filename and verify it stays within STUBS_DIR."""
+    from fastapi import HTTPException as _HTTPException
+
+    pdf_path = (STUBS_DIR / filename).resolve()
+    if not pdf_path.is_relative_to(STUBS_DIR.resolve()):
+        raise _HTTPException(status_code=400, detail="Invalid filename")
+    if not pdf_path.exists() or pdf_path.suffix != ".pdf":
+        raise _HTTPException(status_code=404, detail=f"Stub not found: {filename}")
+    return pdf_path
+
+
 async def _stream_pipeline(stub_filename: str):
     """Generator that yields SSE events as the pipeline runs.
 
     Each event has a named type and JSON data payload. The actual
-    extraction work is synchronous (pdfplumber), but we wrap
-    each step with a small delay so the SSE stream is observable
-    in the UI rather than completing instantly.
+    extraction work is synchronous (pdfplumber), so we run it in
+    a thread to avoid blocking the event loop.
     """
-    pdf_path = STUBS_DIR / stub_filename
+    pdf_path = _safe_stub_path(stub_filename)
 
     # Event: extraction started
     yield {
@@ -74,8 +85,8 @@ async def _stream_pipeline(stub_filename: str):
     }
     await asyncio.sleep(0.3)
 
-    # Event: tables found (run pdfplumber)
-    stub = extract_stub(pdf_path)
+    # Event: tables found (run pdfplumber in thread)
+    stub = await asyncio.to_thread(extract_stub, pdf_path)
     deduction_count = len(stub.deductions)
     yield {
         "event": "tables_found",
@@ -166,9 +177,9 @@ async def tour_step_result(step_number: int, request: Request):
         raise HTTPException(status_code=404, detail=f"Invalid step: {step_number}")
 
     step = TOUR_STEPS[step_number - 1]
-    pdf_path = STUBS_DIR / step["filename"]
+    pdf_path = _safe_stub_path(step["filename"])
 
-    extraction_result = extract(pdf_path, skip_llm=True)
+    extraction_result = await asyncio.to_thread(extract, pdf_path, skip_llm=True)
     validation = validate_stub(extraction_result.stub, stub_id=step["filename"])
 
     return templates.TemplateResponse(
@@ -191,8 +202,6 @@ async def stream_pipeline(stub_filename: str):
     Events: extraction_started, tables_found, validation_running,
     result_ready.
     """
-    pdf_path = STUBS_DIR / stub_filename
-    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
-        raise HTTPException(status_code=404, detail=f"Stub not found: {stub_filename}")
+    _safe_stub_path(stub_filename)
 
     return EventSourceResponse(_stream_pipeline(stub_filename))
