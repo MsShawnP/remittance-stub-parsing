@@ -1,0 +1,83 @@
+<div class="stub-card" id="result-{{ filename }}">
+    <div class="stub-card-header">
+        <h3 class="stub-card-title">{{ stub.retailer.value | title }} &mdash; Check #{{ stub.check_number }}</h3>
+        <span class="status-badge status-{{ validation.status.value }}">
+            {{ validation.status.value | upper }}
+        </span>
+    </div>
+
+    <div class="stub-card-summary">
+        <div class="summary-item">
+            <span class="summary-label">Gross Invoice</span>
+            <span class="summary-value">${{ "{:,.2f}".format(stub.gross_invoice) }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Net Cash</span>
+            <span class="summary-value">${{ "{:,.2f}".format(stub.net_cash) }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Deductions</span>
+            <span class="summary-value">{{ stub.deductions | length }} line items</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Extraction</span>
+            <span class="summary-value">{{ extraction_method }}</span>
+        </div>
+    </div>
+
+    <div class="stub-card-checks">
+        <div class="check-item {% if validation.arithmetic_valid %}check-pass{% else %}check-fail{% endif %}">
+            <span class="check-icon">{% if validation.arithmetic_valid %}&#10003;{% else %}&#10007;{% endif %}</span>
+            Arithmetic
+            {% if validation.discrepancy_amount %}
+                <span class="check-detail">(off by ${{ "{:,.2f}".format(validation.discrepancy_amount) }})</span>
+            {% endif %}
+        </div>
+        <div class="check-item {% if validation.all_codes_mapped %}check-pass{% else %}check-fail{% endif %}">
+            <span class="check-icon">{% if validation.all_codes_mapped %}&#10003;{% else %}&#10007;{% endif %}</span>
+            Reason Codes
+        </div>
+    </div>
+
+    {% if validation.details %}
+    <div class="stub-card-issues">
+        <h4 class="issues-title">Issues ({{ validation.details | length }})</h4>
+        <ul class="issues-list">
+            {% for detail in validation.details %}
+            <li class="issue-item">
+                <span class="issue-field">{{ detail.field }}</span>: {{ detail.issue }}
+                {% if detail.expected and detail.actual %}
+                    <span class="issue-expected">(expected: {{ detail.expected }}, got: {{ detail.actual }})</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if stub.deductions %}
+    <details class="stub-card-deductions">
+        <summary>Deduction Details ({{ stub.deductions | length }})</summary>
+        <table class="deductions-table">
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Reason Code</th>
+                    <th>Description</th>
+                    <th class="col-amount">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in stub.deductions %}
+                <tr>
+                    <td>{{ d.invoice_number }}</td>
+                    <td><code>{{ d.reason_code }}</code></td>
+                    <td>{{ d.reason_description }}</td>
+                    <td class="col-amount">${{ "{:,.2f}".format(d.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+    {% endif %}
+</div>

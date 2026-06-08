@@ -1,0 +1,628 @@
+/* Lailara Design System — CSS Custom Properties
+   Colors, typography, and layout tokens from the design system.
+   Fonts: system fallbacks until self-hosted fonts arrive in U9. */
+
+:root {
+    /* Canvas & London greyscale */
+    --canvas: #f5f3ee;
+    --text-primary: #333333;
+    --text-secondary: #595959;
+    --gridline: #d9d9d9;
+    --reference: #666666;
+    --disabled: #b3b3b3;
+    --ink: #0d0d0d;
+
+    /* Chicago (accent blue) */
+    --navy: #1f2e7a;
+    --navy-hover: #141e52;
+    --navy-light: #8e9ad0;
+
+    /* Brand red — text and 1px rules only */
+    --red: #cc100a;
+
+    /* Hong Kong sequential teal */
+    --teal: #158f75;
+    --teal-dark: #063d32;
+    --teal-light: #6dcdb5;
+
+    /* Semantic status */
+    --pass-bg: #e4f5f0;
+    --pass-text: #0e6e5a;
+    --fail-bg: #fde8e7;
+    --fail-text: #7a0906;
+    --warn-bg: #fdeee0;
+    --warn-text: #7a3d10;
+    --info-bg: #e5e8f5;
+    --info-text: #1f2e7a;
+
+    /* Dark card */
+    --card-dark-bg: #1a1a1a;
+    --card-dark-text: #ffffff;
+    --card-dark-subtitle: #d8d8d8;
+    --card-dark-muted: #9a9a9a;
+    --card-dark-border: rgba(255, 255, 255, 0.12);
+
+    /* Typography */
+    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    /* Layout */
+    --content-max-width: 900px;
+    --section-gap: 60px;
+    --border-radius: 2px;
+}
+
+/* --- Reset & Base --- */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--canvas);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: var(--navy);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--navy-hover);
+}
+
+/* --- Header --- */
+
+.site-header {
+    border-bottom: 1px solid var(--gridline);
+    padding: 16px 24px;
+}
+
+.header-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+
+.brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.brand-name {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.brand-subtitle {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+
+/* --- Main Content --- */
+
+.content {
+    flex: 1;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 48px 24px;
+    width: 100%;
+}
+
+/* --- Hero --- */
+
+.hero {
+    margin-bottom: var(--section-gap);
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-body {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    max-width: 660px;
+    margin-bottom: 32px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* --- Buttons --- */
+
+.btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 150ms ease;
+}
+
+.btn-primary {
+    background-color: var(--navy);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--navy-hover);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+}
+
+.btn-secondary:hover {
+    background-color: var(--info-bg);
+    color: var(--navy-hover);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+/* --- Section Titles --- */
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 24px;
+}
+
+/* --- Format Cards --- */
+
+.formats-section {
+    margin-bottom: var(--section-gap);
+}
+
+.format-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.format-card {
+    background-color: #ffffff;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    padding: 24px;
+}
+
+.format-name {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+
+.format-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* --- Pipeline Steps --- */
+
+.pipeline-section {
+    margin-bottom: var(--section-gap);
+}
+
+.pipeline-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.pipeline-step {
+    text-align: center;
+    padding: 24px 16px;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--navy);
+    color: #ffffff;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.step-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+
+.step-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* --- Stub Card (HTMX partial) --- */
+
+.stub-card {
+    background-color: #ffffff;
+    border: 1px solid var(--gridline);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.stub-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.stub-card-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.status-badge {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.status-verified {
+    background-color: var(--pass-bg);
+    color: var(--pass-text);
+}
+
+.status-flagged {
+    background-color: var(--fail-bg);
+    color: var(--fail-text);
+}
+
+.stub-card-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gridline);
+}
+
+.summary-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+/* --- Check Items --- */
+
+.stub-card-checks {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.check-item {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.check-pass {
+    color: var(--pass-text);
+}
+
+.check-fail {
+    color: var(--fail-text);
+}
+
+.check-icon {
+    font-weight: 700;
+}
+
+.check-detail {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* --- Issues --- */
+
+.stub-card-issues {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: var(--fail-bg);
+    border-radius: var(--border-radius);
+}
+
+.issues-title {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fail-text);
+    margin-bottom: 8px;
+}
+
+.issues-list {
+    list-style: none;
+    padding: 0;
+}
+
+.issue-item {
+    font-size: 13px;
+    color: var(--fail-text);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(122, 9, 6, 0.1);
+}
+
+.issue-item:last-child {
+    border-bottom: none;
+}
+
+.issue-field {
+    font-weight: 600;
+}
+
+.issue-expected {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* --- Deductions Table --- */
+
+.stub-card-deductions {
+    margin-top: 12px;
+}
+
+.stub-card-deductions summary {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.deductions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.deductions-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--gridline);
+}
+
+.deductions-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gridline);
+    color: var(--text-primary);
+}
+
+.deductions-table code {
+    font-size: 13px;
+    background-color: var(--canvas);
+    padding: 2px 6px;
+    border-radius: var(--border-radius);
+}
+
+.col-amount {
+    text-align: right;
+}
+
+/* --- Progress (SSE streaming) --- */
+
+.progress-event {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-active {
+    background-color: var(--navy);
+    animation: pulse 1s infinite;
+}
+
+.dot-complete {
+    background-color: var(--teal);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.progress-message {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.progress-details {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: 20px;
+}
+
+/* --- Footer --- */
+
+.site-footer {
+    border-top: 1px solid var(--gridline);
+    padding: 24px;
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+
+.site-footer p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.site-footer a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+/* --- HTMX indicators --- */
+
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline-block;
+}
+
+.htmx-request.htmx-indicator {
+    display: inline-block;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 640px) {
+    .content {
+        padding: 32px 16px;
+    }
+
+    .hero-title {
+        font-size: 32px;
+    }
+
+    .brand-name {
+        font-size: 20px;
+    }
+
+    .brand-subtitle {
+        font-size: 12px;
+    }
+
+    .format-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .stub-card-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stub-card-checks {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+}
+
+/* --- Print --- */
+
+@media print {
+    body {
+        background-color: #ffffff;
+    }
+
+    .site-header,
+    .site-footer,
+    .hero-actions {
+        display: none;
+    }
+
+    .content {
+        padding: 0;
+        max-width: 100%;
+    }
+}

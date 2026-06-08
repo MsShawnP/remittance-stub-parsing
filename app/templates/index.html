@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Remittance Stub Parser{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1 class="hero-title">Remittance Stub Parser</h1>
+    <p class="hero-body">
+        Multi-format PDF extraction engine that reads Walmart, Costco, UNFI, and KeHE
+        remittance advice, validates deductions against invoices, and surfaces what is
+        about to expire past the dispute window before anyone reconciles it.
+    </p>
+    <div class="hero-actions">
+        <a href="/tour" class="btn btn-primary">Start Guided Tour</a>
+        <a href="/explore" class="btn btn-secondary">Explore Freely</a>
+    </div>
+</section>
+
+<section class="formats-section">
+    <h2 class="section-title">Supported Formats</h2>
+    <div class="format-grid">
+        <div class="format-card">
+            <h3 class="format-name">Walmart</h3>
+            <p class="format-desc">
+                Remittance advice with promotional allowances, freight claims,
+                and compliance fines. Table-heavy layout with reason codes
+                mapped to 12 deduction categories.
+            </p>
+        </div>
+        <div class="format-card">
+            <h3 class="format-name">Costco</h3>
+            <p class="format-desc">
+                Volume rebate and warehouse handling deductions. Structured
+                two-column layout with gross/net reconciliation and
+                multi-line item descriptions.
+            </p>
+        </div>
+        <div class="format-card">
+            <h3 class="format-name">UNFI</h3>
+            <p class="format-desc">
+                Distributor chargebacks for spoilage, short-ships, and
+                invoice discrepancies. Variable-length line items that
+                sometimes span multiple pages.
+            </p>
+        </div>
+        <div class="format-card">
+            <h3 class="format-name">KeHE</h3>
+            <p class="format-desc">
+                Promotional billbacks, new-item slotting fees, and
+                reclamation deductions. Compact single-page format with
+                merged header rows.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="pipeline-section">
+    <h2 class="section-title">How It Works</h2>
+    <div class="pipeline-steps">
+        <div class="pipeline-step">
+            <span class="step-number">1</span>
+            <h3 class="step-title">Extract</h3>
+            <p class="step-desc">
+                pdfplumber reads native-text PDFs and extracts tabular
+                deduction data. An optional LLM pass catches line items
+                that table detection misses.
+            </p>
+        </div>
+        <div class="pipeline-step">
+            <span class="step-number">2</span>
+            <h3 class="step-title">Validate</h3>
+            <p class="step-desc">
+                Arithmetic check confirms net + deductions = gross invoice.
+                Reason codes are mapped against retailer configs to flag
+                unmapped or suspicious entries.
+            </p>
+        </div>
+        <div class="pipeline-step">
+            <span class="step-number">3</span>
+            <h3 class="step-title">Reconcile</h3>
+            <p class="step-desc">
+                Validated stubs feed a SQLite ledger. Each deduction is
+                matched against invoice and AR records to surface
+                unrecovered amounts before the dispute window closes.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

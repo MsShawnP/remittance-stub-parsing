@@ -1,0 +1,11 @@
+<div class="progress-event" data-event="{{ event_type }}">
+    <div class="progress-indicator">
+        <span class="progress-dot {% if is_complete %}dot-complete{% else %}dot-active{% endif %}"></span>
+        <span class="progress-message">{{ message }}</span>
+    </div>
+    {% if details %}
+    <div class="progress-details">
+        {{ details }}
+    </div>
+    {% endif %}
+</div>

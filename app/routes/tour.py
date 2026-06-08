@@ -1,0 +1,95 @@
+"""SSE endpoint for streaming pipeline progress during guided tour."""
+
+import asyncio
+import json
+from pathlib import Path
+
+from fastapi import APIRouter, HTTPException
+from sse_starlette.sse import EventSourceResponse
+
+from src.extraction.pdf_extractor import extract_stub
+from src.validation.reason_codes import validate_stub
+
+router = APIRouter(prefix="/tour")
+
+STUBS_DIR = Path(__file__).parent.parent.parent / "stubs"
+
+
+async def _stream_pipeline(stub_filename: str):
+    """Generator that yields SSE events as the pipeline runs.
+
+    Each event has a named type and JSON data payload. The actual
+    extraction work is synchronous (pdfplumber), but we wrap
+    each step with a small delay so the SSE stream is observable
+    in the UI rather than completing instantly.
+    """
+    pdf_path = STUBS_DIR / stub_filename
+
+    # Event: extraction started
+    yield {
+        "event": "extraction_started",
+        "data": json.dumps({
+            "message": f"Starting extraction for {stub_filename}",
+            "filename": stub_filename,
+        }),
+    }
+    await asyncio.sleep(0.3)
+
+    # Event: tables found (run pdfplumber)
+    stub = extract_stub(pdf_path)
+    deduction_count = len(stub.deductions)
+    yield {
+        "event": "tables_found",
+        "data": json.dumps({
+            "message": f"Found {deduction_count} deduction line items",
+            "deduction_count": deduction_count,
+            "retailer": stub.retailer.value,
+        }),
+    }
+    await asyncio.sleep(0.3)
+
+    # Event: validation running
+    yield {
+        "event": "validation_running",
+        "data": json.dumps({
+            "message": "Running arithmetic and reason-code validation",
+        }),
+    }
+    await asyncio.sleep(0.2)
+
+    # Run validation
+    validation = validate_stub(stub, stub_id=stub_filename)
+
+    # Event: result ready
+    yield {
+        "event": "result_ready",
+        "data": json.dumps({
+            "message": "Pipeline complete",
+            "filename": stub_filename,
+            "retailer": stub.retailer.value,
+            "check_number": stub.check_number,
+            "gross_invoice": str(stub.gross_invoice),
+            "net_cash": str(stub.net_cash),
+            "deduction_count": deduction_count,
+            "status": validation.status.value,
+            "arithmetic_valid": validation.arithmetic_valid,
+            "all_codes_mapped": validation.all_codes_mapped,
+            "discrepancy_amount": str(validation.discrepancy_amount) if validation.discrepancy_amount else None,
+            "issue_count": len(validation.details),
+        }),
+    }
+
+
+@router.get("/stream/{stub_filename}")
+async def stream_pipeline(stub_filename: str):
+    """SSE endpoint that streams extraction + validation progress.
+
+    Connect via HTMX's SSE extension or plain EventSource.
+    Events: extraction_started, tables_found, validation_running,
+    result_ready.
+    """
+    pdf_path = STUBS_DIR / stub_filename
+    if not pdf_path.exists() or not pdf_path.suffix == ".pdf":
+        raise HTTPException(status_code=404, detail=f"Stub not found: {stub_filename}")
+
+    return EventSourceResponse(_stream_pipeline(stub_filename))
