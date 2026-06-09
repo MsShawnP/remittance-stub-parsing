@@ -9,6 +9,26 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 — First /improve pass: 6 fixes across security, docs, and path hygiene
+
+**Started from:** All 9 units built, 206 tests passing, deployed to Fly.io, code review complete. First /improve run.
+
+**Did:** Full audit (structural, security, dependency, workflow files). Found 2 critical + 4 important + 2 nice-to-have issues. Fixed all actionable items in 4 commits:
+1. README rewritten from "scaffolded, not yet built" to actual deployed state
+2. Self-hosted htmx 2.0.4 + htmx-ext-sse 2.2.3 from unpkg CDN into static/js/; added Content-Security-Policy middleware
+3. Error messages in report.py no longer leak internal filesystem paths; source_file field stores filename only (not absolute path) across extractor + 4 generators
+4. Archived completed arc in PLAN.md, added improvement history entry
+
+**Dependency audit:** pip-audit found 12 CVEs in 6 packages — all transitive from other projects sharing this venv (flask, aiohttp, pyjwt, werkzeug, diskcache). None are direct dependencies.
+
+**State:** 206 tests passing. 4 commits on main (not pushed). No active arc. Project is built, deployed, reviewed, and improved.
+
+**Deferred:** Refactor inline onclick handlers to event listeners so CSP can drop 'unsafe-inline' (future /improve pass).
+
+**Next:** Push to origin. Redeploy to Fly.io to pick up CSP header and self-hosted scripts. Next /improve due 2026-07-08.
+
+---
+
 ## 2026-06-08 — Session wrap: 12-reviewer code review, 17 findings fixed, redeployed
 
 **Started from:** All 9 units built, 206 tests passing, deployed to Fly.io. HANDOFF.md said "Run /ce:review for code quality pass."
