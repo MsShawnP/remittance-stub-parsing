@@ -1574,3 +1574,7 @@ a:hover {
         break-inside: avoid;
     }
 }
+
+.is-hidden {
+    display: none !important;
+}

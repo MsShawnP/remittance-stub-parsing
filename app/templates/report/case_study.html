@@ -24,13 +24,7 @@
             </label>
             {% endfor %}
         </div>
-        <button type="submit" class="btn btn-secondary" onclick="
-            var checked = document.querySelectorAll('input[name=stub_select]:checked');
-            if (checked.length === 0) { alert('Select at least one stub.'); return false; }
-            var names = Array.from(checked).map(function(c) { return c.value; }).join(',');
-            window.location.href = '/report?stubs=' + encodeURIComponent(names);
-            return false;
-        ">Generate Report</button>
+        <button type="submit" class="btn btn-secondary">Generate Report</button>
     </form>
 </div>
 {% else %}

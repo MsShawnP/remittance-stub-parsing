@@ -5,9 +5,8 @@ Start with: uvicorn app.main:app --reload
 
 from pathlib import Path
 
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.routes import demo, report, review, tour
 
@@ -15,8 +14,8 @@ APP_DIR = Path(__file__).parent
 
 CSP = (
     "default-src 'self'; "
-    "script-src 'self' 'unsafe-inline'; "
-    "style-src 'self' 'unsafe-inline'; "
+    "script-src 'self'; "
+    "style-src 'self'; "
     "font-src 'self'; "
     "img-src 'self'; "
     "connect-src 'self'; "
@@ -24,11 +23,23 @@ CSP = (
 )
 
 
-class CSPMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        response: Response = await call_next(request)
-        response.headers["Content-Security-Policy"] = CSP
-        return response
+class CSPMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        async def send_with_csp(message):
+            if message["type"] == "http.response.start":
+                headers = list(message.get("headers", []))
+                headers.append((b"content-security-policy", CSP.encode()))
+                message = {**message, "headers": headers}
+            await send(message)
+
+        await self.app(scope, receive, send_with_csp)
 
 
 app = FastAPI(title="Remittance Stub Parser")

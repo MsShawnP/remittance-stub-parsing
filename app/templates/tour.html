@@ -3,6 +3,8 @@
 {% block title %}Guided Tour{% endblock %}
 
 {% block content %}
+<script type="application/json" id="tour-data">{{ steps | tojson }}</script>
+
 <section class="tour-header">
     <h1 class="section-title">Guided Tour</h1>
     <p class="tour-intro">
@@ -18,7 +20,6 @@
         class="tour-step-btn {% if loop.first %}tour-step-active{% endif %}"
         id="step-btn-{{ step.step }}"
         data-step="{{ step.step }}"
-        onclick="RspApp.goToStep({{ step.step }})"
     >
         <span class="tour-step-number">{{ step.step }}</span>
         <span class="tour-step-label">{{ step.retailer }}</span>
@@ -30,8 +31,7 @@
     <div class="tour-step-intro" id="step-intro">
         <h2 class="tour-step-retailer">{{ steps[0].retailer }}</h2>
         <p class="tour-step-desc">{{ steps[0].description }}</p>
-        <button class="btn btn-primary" id="run-step-btn"
-            onclick="RspApp.runTourStep(1)">
+        <button class="btn btn-primary" id="run-step-btn">
             Run Pipeline
         </button>
     </div>
@@ -39,16 +39,16 @@
     <div id="step-result"></div>
 </div>
 
-<div class="tour-nav-buttons" id="tour-nav-buttons" style="display: none;">
-    <button class="btn btn-secondary" id="prev-step-btn" onclick="RspApp.prevStep()" style="display: none;">
+<div class="tour-nav-buttons is-hidden" id="tour-nav-buttons">
+    <button class="btn btn-secondary is-hidden" id="prev-step-btn">
         Previous
     </button>
-    <button class="btn btn-primary" id="next-step-btn" onclick="RspApp.nextStep()">
+    <button class="btn btn-primary" id="next-step-btn">
         Next Format
     </button>
 </div>
 
-<div class="tour-summary" id="tour-summary" style="display: none;">
+<div class="tour-summary is-hidden" id="tour-summary">
     <h2 class="section-title">Tour Complete</h2>
     <p class="tour-summary-text">
         All five stubs have been processed. The pipeline successfully extracted
@@ -60,118 +60,4 @@
         <a href="/explore" class="btn btn-secondary">Explore More Stubs</a>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-(function () {
-    var totalSteps = {{ total_steps }};
-    var currentStep = 1;
-    var completedSteps = {};
-    var steps = {{ steps | tojson }};
-
-    function goToStep(stepNum) {
-        currentStep = stepNum;
-
-        // Update step indicator
-        document.querySelectorAll('.tour-step-btn').forEach(function (btn) {
-            btn.classList.remove('tour-step-active');
-            if (parseInt(btn.dataset.step) === stepNum) {
-                btn.classList.add('tour-step-active');
-            }
-        });
-
-        // Update intro content
-        var step = steps[stepNum - 1];
-        var intro = document.getElementById('step-intro');
-        intro.innerHTML =
-            '<h2 class="tour-step-retailer">' + step.retailer + '</h2>' +
-            '<p class="tour-step-desc">' + step.description + '</p>' +
-            '<button class="btn btn-primary" id="run-step-btn" ' +
-            'onclick="RspApp.runTourStep(' + stepNum + ')">Run Pipeline</button>';
-        intro.style.display = 'block';
-
-        // Clear previous results
-        document.getElementById('step-progress').innerHTML = '';
-        document.getElementById('step-result').innerHTML = '';
-
-        // If already completed, show result directly
-        if (completedSteps[stepNum]) {
-            intro.querySelector('#run-step-btn').textContent = 'Re-run Pipeline';
-        }
-
-        // Update nav buttons
-        updateNavButtons();
-    }
-
-    function runTourStep(stepNum) {
-        var step = steps[stepNum - 1];
-        var intro = document.getElementById('step-intro');
-        var runBtn = intro.querySelector('#run-step-btn');
-        runBtn.disabled = true;
-        runBtn.textContent = 'Processing...';
-
-        var progressEl = document.getElementById('step-progress');
-        progressEl.innerHTML = '';
-
-        var resultEl = document.getElementById('step-result');
-        resultEl.innerHTML = '';
-
-        // Connect SSE to stream progress
-        RspApp.connectSSE(
-            '/tour/stream/' + step.filename,
-            progressEl,
-            function (data) {
-                completedSteps[stepNum] = data;
-
-                // Fetch the rendered result partial
-                fetch('/tour/step/' + stepNum + '/result')
-                    .then(function (response) { return response.text(); })
-                    .then(function (html) {
-                        resultEl.innerHTML = html;
-                        runBtn.textContent = 'Re-run Pipeline';
-                        runBtn.disabled = false;
-
-                        // Show nav buttons
-                        document.getElementById('tour-nav-buttons').style.display = 'flex';
-                        updateNavButtons();
-
-                        // If this was the last step, show summary
-                        if (stepNum === totalSteps) {
-                            document.getElementById('tour-summary').style.display = 'block';
-                            document.getElementById('next-step-btn').style.display = 'none';
-                        }
-                    });
-            }
-        );
-    }
-
-    function nextStep() {
-        if (currentStep < totalSteps) {
-            goToStep(currentStep + 1);
-        }
-    }
-
-    function prevStep() {
-        if (currentStep > 1) {
-            goToStep(currentStep - 1);
-        }
-    }
-
-    function updateNavButtons() {
-        var navButtons = document.getElementById('tour-nav-buttons');
-        var prevBtn = document.getElementById('prev-step-btn');
-        var nextBtn = document.getElementById('next-step-btn');
-
-        prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
-        nextBtn.style.display = currentStep < totalSteps ? 'inline-block' : 'none';
-    }
-
-    // Expose to RspApp
-    RspApp.goToStep = goToStep;
-    RspApp.runTourStep = runTourStep;
-    RspApp.nextStep = nextStep;
-    RspApp.prevStep = prevStep;
-})();
-</script>
 {% endblock %}

@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-08 23:58
+
+**What changed:** Refactored all inline onclick handlers in tour.html and case_study.html into addEventListener calls in app.js. Removed 'unsafe-inline' from both script-src and style-src in CSP. Converted inline style="display:none" to .is-hidden CSS class. Switched CSP middleware from BaseHTTPMiddleware (headers silently dropped by uvicorn) to pure ASGI middleware.
+
+**Why:** The previous /improve pass deferred this — CSP with 'unsafe-inline' is effectively toothless against XSS. Needed to eliminate all inline JS to tighten script-src to 'self' only.
+
+**State:** 206 tests passing. CSP header verified via curl (no 'unsafe-inline'). Tour step nav, pipeline execution, prev/next all working via event listeners. Report form validation and redirect working. Not yet pushed or redeployed.
+
+**Next:** Push to origin, redeploy to Fly.io to pick up strict CSP. Next /improve due 2026-07-08.
+
+---
+
 ## 2026-06-08 — First /improve pass: 6 fixes across security, docs, and path hygiene
 
 **Started from:** All 9 units built, 206 tests passing, deployed to Fly.io, code review complete. First /improve run.
