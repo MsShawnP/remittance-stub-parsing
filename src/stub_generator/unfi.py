@@ -121,7 +121,7 @@ class UnfiStubGenerator(BaseStubGenerator):
             net_cash=net_cash,
             payer_name=self.payer_name,
             deductions=deductions,
-            source_file=str(output_path),
+            source_file=output_path.name,
         )
 
     def generate(self, output_dir: Path) -> list[Path]:

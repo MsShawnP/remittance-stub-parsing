@@ -9,6 +9,7 @@ Windows without system deps).
 
 import asyncio
 import json
+import logging
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
@@ -28,6 +29,8 @@ from src.ledger.reconciliation import (
 )
 from src.models import DeductionCategory, ValidationStatus, load_reason_codes
 from src.validation.reason_codes import validate_stub
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/report")
 
@@ -333,10 +336,11 @@ async def report_pdf(
             media_type="text/plain",
         )
 
-    except Exception as e:
+    except Exception:
+        logger.exception("PDF generation failed")
         return Response(
             content=(
-                f"PDF generation failed: {e}. "
+                "PDF generation failed due to an internal error. "
                 "This is often caused by missing system libraries (pango, cairo). "
                 "The HTML report at /report?show_all=true is available as an alternative."
             ),

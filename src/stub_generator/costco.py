@@ -88,7 +88,7 @@ class CostcoStubGenerator(BaseStubGenerator):
             net_cash=stub.net_cash,
             payer_name=stub.payer_name,
             deductions=deductions,
-            source_file=str(output_path),
+            source_file=output_path.name,
         )
 
     def generate(self, output_dir: Path) -> list[Path]:

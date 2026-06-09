@@ -264,7 +264,7 @@ def extract_stub_with_text(pdf_path: Path) -> tuple[RemittanceStub, str]:
         net_cash=totals["net_cash"] or Decimal("0"),
         payer_name=header["payer_name"],
         deductions=deductions,
-        source_file=str(path),
+        source_file=Path(path).name,
     )
     return stub, full_text
 

@@ -115,7 +115,7 @@ class BaseStubGenerator(ABC):
             net_cash=net_cash,
             payer_name=self.payer_name,
             deductions=deductions,
-            source_file=str(output_path),
+            source_file=output_path.name,
         )
 
     def write_stub_pdf(self, stub: RemittanceStub, output_path: Path) -> Path:
