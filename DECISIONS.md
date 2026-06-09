@@ -178,6 +178,18 @@ Each entry:
 - **Scope:** src/models.py, all consumers of RemittanceStub.payment_date
 - **Do not:** Assume payment_date is always present — check for None before date arithmetic
 
+### 2026-06-08 — Self-host all third-party JavaScript; no CDN script loading
+
+- **Why:** htmx and htmx-ext-sse were loaded from unpkg.com CDN without integrity hashes. A CDN compromise could inject JS into pages displaying financial data. Self-hosting matches the existing pattern for fonts (Playfair Display + Source Sans 3 already self-hosted for this reason). Content-Security-Policy middleware now blocks all external script/style/font sources.
+- **Scope:** app/templates/base.html, app/static/js/, app/main.py (CSP middleware)
+- **Do not:** Load JavaScript from external CDNs. Vendor scripts into static/js/ at pinned versions.
+
+### 2026-06-08 — Never expose raw exception messages to clients
+
+- **Why:** WeasyPrint and pdfplumber exceptions include absolute filesystem paths, library versions, and internal stack details. Sending `str(e)` to the client leaks server layout information. Log the real exception server-side; return a generic message to the client.
+- **Scope:** All route error handlers, especially report.py PDF generation
+- **Do not:** Include `str(e)` or `repr(e)` in HTTP response bodies
+
 ---
 
 ## Visualization
