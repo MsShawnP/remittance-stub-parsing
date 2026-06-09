@@ -9,15 +9,15 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
-## 2026-06-08 23:58
+## 2026-06-08 23:58 — Session wrap: eliminate inline JS, strict CSP
 
-**What changed:** Refactored all inline onclick handlers in tour.html and case_study.html into addEventListener calls in app.js. Removed 'unsafe-inline' from both script-src and style-src in CSP. Converted inline style="display:none" to .is-hidden CSS class. Switched CSP middleware from BaseHTTPMiddleware (headers silently dropped by uvicorn) to pure ASGI middleware.
+**Started from:** Project fully built, deployed, reviewed. Previous /improve deferred item: refactor inline onclick handlers so CSP can drop 'unsafe-inline'.
 
-**Why:** The previous /improve pass deferred this — CSP with 'unsafe-inline' is effectively toothless against XSS. Needed to eliminate all inline JS to tighten script-src to 'self' only.
+**Did:** Moved all tour logic from inline script in tour.html into app.js with event delegation. Removed onclick attributes from 6 buttons (tour.html + case_study.html). Converted inline style="display:none" to .is-hidden CSS class. Removed 'unsafe-inline' from script-src and style-src. Replaced BaseHTTPMiddleware with pure ASGI middleware (BaseHTTPMiddleware silently dropped headers through uvicorn).
 
-**State:** 206 tests passing. CSP header verified via curl (no 'unsafe-inline'). Tour step nav, pipeline execution, prev/next all working via event listeners. Report form validation and redirect working. Not yet pushed or redeployed.
+**State:** 206 tests passing. CSP enforces script-src 'self'; style-src 'self' — no 'unsafe-inline'. Tour and report pages fully functional. 1 commit on main, not pushed, not redeployed.
 
-**Next:** Push to origin, redeploy to Fly.io to pick up strict CSP. Next /improve due 2026-07-08.
+**Next:** Push to origin, redeploy to Fly.io, verify CSP header on live site via curl. Next /improve due 2026-07-08.
 
 ---
 

@@ -51,6 +51,6 @@ check again.
   - Error messages in report.py no longer leak internal paths (logged server-side instead)
   - source_file field stores filename only, not absolute path (extractor + 4 generators)
   - Completed arc archived in PLAN.md
-- **Deferred:** Refactor inline onclick handlers to event listeners so CSP can drop 'unsafe-inline' (future pass)
+- ~~**Deferred:** Refactor inline onclick handlers to event listeners so CSP can drop 'unsafe-inline'~~ — Resolved 2026-06-08
 - **Dependencies:** 12 CVEs found by pip-audit, all in transitive packages from other projects sharing this venv (flask, aiohttp, pyjwt, werkzeug, diskcache) — none are direct deps of this project
 - **Next review:** 2026-07-08

@@ -107,6 +107,18 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** fly-io, deploy, health-check, suspended-app, trade-spend-leakage
 
+### 2026-06-08 — BaseHTTPMiddleware silently drops response headers through uvicorn
+
+**Attempted:** Used Starlette's `BaseHTTPMiddleware` to add Content-Security-Policy header via `response.headers["Content-Security-Policy"] = CSP` in the `dispatch` method.
+
+**Why it didn't work:** With Starlette 1.0.1 + uvicorn, the header was present when tested via FastAPI's `TestClient` (which uses a synchronous transport) but absent in actual HTTP responses through uvicorn. The BaseHTTPMiddleware wraps responses in a StreamingResponse, and the header modifications don't survive the ASGI send/receive pipeline in production.
+
+**What we tried instead:** Pure ASGI middleware that intercepts `http.response.start` messages and appends the header bytes directly. This works at the protocol level and reliably sets headers through uvicorn.
+
+**Status:** Resolved.
+
+**Tags:** starlette, fastapi, middleware, csp, uvicorn, basehttpmiddleware, asgi
+
 ### 2026-06-08 — pyproject.toml build backend `setuptools.backends._legacy:_Backend` doesn't exist
 
 **Attempted:** Used `setuptools.backends._legacy:_Backend` as the build-backend in pyproject.toml.

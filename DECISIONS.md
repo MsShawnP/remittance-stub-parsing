@@ -19,6 +19,13 @@ Each entry:
 
 ## Architecture & Pipeline
 
+### 2026-06-08 — Use pure ASGI middleware for response headers, not BaseHTTPMiddleware
+- **Why:** Starlette 1.0.1's `BaseHTTPMiddleware` silently drops headers set via `response.headers[...]` when running through uvicorn (works in TestClient but not in production). A pure ASGI middleware that intercepts `http.response.start` messages and appends header bytes directly is reliable across all transports.
+- **Scope:** app/main.py — CSPMiddleware class and any future response-header middleware
+- **Do not:** Use `BaseHTTPMiddleware` for setting response headers. If adding new middleware that modifies headers, follow the pure ASGI pattern in CSPMiddleware.
+
+---
+
 ### 2026-06-04 — Use deterministic validation (arithmetic check) as the trust signal, not model confidence
 - **Why:** Raw LLM/OCR token confidence is unreliable on financial documents — a wrong number can return at 99% confidence. The pipeline enforces `net cash + sum(deductions) = gross invoice` and reason-code mapping. If it balances and maps, verified; if not, routes to human review.
 - **Scope:** Global — applies to all extraction paths
