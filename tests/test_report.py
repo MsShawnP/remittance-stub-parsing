@@ -190,8 +190,8 @@ async def test_report_includes_cinderhaven_context(client):
     response = await client.get("/report?show_all=true")
     text = response.text
     # Should reference the annual trade spend and chargebacks
-    assert "864" in text
-    assert "3.5M" in text or "3,500,000" in text
+    assert "6,563" in text
+    assert "3.7M" in text or "3,700,000" in text
 
 
 @pytest.mark.asyncio

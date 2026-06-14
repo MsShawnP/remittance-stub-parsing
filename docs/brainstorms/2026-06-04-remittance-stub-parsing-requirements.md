@@ -65,7 +65,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 
 **Synthetic stubs**
 - R1. Generate synthetic remittance stubs for four retailer/distributor formats: Walmart, Costco, UNFI, KeHE — all native-text PDFs
-- R2. Stubs must reconcile against the Cinderhaven SSOT in Postgres (864 chargebacks, ~$3.5M/yr all-in trade spend, 10.8% of scan revenue) — parsed totals must not drift from canonical figures
+- R2. Stubs must reconcile against the Cinderhaven SSOT in Postgres (6,563 chargebacks, $3.7M/yr all-in trade spend, 11.3% of scan revenue) — parsed totals must not drift from canonical figures
 - R3. Include intentionally broken stubs (mismatched amounts, unmapped reason codes) that fail deterministic validation and route to the review queue
 - R11. Reason codes must be correct per source — UNFI promo codes differ from KeHE codes differ from Walmart codes; incorrect codes are an instant credibility loss with AP practitioners
 - R12. Stubs must be realistically ugly — multi-page, inconsistent headers, inconsistent column naming, reason codes that don't map cleanly to the ERP
@@ -93,7 +93,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 **Case study**
 - R4. Generate a dynamic case study report (HTML, downloadable as PDF) reflecting the stubs the visitor explored
 - R10. Provide a "show all" option that generates the complete Cinderhaven story across all four formats
-- R20. Recoverable dollar figure is derived from the Cinderhaven data during the build — anchored against the ~$480K/yr operational deduction waste, framing recovery, labor savings, and dispute-window forfeit
+- R20. Recoverable dollar figure is derived from the Cinderhaven data during the build — anchored against the ~$460K/yr operational deduction waste, framing recovery, labor savings, and dispute-window forfeit
 - R21. Economist voice: sober, declarative, data-forward. No marketing language, no hedging that softens a real finding
 - R22. Follow the Lailara design system for all visual output
 
@@ -109,7 +109,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 - AE2. **Covers R3, R6, R8.** Given a UNFI stub where net cash + sum of deductions does not equal the gross invoice, the extraction routes to the review queue with mismatched fields highlighted in the side-by-side view.
 - AE3. **Covers R3, R6.** Given a KeHE stub with a reason code that does not map to any known category, the extraction routes to the review queue even if the arithmetic balances.
 - AE4. **Covers R4, R10.** Given a visitor who explored only the Walmart and UNFI stubs, the generated case study report shows reconciliation findings for those two formats. Toggling "show all" adds Costco and KeHE findings.
-- AE5. **Covers R2, R20.** The reconciled ledger totals tie exactly to the Cinderhaven canonical ~$3.5M/yr all-in trade spend figure — no drift.
+- AE5. **Covers R2, R20.** The reconciled ledger totals tie exactly to the Cinderhaven canonical $3.7M/yr all-in trade spend figure — no drift.
 
 ---
 
@@ -150,7 +150,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 ## Dependencies / Assumptions
 
 - Cinderhaven SSOT in Postgres is accessible and contains the invoice/AR/chargeback records needed to build synthetic stubs and reconcile the output ledger
-- The 864 chargebacks and ~$3.5M/yr all-in trade spend figures are current and canonical (per CINDERHAVEN_CANONICAL.md)
+- The 6,563 chargebacks and $3.7M/yr all-in trade spend figures are current and canonical (per CINDERHAVEN_CANONICAL.md)
 - Existing Cinderhaven retailers (Walmart, Costco, UNFI, KeHE) have enough data to support realistic synthetic stubs per format
 
 ---

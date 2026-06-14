@@ -26,7 +26,7 @@ Carried from origin requirements doc. R-IDs match origin.
 
 **Synthetic stubs**
 - R1. Generate synthetic stubs for Walmart, Costco, UNFI, KeHE — all native-text PDFs
-- R2. Stubs reconcile against Cinderhaven SSOT (~$3.5M/yr all-in trade spend, 864 chargebacks)
+- R2. Stubs reconcile against Cinderhaven SSOT ($3.7M/yr all-in trade spend, 6,563 chargebacks)
 - R3. Include intentionally broken stubs (mismatched amounts, unmapped reason codes)
 - R11. Reason codes correct per source (UNFI ≠ KeHE ≠ Walmart)
 - R12. Realistically ugly — multi-page, inconsistent headers, messy column naming
@@ -134,7 +134,7 @@ Carried from origin requirements doc. R-IDs match origin.
 
 - **Per-format pdfplumber settings:** Each retailer format may need different `table_settings` (snap_tolerance, strategies). Tuning happens against actual synthetic stubs during U3/U4.
 - **Reason-code taxonomy:** The specific reason codes per retailer (UNFI promo codes vs KeHE codes vs Walmart codes) need domain research to get right. Build a starter set, refine during U2.
-- **Recoverable dollar figure:** The specific recovery rate and dollar amount derived from the 864 chargebacks / ~$480K/yr recoverable base during U5.
+- **Recoverable dollar figure:** The specific recovery rate and dollar amount derived from the 6,563 chargebacks / ~$460K/yr recoverable base during U5.
 - **Guided tour sequence:** The specific progression order (which stub first, which last) tuned during U8 based on which formats tell the most compelling story.
 - **Chart library for case study visualizations:** SVG generation approach (matplotlib SVG export, inline SVG templates, or lightweight JS charting) decided during U8 based on what visualizations the case study needs.
 
@@ -450,7 +450,7 @@ graph TD
 - **SQLite ledger:** Schema with tables for stubs (header-level), deductions (line-level), validation_results, and reconciliation_results. WAL mode for read concurrency
 - **Reconciliation:** Match parsed deductions against Cinderhaven invoice/AR records (exported from Postgres as reference data). Flag matched vs unmatched, compute net reconciled amounts
 - **Aging analysis:** Calculate days remaining in dispute window per deduction. Flag deductions approaching or past the window
-- **Recoverable figure:** Derive from the reconciled data — sum of invalid/disputable deductions that are still within the dispute window, anchored against the ~$480K/yr operational deduction waste
+- **Recoverable figure:** Derive from the reconciled data — sum of invalid/disputable deductions that are still within the dispute window, anchored against the ~$460K/yr operational deduction waste
 
 **Patterns to follow:**
 - Structured error contracts (validation returns typed results, not booleans)
@@ -462,7 +462,7 @@ graph TD
 - Covers AE3. Stub with unmapped reason code → routes to review even if arithmetic balances
 - Happy path: Reconciliation matches deductions to Cinderhaven invoices correctly
 - Happy path: Aging analysis correctly flags deductions near dispute window expiry
-- Covers AE5. Ledger totals tie exactly to Cinderhaven canonical ~$3.5M/yr all-in trade spend
+- Covers AE5. Ledger totals tie exactly to Cinderhaven canonical $3.7M/yr all-in trade spend
 - Edge case: Deduction with zero amount passes validation (informational entry)
 - Edge case: Multiple deductions on one stub — some valid, some invalid — mixed result
 - Error path: Cinderhaven reference data missing for an invoice → unmatched flag, not crash
@@ -668,7 +668,7 @@ graph TD
 - **State lifecycle risks:** SQLite WAL mode for read concurrency during SSE streaming. Single-writer constraint enforced by `fly scale count 1`. Generated stubs are static files (no state). Session state for "which stubs has this visitor explored" stored server-side (in-memory or SQLite)
 - **API surface parity:** No external API consumers — this is a demo application. Internal API is FastAPI routes consumed by HTMX
 - **Integration coverage:** The critical cross-layer scenario is the full pipeline: stub upload → extraction → validation → ledger → reconciliation → report. This must be tested end-to-end, not just per-unit
-- **Unchanged invariants:** Cinderhaven SSOT figures (~$3.5M/yr all-in trade spend, 864 chargebacks) are read-only inputs — this project never writes to the SSOT
+- **Unchanged invariants:** Cinderhaven SSOT figures ($3.7M/yr all-in trade spend, 6,563 chargebacks) are read-only inputs — this project never writes to the SSOT
 
 ---
 

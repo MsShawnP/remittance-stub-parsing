@@ -14,7 +14,7 @@ Built on the Cinderhaven synthetic dataset — a ~$25M specialty food brand, 50 
 - Deterministic validation: net cash + sum(deductions) = gross invoice. If it doesn't balance, the stub routes to a human review queue — no model confidence scores involved.
 - Reason-code classification against per-retailer YAML configs. Unmapped codes get flagged.
 - SQLite ledger with Decimal-as-text for penny-exact monetary storage.
-- Reconciliation against Cinderhaven SSOT: 864 chargebacks, $3.4M annualized all-in trade cost, 36-month window.
+- Reconciliation against Cinderhaven SSOT: 6,563 chargebacks, $3.7M annualized all-in trade cost, 36-month window.
 - Interactive demo with guided tour (SSE streaming), free exploration, and a review queue with side-by-side PDF viewer + editable form.
 - Dynamic case study (HTML + PDF via WeasyPrint) with Cinderhaven findings.
 
@@ -37,7 +37,7 @@ Built on the Cinderhaven synthetic dataset — a ~$25M specialty food brand, 50 
 
 **Canonical baseline:** 50 SKUs · 5 product lines (AS·PS·SC·DG·SB) · 6 retailers (Walmart·Costco·Whole Foods·Sprouts·Kroger·Regional Group) · 10 channels (6 retail + UNFI·KeHE·DPI + DTC)
 
-Reconciliation uses the canonical 864 chargebacks and $3.4M annualized all-in trade cost from cinderhaven-data-platform.
+Reconciliation uses the canonical 6,563 chargebacks and $3.7M annualized all-in trade cost from cinderhaven-data-platform.
 
 ## Run
 

@@ -13,8 +13,8 @@ from decimal import Decimal
 from src.models import ReconciliationMatch, ReconciliationResult, RemittanceStub
 
 # Cinderhaven canonical figures
-ANNUAL_TRADE_SPEND = Decimal("3500000")  # ~$3.5M/yr
-TOTAL_CHARGEBACKS = 864
+ANNUAL_TRADE_SPEND = Decimal("3700000")  # ~$3.7M/yr
+TOTAL_CHARGEBACKS = 6563
 DISPUTE_WINDOW_DAYS = 90  # standard dispute window
 
 
