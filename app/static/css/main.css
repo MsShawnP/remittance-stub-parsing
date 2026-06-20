@@ -277,7 +277,8 @@ a:hover {
 
 .format-card {
     background-color: #ffffff;
-    border: 1px solid var(--gridline);
+    border: none;
+    border-left: 4px solid var(--navy);
     border-radius: var(--border-radius);
     padding: 24px;
 }
@@ -1276,7 +1277,8 @@ a:hover {
     flex: 1;
     min-width: 160px;
     background-color: #ffffff;
-    border: 1px solid var(--gridline);
+    border: none;
+    border-left: 4px solid var(--navy);
     border-radius: var(--border-radius);
     padding: 20px;
     display: flex;
@@ -1300,7 +1302,7 @@ a:hover {
 }
 
 .report-stat-pass {
-    border-color: var(--pass-text);
+    border-left-color: var(--pass-text);
     background-color: var(--pass-bg);
 }
 
@@ -1309,7 +1311,7 @@ a:hover {
 }
 
 .report-stat-fail {
-    border-color: var(--fail-text);
+    border-left-color: var(--fail-text);
     background-color: var(--fail-bg);
 }
 
@@ -1318,7 +1320,7 @@ a:hover {
 }
 
 .report-stat-recovery {
-    border-color: var(--pass-text);
+    border-left-color: var(--pass-text);
     background-color: var(--pass-bg);
 }
 
@@ -1327,7 +1329,7 @@ a:hover {
 }
 
 .report-stat-forfeit {
-    border-color: var(--fail-text);
+    border-left-color: var(--fail-text);
     background-color: var(--fail-bg);
 }
 
@@ -1448,7 +1450,7 @@ a:hover {
 
 .report-recovery-box {
     background-color: var(--pass-bg);
-    border-left: 3px solid var(--pass-text);
+    border-left: 4px solid var(--pass-text);
     padding: 16px 20px;
     margin: 20px 0;
 }
@@ -1462,7 +1464,7 @@ a:hover {
 
 .report-forfeit-box {
     background-color: var(--fail-bg);
-    border-left: 3px solid var(--fail-text);
+    border-left: 4px solid var(--fail-text);
     padding: 16px 20px;
     margin: 20px 0;
 }
