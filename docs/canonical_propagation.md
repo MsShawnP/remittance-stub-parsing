@@ -14,8 +14,8 @@ approved phrasings.
 
 | Context | Exact phrasing |
 |---------|----------------|
-| Trade context (annual) | "$3.7M/yr all-in trade spend, 11.3% of scan revenue (trailing 52 weeks)" |
-| Recoverable layer | "~$460K/yr operational deduction waste; 6,563 chargebacks over 36 months" |
+| Trade context (annual) | "~$3.6M/yr all-in trade spend, 11.0% of scan revenue (trailing 52 weeks)" |
+| Recoverable layer | "~$380K/yr operational deduction waste; 3,363 chargebacks (2,879 retailer + 484 distributor) over 36 months" |
 | 36-mo total | "[36mo total deferred — recompute from updated SSOT]" |
 
 ---
@@ -137,8 +137,8 @@ approved phrasings.
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
-| build_spec_dimension_integrity.md:91 | "464 chargebacks" and "$5.4M all-in trade" | "6,563 chargebacks" and "$3.7M/yr all-in trade spend, 11.3% of scan revenue (trailing 52 weeks)" | FIX |
-| build_spec_dimension_integrity.md:296 | "464" and "$5.4M all-in trade / 464-chargeback canon" | "6,563" and "$3.7M/yr all-in trade / 6,563-chargeback canon" | FIX |
+| build_spec_dimension_integrity.md:91 | "464 chargebacks" and "$5.4M all-in trade" | "3,363 chargebacks" and "~$3.6M/yr all-in trade spend, 11.0% of scan revenue (trailing 52 weeks)" | FIX |
+| build_spec_dimension_integrity.md:296 | "464" and "$5.4M all-in trade / 464-chargeback canon" | "3,363" and "~$3.6M/yr all-in trade / 3,363-chargeback canon" | FIX |
 
 ---
 
@@ -148,20 +148,20 @@ approved phrasings.
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
-| portfolio_project_brief_remittance_parsing.md:44 | "$5.4M all-in trade cost" | "~$460K/yr operational deduction waste (6,563 chargebacks)" | DONE (Phase 5) |
-| portfolio_project_brief_remittance_parsing.md:49 | "464 chargebacks / 18 months, $5.4M all-in trade cost" | "6,563 chargebacks / 36 months, $3.7M/yr all-in trade spend" | DONE (Phase 5) |
-| portfolio_project_brief_remittance_parsing.md:51 | "quantify against the $5.4M base" | "quantify against the ~$460K/yr operational deduction waste" | DONE (Phase 5) |
-| portfolio_project_brief_remittance_parsing.md:180 | "464 chargebacks, $5.4M all-in trade cost" | "6,563 chargebacks, $3.7M/yr all-in trade spend" | DONE (Phase 5) |
-| portfolio_project_brief_remittance_parsing.md:189 | "canonical $5.4M" | "canonical $3.7M/yr" | DONE (Phase 5) |
-| docs/brainstorms/...requirements.md:68 | "464 chargebacks, $5.4M all-in trade cost" | "6,563 chargebacks, $3.7M/yr all-in trade spend, 11.3% of scan revenue" | DONE (Phase 5) |
-| docs/brainstorms/...requirements.md:96 | "anchored against the $5.4M all-in trade cost" | "anchored against the ~$460K/yr operational deduction waste" | DONE (Phase 5) |
-| docs/brainstorms/...requirements.md:112 | "Cinderhaven canonical $5.4M all-in trade cost" | "Cinderhaven canonical $3.7M/yr all-in trade spend" | DONE (Phase 5) |
-| docs/brainstorms/...requirements.md:153 | "464 chargebacks and $5.4M all-in trade cost figures" | "6,563 chargebacks and $3.7M/yr all-in trade spend figures" | DONE (Phase 5) |
-| docs/plans/...plan.md:29 | "$5.4M all-in trade cost" | "$3.7M/yr all-in trade spend" | DONE (Phase 5) |
-| docs/plans/...plan.md:137 | "464 chargebacks / $5.4M base" | "6,563 chargebacks / ~$460K/yr recoverable base" | DONE (Phase 5) |
-| docs/plans/...plan.md:453 | "anchored against the $5.4M base" | "anchored against the ~$460K/yr operational deduction waste" | DONE (Phase 5) |
-| docs/plans/...plan.md:465 | "Cinderhaven $5.4M canonical figure" | "Cinderhaven canonical $3.7M/yr all-in trade spend" | DONE (Phase 5) |
-| docs/plans/...plan.md:671 | "$5.4M all-in trade cost, 464 chargebacks" | "$3.7M/yr all-in trade spend, 6,563 chargebacks" | DONE (Phase 5) |
+| portfolio_project_brief_remittance_parsing.md:44 | "$5.4M all-in trade cost" | "~$380K/yr operational deduction waste (3,363 chargebacks)" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:49 | "464 chargebacks / 18 months, $5.4M all-in trade cost" | "3,363 chargebacks / 36 months, ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:51 | "quantify against the $5.4M base" | "quantify against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:180 | "464 chargebacks, $5.4M all-in trade cost" | "3,363 chargebacks, ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:189 | "canonical $5.4M" | "canonical ~$3.6M/yr" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:68 | "464 chargebacks, $5.4M all-in trade cost" | "3,363 chargebacks, ~$3.6M/yr all-in trade spend, 11.0% of scan revenue" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:96 | "anchored against the $5.4M all-in trade cost" | "anchored against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:112 | "Cinderhaven canonical $5.4M all-in trade cost" | "Cinderhaven canonical ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:153 | "464 chargebacks and $5.4M all-in trade cost figures" | "3,363 chargebacks and ~$3.6M/yr all-in trade spend figures" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:29 | "$5.4M all-in trade cost" | "~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:137 | "464 chargebacks / $5.4M base" | "3,363 chargebacks / ~$380K/yr recoverable base" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:453 | "anchored against the $5.4M base" | "anchored against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:465 | "Cinderhaven $5.4M canonical figure" | "Cinderhaven canonical ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:671 | "$5.4M all-in trade cost, 464 chargebacks" | "~$3.6M/yr all-in trade spend, 3,363 chargebacks" | DONE (Phase 5 + v3 update) |
 
 ### History/context docs (stale figures documented as wrong — preserve)
 
@@ -184,8 +184,8 @@ approved phrasings.
 | where-the-money-comes-from | CLEAN | None | No action |
 | short-ship-cost | LOW | 1 unused table count | Fix 381 → 864 when convenient |
 | chargeback-prediction-model | CLEAN | None | No action |
-| dimension-weight-integrity | FIX NOW | 2 refs in build_spec | Fix 464→6,563, $5.4M→$3.7M/yr |
-| remittance-stub-parsing | DONE | 14 refs in brief/reqs/plan | Fixed per Phase 5 change report |
+| dimension-weight-integrity | FIX NOW | 2 refs in build_spec | Fix 464→3,363, $5.4M→~$3.6M/yr |
+| remittance-stub-parsing | DONE | 14 refs in brief/reqs/plan | Fixed per Phase 5 + v3 canonical update |
 
 ## Follow-up checklist (per-repo sessions)
 
