@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-24 — Status check, HANDOFF catch-up
+
+**Started from:** Project fully built and deployed. 5 commits landed since last HANDOFF (Jun 13–Jun 24) across sessions that didn't /wrap: canonical figure updates (v3 SSOT), hero card standardization, exec-readiness fixes, case study copy rewrite.
+
+**Did:** Status check only. Verified git state — branch up to date with origin, no uncommitted changes. No code changes.
+
+**State:** 206 tests passing. Deployed at remittance.lailarallc.com. No active arc. Untracked: review.yaml, screenshots/ (prior session artifacts). Next /improve due 2026-07-08.
+
+**Next:** No pending work. Run /improve when due (2026-07-08). Define new arc in PLAN.md before starting new work.
+
+---
+
 ## 2026-06-08 23:58 — Session wrap: eliminate inline JS, strict CSP
 
 **Started from:** Project fully built, deployed, reviewed. Previous /improve deferred item: refactor inline onclick handlers so CSP can drop 'unsafe-inline'.
