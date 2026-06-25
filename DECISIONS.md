@@ -203,6 +203,18 @@ Each entry:
 - **Scope:** Global — main.css, case_study_pdf.html, all templates that use status badges, stat cards, callout boxes, check marks, or field states
 - **Do not:** Reintroduce colored backgrounds or text that signal good/bad. No green family for "pass," no red family for "fail," no amber for "warning." All badges use navy bg + white text. All stat cards use white bg + navy left border + ink text. All callout boxes use white bg + navy left border + ink text.
 
+### 2026-06-25 — Text containers use 800px max-width; data elements remain unconstrained within 1200px content container
+
+- **Why:** 660px text alongside 1200px-wide data elements (stat cards, tables, charts) created a jarring visual mismatch — the page looked like two layouts stitched together. Tried 1200px text first but that made paragraphs unreadable (~120 chars/line). 800px (~80-85 chars/line) is within the readable range while closing the gap. The `.report-selector` form uses the same 800px. The SVG chart container matches at 800px. Data elements (stat rows, tables, callout boxes) inherit from the 1200px content container with no cap.
+- **Scope:** main.css — `.hero-body`, `.tour-intro`, `.tour-step-desc`, `.tour-summary-text`, `.explore-intro`, `.review-intro`, `.report-subtitle`, `.report-body`, `.report-selector`, `.report-svg-chart`
+- **Do not:** Set text body elements to `var(--content-max-width)` (1200px) or remove their max-width entirely. Do not constrain data elements (stat cards, tables, grids) to the text width.
+
+### 2026-06-25 — Review detail layout uses 40/60 split (PDF viewer / form panel)
+
+- **Why:** Original `3fr 2fr` (60/40) gave the PDF viewer 60% and the form panel 40%. At 40%, reason code descriptions like "Advertising allowance" and "Freight allowance" truncated in the editable deductions table. The PDF viewer doesn't need more than 40% — the PDF content is fixed-width and the browser viewer scales to fit. The form panel needs the extra room for its 4-column table (Invoice #, Reason Code, Description, Amount).
+- **Scope:** main.css — `.split-layout` grid-template-columns
+- **Do not:** Give the PDF viewer more than 50% of the split. The form panel is the interactive element; the PDF is reference-only.
+
 ---
 
 ## Visualization

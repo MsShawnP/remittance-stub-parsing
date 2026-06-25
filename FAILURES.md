@@ -107,6 +107,18 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** fly-io, deploy, health-check, suspended-app, trade-spend-leakage
 
+### 2026-06-25 — Widening all text containers from 660px to 1200px made paragraphs unreadable
+
+**Attempted:** Changed all 9 elements with `max-width: 660px` to `max-width: var(--content-max-width)` (1200px) to fix the "page looks 900px wide" report. Committed, pushed, deployed.
+
+**Why it didn't work:** 660px is a deliberate readable line length (~65 characters per line). At 1200px, body text spans the full container width (~120 characters per line) — far beyond comfortable reading. The visual problem was not that text was too narrow, but that the gap between 660px text and 1200px data elements (stat cards, tables) was too wide, making the page look like two different layouts stitched together.
+
+**What we tried instead:** Reverted within minutes. Then widened text to 800px (~80-85 characters per line, still within readable range) to close the visual gap without sacrificing readability.
+
+**Status:** Resolved.
+
+**Tags:** css, max-width, readability, line-length, text-width, revert
+
 ### 2026-06-25 — Fly.io depot builder timed out twice before succeeding on third attempt
 
 **Attempted:** `fly deploy --remote-only` to deploy 4 commits (reason codes, factual fix, color audit, wrap files).

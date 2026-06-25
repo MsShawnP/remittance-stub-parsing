@@ -21,6 +21,23 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-25 — Session wrap: CSS width fixes, review panel split, pricing removal
+
+**Started from:** Project built, deployed, reviewed. No active arc. 206 tests passing, live at remittance.lailarallc.com.
+
+**Did:** Five CSS/template fixes, all pushed and deployed:
+1. Diagnosed content width — `--content-max-width` already 1200px, no 900px anywhere. First attempted widening all 660px text to 1200px — reverted (unreadable paragraphs). Correct fix: text to 800px.
+2. Widened review form panel — `.split-layout` grid from `3fr 2fr` (60/40 PDF/form) to `2fr 3fr` (40/60). Fixes truncated reason code descriptions.
+3. Widened 9 text containers from 660px to 800px + chart from 700px to 800px. Closes text/data visual gap.
+4. Fixed table column alignment — `col-amount` gets `nowrap` + `min-width: 100px`, `report-code` gets `word-break: break-all`. Applied to web CSS and PDF template.
+5. Removed pricing sentence from case study closing section (what_this_means.html).
+
+**State:** 206 tests passing. 6 commits pushed and deployed. Live at https://remittance.lailarallc.com. No active arc. Untracked: review.yaml, screenshots/.
+
+**Next:** No planned work. Next /improve due 2026-07-08.
+
+---
+
 ## 2026-06-24 — Session wrap: exec-readiness fixes + case study copy improvements
 
 **Started from:** Project built, deployed, reviewed. All 206 tests passing. No active arc — polish pass for exec readiness.
