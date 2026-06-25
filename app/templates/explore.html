@@ -27,7 +27,7 @@
             <span class="explore-card-name">{{ stub.name }}</span>
             <span class="explore-card-meta">{{ stub.size_kb }} KB</span>
             {% if stub.is_broken %}
-            <span class="explore-card-tag tag-broken">Broken</span>
+            <span class="explore-card-tag tag-broken">Test Case</span>
             {% endif %}
             <span class="htmx-indicator" id="loading-{{ stub.filename | replace('.', '-') }}">
                 Processing...

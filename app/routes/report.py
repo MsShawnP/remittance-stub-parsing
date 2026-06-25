@@ -220,7 +220,7 @@ async def report_page(
         description="Comma-separated list of stub filenames to include.",
     ),
     show_all: bool = Query(
-        default=False,
+        default=True,
         description="If true, include all stubs in the report.",
     ),
 ):

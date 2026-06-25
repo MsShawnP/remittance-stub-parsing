@@ -100,7 +100,7 @@ async def test_report_selected_stubs_returns_200(client):
 
 @pytest.mark.asyncio
 async def test_report_selected_stubs_shows_only_those_formats(client):
-    response = await client.get("/report?stubs=walmart_stub_01.pdf,costco_stub_01.pdf")
+    response = await client.get("/report?stubs=walmart_stub_01.pdf,costco_stub_01.pdf&show_all=false")
     assert response.status_code == 200
     text = response.text
     # Should show only 2 stubs processed
@@ -122,11 +122,11 @@ async def test_report_single_stub_returns_200(client):
 
 
 @pytest.mark.asyncio
-async def test_report_no_params_shows_selector(client):
+async def test_report_no_params_shows_all_stubs(client):
     response = await client.get("/report")
     assert response.status_code == 200
-    assert "Show All Stubs" in response.text
-    assert "report-selector" in response.text
+    assert "Remittance Stub Parsing" in response.text
+    assert "report-selector" not in response.text
 
 
 @pytest.mark.asyncio

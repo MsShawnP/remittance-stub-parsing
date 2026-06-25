@@ -66,7 +66,7 @@
     </table>
 
     <p class="report-body">
-        Of {{ stub_count }} stubs processed, {{ verified_count }} balanced to the penny
+        Of {{ stub_count }} {{ "stub" if stub_count == 1 else "stubs" }} processed, {{ verified_count }} balanced to the penny
         and mapped to known reason codes. {{ flagged_count }} did not.
         {% if flagged_count > 0 %}
         Flagged stubs enter the review queue, where an analyst can inspect the

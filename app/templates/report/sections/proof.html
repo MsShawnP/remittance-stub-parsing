@@ -3,7 +3,7 @@
     <h2 class="section-title">The Unified Ledger</h2>
 
     <p class="report-body">
-        Deductions from {{ format_count }} formats collapse into six categories
+        Deductions from {{ format_count }} {{ "format" if format_count == 1 else "formats" }} collapse into six categories
         once reason codes are mapped. The category breakdown reveals where the
         money goes — and which categories carry the highest dispute potential.
     </p>
@@ -93,7 +93,7 @@
         {%- endif %}.
         {% endif %}
         Against Cinderhaven's ~{{ annual_trade_spend | format_compact }}/yr all-in trade spend
-        and {{ total_chargebacks }} chargebacks, these deductions represent one
+        and {{ "{:,}".format(total_chargebacks) }} chargebacks, these deductions represent one
         remittance cycle's contribution to the annual trade cost.
     </p>
 

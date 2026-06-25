@@ -71,7 +71,7 @@
                 <td class="col-amount">{{ sd.reconciliation.unmatched_amount | format_currency }}</td>
                 <td>
                     {% if sd.reconciliation.dispute_window_days_remaining is not none %}
-                    {{ sd.reconciliation.dispute_window_days_remaining }} days
+                    {{ sd.reconciliation.dispute_window_days_remaining }} {{ "day" if sd.reconciliation.dispute_window_days_remaining == 1 else "days" }}
                     {% else %}
                     —
                     {% endif %}
@@ -81,15 +81,15 @@
         </tbody>
     </table>
 
-    <h3 class="report-subsection-title">Labour Estimate</h3>
+    <h3 class="report-subsection-title">Labor Estimate</h3>
 
     <p class="report-body">
         Manual keying of a single remittance stub — opening the PDF, reading
         each line item, typing invoice numbers and amounts into a spreadsheet,
         checking arithmetic — takes an experienced analyst 8 to 15 minutes per
-        stub. At {{ stub_count }} stubs, that is {{ stub_count * 10 }} to
+        stub. At {{ stub_count }} {{ "stub" if stub_count == 1 else "stubs" }}, that is {{ stub_count * 10 }} to
         {{ stub_count * 15 }} minutes of manual work. The automated pipeline
-        processes the same set in under {{ stub_count }} seconds.
+        processes the same set in under {{ stub_count }} {{ "second" if stub_count == 1 else "seconds" }}.
     </p>
 
     <div class="report-stat-row">
@@ -113,7 +113,7 @@
     <p class="report-footnote">
         Reconciliation against Cinderhaven reference invoices
         (data/cinderhaven_reference.json). Dispute window: {{ dispute_window_days }} days
-        from deduction date. Labour estimates based on industry benchmarks for
+        from deduction date. Labor estimates based on industry benchmarks for
         manual remittance keying.
     </p>
 </section>

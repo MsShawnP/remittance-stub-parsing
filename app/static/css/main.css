@@ -96,7 +96,7 @@
     --font-sans: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
     /* Layout */
-    --content-max-width: 900px;
+    --content-max-width: 1200px;
     --section-gap: 60px;
     --border-radius: 2px;
 }
@@ -146,6 +146,26 @@ a:hover {
 .header-inner {
     max-width: var(--content-max-width);
     margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.site-nav {
+    display: flex;
+    gap: 24px;
+}
+
+.site-nav a {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.site-nav a:hover {
+    color: var(--navy);
 }
 
 .brand {
@@ -447,7 +467,8 @@ a:hover {
 .stub-card-issues {
     margin-top: 12px;
     padding: 12px;
-    background-color: var(--fail-bg);
+    background-color: #faf8f6;
+    border-left: 4px solid var(--fail-text);
     border-radius: var(--border-radius);
 }
 
@@ -809,8 +830,9 @@ a:hover {
 }
 
 .tag-broken {
-    background-color: var(--fail-bg);
+    background-color: #faf8f6;
     color: var(--fail-text);
+    border: 1px solid var(--fail-text);
 }
 
 .explore-results {
