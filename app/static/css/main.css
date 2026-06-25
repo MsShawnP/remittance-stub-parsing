@@ -216,7 +216,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: 800px;
     margin-bottom: 32px;
 }
 
@@ -539,6 +539,8 @@ a:hover {
 
 .col-amount {
     text-align: right;
+    white-space: nowrap;
+    min-width: 100px;
 }
 
 /* --- Progress (SSE streaming) --- */
@@ -621,7 +623,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .tour-steps {
@@ -702,7 +704,7 @@ a:hover {
     line-height: 1.5;
     color: var(--text-secondary);
     margin-bottom: 20px;
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .step-progress {
@@ -729,7 +731,7 @@ a:hover {
     line-height: 1.6;
     color: var(--ink);
     margin-bottom: 20px;
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .tour-summary-actions {
@@ -747,7 +749,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .explore-retailer-group {
@@ -844,7 +846,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .review-empty {
@@ -1261,7 +1263,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 660px;
+    max-width: 800px;
     margin-bottom: 24px;
 }
 
@@ -1285,7 +1287,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: 800px;
     margin-bottom: 20px;
 }
 
@@ -1381,6 +1383,7 @@ a:hover {
     padding: 2px 6px;
     border-radius: var(--border-radius);
     font-family: monospace;
+    word-break: break-all;
 }
 
 /* Report badges */
@@ -1427,7 +1430,7 @@ a:hover {
 
 .report-svg-chart {
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
     height: auto;
 }
 
@@ -1461,7 +1464,7 @@ a:hover {
 /* Report selector (stub picker form) */
 
 .report-selector {
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .report-selector-intro {
