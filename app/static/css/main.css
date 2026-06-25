@@ -1114,6 +1114,32 @@ a:hover {
     vertical-align: middle;
 }
 
+.review-hint {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.review-reference {
+    margin-bottom: 16px;
+}
+
+.review-reference summary {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.review-reference .review-deductions-table code {
+    font-size: 12px;
+    background-color: var(--canvas);
+    padding: 1px 5px;
+    border-radius: var(--border-radius);
+}
+
 .review-actions {
     display: flex;
     align-items: center;

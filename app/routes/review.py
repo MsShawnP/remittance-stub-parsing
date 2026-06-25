@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from src.extraction.pipeline import extract
-from src.models import DeductionEntry, RemittanceStub, ValidationStatus
+from src.models import DeductionEntry, RemittanceStub, ValidationStatus, load_reason_codes
 from src.validation.reason_codes import validate_stub
 
 router = APIRouter(prefix="/review")
@@ -52,6 +52,30 @@ def _ensure_processed(filename: str) -> dict:
         return _processed_stubs[filename]
 
 
+def _review_context(stub: RemittanceStub, validation) -> dict:
+    """Build reason code list and issue type for the review template."""
+    try:
+        codes_dict = load_reason_codes(stub.retailer)
+        reason_codes = sorted(codes_dict.values(), key=lambda c: c.code)
+    except FileNotFoundError:
+        reason_codes = []
+
+    if not validation.arithmetic_valid and not validation.all_codes_mapped:
+        issue_type = "both"
+    elif not validation.arithmetic_valid:
+        issue_type = "arithmetic"
+    elif not validation.all_codes_mapped:
+        issue_type = "unmapped"
+    else:
+        issue_type = "none"
+
+    return {
+        "reason_codes": reason_codes,
+        "issue_type": issue_type,
+        "retailer_name": stub.retailer.value.title(),
+    }
+
+
 def _get_flagged_stubs() -> list[dict]:
     """Process all stubs and return those with FLAGGED status."""
     flagged = []
@@ -88,6 +112,7 @@ async def review_detail(stub_filename: str, request: Request):
         context={
             "flagged_stubs": _get_flagged_stubs(),
             "active_stub": result,
+            **_review_context(result["stub"], result["validation"]),
         },
     )
 
@@ -180,5 +205,6 @@ async def revalidate_stub(stub_filename: str, request: Request):
             "stub": updated_stub,
             "validation": validation,
             "filename": stub_filename,
+            **_review_context(updated_stub, validation),
         },
     )

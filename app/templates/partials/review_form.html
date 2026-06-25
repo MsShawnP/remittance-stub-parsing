@@ -24,6 +24,42 @@
     </div>
     {% endif %}
 
+    {% if issue_type is defined and issue_type != 'none' %}
+    <p class="review-hint">
+        {% if issue_type == 'arithmetic' %}
+        The amounts below are editable. Adjust the gross invoice, net cash, or line item amounts until the arithmetic balances (net cash + sum of deductions = gross invoice), then click Re-validate.
+        {% elif issue_type == 'unmapped' %}
+        The reason codes below are editable. Replace any unmapped codes with valid codes from the reference table, then click Re-validate.
+        {% elif issue_type == 'both' %}
+        The fields below are editable. Fix the arithmetic (net cash + sum of deductions = gross invoice) and replace any unmapped reason codes with valid codes from the reference table, then click Re-validate.
+        {% endif %}
+    </p>
+    {% endif %}
+
+    {% if reason_codes is defined and reason_codes %}
+    <details class="review-reference" {% if issue_type is defined and issue_type in ['unmapped', 'both'] %}open{% endif %}>
+        <summary>Valid Reason Codes — {{ retailer_name }}</summary>
+        <table class="review-deductions-table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rc in reason_codes %}
+                <tr>
+                    <td><code>{{ rc.code }}</code></td>
+                    <td>{{ rc.description }}</td>
+                    <td>{{ rc.category.value | title }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+    {% endif %}
+
     <form hx-post="/review/{{ filename }}/revalidate"
           hx-target="#review-form-container"
           hx-swap="innerHTML">
