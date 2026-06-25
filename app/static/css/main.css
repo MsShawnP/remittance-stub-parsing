@@ -216,7 +216,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
     margin-bottom: 32px;
 }
 
@@ -621,7 +621,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .tour-steps {
@@ -702,7 +702,7 @@ a:hover {
     line-height: 1.5;
     color: var(--text-secondary);
     margin-bottom: 20px;
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .step-progress {
@@ -729,7 +729,7 @@ a:hover {
     line-height: 1.6;
     color: var(--ink);
     margin-bottom: 20px;
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .tour-summary-actions {
@@ -747,7 +747,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .explore-retailer-group {
@@ -844,7 +844,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .review-empty {
@@ -1261,7 +1261,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
     margin-bottom: 24px;
 }
 
@@ -1285,7 +1285,7 @@ a:hover {
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-primary);
-    max-width: 660px;
+    max-width: var(--content-max-width);
     margin-bottom: 20px;
 }
 
@@ -1461,7 +1461,7 @@ a:hover {
 /* Report selector (stub picker form) */
 
 .report-selector {
-    max-width: 660px;
+    max-width: var(--content-max-width);
 }
 
 .report-selector-intro {
