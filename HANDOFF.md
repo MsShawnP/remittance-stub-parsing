@@ -9,15 +9,17 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
-## 2026-06-24 — Status check, HANDOFF catch-up
+## 2026-06-24 — Session wrap: exec-readiness fixes + case study copy improvements
 
-**Started from:** Project fully built and deployed. 5 commits landed since last HANDOFF (Jun 13–Jun 24) across sessions that didn't /wrap: canonical figure updates (v3 SSOT), hero card standardization, exec-readiness fixes, case study copy rewrite.
+**Started from:** Project built, deployed, reviewed. All 206 tests passing. No active arc — polish pass for exec readiness.
 
-**Did:** Status check only. Verified git state — branch up to date with origin, no uncommitted changes. No code changes.
+**Did:** Two batches of exec-readiness fixes, both deployed to Fly.io:
+1. **Exec-readiness (8 steps):** Added site-wide nav bar (Tour/Explore/Review/Case Study) to base.html. Changed /report default to show_all=true. Fixed British spellings (totalling→totaling, normalises→normalizes, Labour→Labor). Fixed singular/plural bugs for count=1 cases (formats, stubs, seconds, days). Fixed design system violations (issues box pink fill→neutral with red left border, content max-width 900→1200px). Renamed "Broken" badge to "Test Case" on explore grid. Updated 2 tests for new defaults.
+2. **Case study copy (6 steps):** Replaced landing page hero subtitle with longer narrative. Reordered case study sections (margin_math before evidence). Created new closing section "What This Means for a $25M Brand" (what_this_means.html). Added to both HTML and PDF templates.
 
-**State:** 206 tests passing. Deployed at remittance.lailarallc.com. No active arc. Untracked: review.yaml, screenshots/ (prior session artifacts). Next /improve due 2026-07-08.
+**State:** 206 tests passing. Two commits pushed and deployed: `8eab878` (exec-readiness), `bf2a7d2` (case study copy). Live at https://remittance.lailarallc.com. No active arc.
 
-**Next:** No pending work. Run /improve when due (2026-07-08). Define new arc in PLAN.md before starting new work.
+**Next:** No planned work. Next /improve due 2026-07-08.
 
 ---
 

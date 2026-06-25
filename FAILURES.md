@@ -191,6 +191,18 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** git, push-rejected, divergence, url-cleanup, multi-repo
 
+### 2026-06-24 — Edited wrong template file for singular/plural fix (evidence.html vs margin_math.html)
+
+**Attempted:** Applied the `dispute_window_days_remaining` singular/plural fix to `evidence.html`, assuming that's where the "days remaining" text lived.
+
+**Why it didn't work:** The string was actually in `margin_math.html`, not `evidence.html`. The Edit tool returned "String to replace not found in file." The section names don't map 1:1 to the content they contain — margin_math.html holds the dispute window language alongside the labor estimate.
+
+**What we tried instead:** Grepped for `days_remaining` across all section files, found the correct file (margin_math.html:74), re-read the exact whitespace, and applied the edit successfully.
+
+**Status:** Resolved.
+
+**Tags:** template, wrong-file, jinja2, grep-first
+
 ### 2026-06-08 — sse-starlette missing from requirements.txt crashed first Fly.io deploy
 
 **Attempted:** Deployed to Fly.io with existing requirements.txt.
