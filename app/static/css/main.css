@@ -74,13 +74,7 @@
     --teal-dark: #063d32;
     --teal-light: #6dcdb5;
 
-    /* Semantic status */
-    --pass-bg: #e4f5f0;
-    --pass-text: #0e6e5a;
-    --fail-bg: #fde8e7;
-    --fail-text: #7a0906;
-    --warn-bg: #fdeee0;
-    --warn-text: #7a3d10;
+    /* Semantic status — no traffic-light signaling */
     --info-bg: #e5e8f5;
     --info-text: #1f2e7a;
 
@@ -397,14 +391,10 @@ a:hover {
     letter-spacing: 0.02em;
 }
 
-.status-verified {
-    background-color: var(--pass-bg);
-    color: var(--pass-text);
-}
-
+.status-verified,
 .status-flagged {
-    background-color: var(--fail-bg);
-    color: var(--fail-text);
+    background-color: var(--navy);
+    color: #ffffff;
 }
 
 .stub-card-summary {
@@ -445,12 +435,9 @@ a:hover {
     gap: 6px;
 }
 
-.check-pass {
-    color: var(--pass-text);
-}
-
+.check-pass,
 .check-fail {
-    color: var(--fail-text);
+    color: var(--ink);
 }
 
 .check-icon {
@@ -467,8 +454,8 @@ a:hover {
 .stub-card-issues {
     margin-top: 12px;
     padding: 12px;
-    background-color: #faf8f6;
-    border-left: 4px solid var(--fail-text);
+    background-color: #ffffff;
+    border-left: 4px solid var(--navy);
     border-radius: var(--border-radius);
 }
 
@@ -476,7 +463,7 @@ a:hover {
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 600;
-    color: var(--fail-text);
+    color: var(--ink);
     margin-bottom: 8px;
 }
 
@@ -487,9 +474,9 @@ a:hover {
 
 .issue-item {
     font-size: 13px;
-    color: var(--fail-text);
+    color: var(--ink);
     padding: 4px 0;
-    border-bottom: 1px solid rgba(122, 9, 6, 0.1);
+    border-bottom: 1px solid var(--gridline);
 }
 
 .issue-item:last-child {
@@ -582,7 +569,7 @@ a:hover {
 }
 
 .dot-complete {
-    background-color: var(--teal);
+    background-color: var(--navy);
 }
 
 @keyframes pulse {
@@ -730,8 +717,8 @@ a:hover {
 }
 
 .tour-summary {
-    background-color: var(--pass-bg);
-    border: 1px solid var(--pass-text);
+    background-color: #ffffff;
+    border: 1px solid var(--navy);
     border-radius: var(--border-radius);
     padding: 32px;
     margin-top: 24px;
@@ -740,7 +727,7 @@ a:hover {
 .tour-summary-text {
     font-size: 17px;
     line-height: 1.6;
-    color: var(--pass-text);
+    color: var(--ink);
     margin-bottom: 20px;
     max-width: 660px;
 }
@@ -801,12 +788,12 @@ a:hover {
 }
 
 .explore-card-broken {
-    border-color: var(--fail-text);
+    border-color: var(--navy);
     border-style: dashed;
 }
 
 .explore-card-broken:hover {
-    border-color: var(--fail-text);
+    border-color: var(--navy);
 }
 
 .explore-card-name {
@@ -830,9 +817,9 @@ a:hover {
 }
 
 .tag-broken {
-    background-color: #faf8f6;
-    color: var(--fail-text);
-    border: 1px solid var(--fail-text);
+    background-color: #ffffff;
+    color: var(--navy);
+    border: 1px solid var(--navy);
 }
 
 .explore-results {
@@ -919,7 +906,7 @@ a:hover {
 
 .review-list-issues {
     font-size: 13px;
-    color: var(--fail-text);
+    color: var(--ink);
 }
 
 /* --- Split Layout (Review Detail) --- */
@@ -997,7 +984,8 @@ a:hover {
 .review-issues {
     margin-bottom: 16px;
     padding: 12px;
-    background-color: var(--fail-bg);
+    background-color: #ffffff;
+    border-left: 4px solid var(--navy);
     border-radius: var(--border-radius);
 }
 
@@ -1005,7 +993,7 @@ a:hover {
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 600;
-    color: var(--fail-text);
+    color: var(--ink);
     margin-bottom: 8px;
 }
 
@@ -1016,7 +1004,7 @@ a:hover {
 
 .review-issue-item {
     font-size: 13px;
-    color: var(--fail-text);
+    color: var(--ink);
     padding: 4px 0;
 }
 
@@ -1070,9 +1058,10 @@ a:hover {
 .review-discrepancy {
     font-size: 14px;
     font-weight: 600;
-    color: var(--fail-text);
+    color: var(--ink);
     padding: 8px 12px;
-    background-color: var(--fail-bg);
+    background-color: #ffffff;
+    border-left: 4px solid var(--navy);
     border-radius: var(--border-radius);
     margin-bottom: 16px;
 }
@@ -1149,19 +1138,15 @@ a:hover {
 .review-success-msg {
     font-size: 14px;
     font-weight: 600;
-    color: var(--pass-text);
+    color: var(--ink);
 }
 
 /* --- Field States --- */
 
-.field-flagged {
-    border-color: var(--fail-text) !important;
-    background-color: var(--fail-bg);
-}
-
+.field-flagged,
 .field-verified {
-    border-color: var(--pass-text) !important;
-    background-color: var(--pass-bg);
+    border-color: var(--gridline) !important;
+    background-color: #ffffff;
 }
 
 /* --- HTMX indicators --- */
@@ -1349,40 +1334,13 @@ a:hover {
     color: var(--text-secondary);
 }
 
-.report-stat-pass {
-    border-left-color: var(--pass-text);
-    background-color: var(--pass-bg);
-}
-
-.report-stat-pass .report-stat-number {
-    color: var(--pass-text);
-}
-
-.report-stat-fail {
-    border-left-color: var(--fail-text);
-    background-color: var(--fail-bg);
-}
-
-.report-stat-fail .report-stat-number {
-    color: var(--fail-text);
-}
-
-.report-stat-recovery {
-    border-left-color: var(--pass-text);
-    background-color: var(--pass-bg);
-}
-
-.report-stat-recovery .report-stat-number {
-    color: var(--pass-text);
-}
-
+/* Stat card modifiers kept for template compatibility — all render
+   identically to the base .report-stat-card (white bg, navy border). */
+.report-stat-pass,
+.report-stat-fail,
+.report-stat-recovery,
 .report-stat-forfeit {
-    border-left-color: var(--fail-text);
-    background-color: var(--fail-bg);
-}
-
-.report-stat-forfeit .report-stat-number {
-    color: var(--fail-text);
+    /* inherits base card styling */
 }
 
 /* Report tables */
@@ -1438,30 +1396,18 @@ a:hover {
     letter-spacing: 0.02em;
 }
 
-.report-badge-pass {
-    background-color: var(--pass-bg);
-    color: var(--pass-text);
-}
-
-.report-badge-fail {
-    background-color: var(--fail-bg);
-    color: var(--fail-text);
-}
-
+.report-badge-pass,
+.report-badge-fail,
 .report-badge-warn {
-    background-color: var(--warn-bg);
-    color: var(--warn-text);
+    background-color: var(--navy);
+    color: #ffffff;
 }
 
 /* Report check indicators */
 
-.report-check-pass {
-    color: var(--pass-text);
-    font-size: 13px;
-}
-
+.report-check-pass,
 .report-check-fail {
-    color: var(--fail-text);
+    color: var(--ink);
     font-size: 13px;
 }
 
@@ -1496,31 +1442,19 @@ a:hover {
 
 /* Recovery / forfeit callout boxes */
 
-.report-recovery-box {
-    background-color: var(--pass-bg);
-    border-left: 4px solid var(--pass-text);
-    padding: 16px 20px;
-    margin: 20px 0;
-}
-
-.report-recovery-text {
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--pass-text);
-    margin: 0;
-}
-
+.report-recovery-box,
 .report-forfeit-box {
-    background-color: var(--fail-bg);
-    border-left: 4px solid var(--fail-text);
+    background-color: #ffffff;
+    border-left: 4px solid var(--navy);
     padding: 16px 20px;
     margin: 20px 0;
 }
 
+.report-recovery-text,
 .report-forfeit-text {
     font-size: 15px;
     line-height: 1.5;
-    color: var(--fail-text);
+    color: var(--ink);
     margin: 0;
 }
 

@@ -68,17 +68,10 @@
         .section-title { font-family: 'Playfair Display', Georgia, serif; font-size: 18pt; font-weight: 700; color: #0d0d0d; margin-top: 24pt; margin-bottom: 12pt; page-break-after: avoid; }
         .report-subsection-title { font-family: 'Playfair Display', Georgia, serif; font-size: 14pt; font-weight: 700; color: #0d0d0d; margin-top: 16pt; margin-bottom: 10pt; }
         .report-stat-row { display: flex; gap: 16px; margin: 16pt 0; }
-        .report-stat-card { flex: 1; border: 1px solid #d9d9d9; padding: 12px; }
+        .report-stat-card { flex: 1; background-color: #ffffff; border: none; border-left: 4px solid #1f2e7a; padding: 12px; }
         .report-stat-number { font-family: 'Playfair Display', Georgia, serif; font-size: 28pt; font-weight: 700; color: #0d0d0d; display: block; }
         .report-stat-label { font-size: 10pt; color: #595959; display: block; }
-        .report-stat-pass { border-color: #0e6e5a; background-color: #e4f5f0; }
-        .report-stat-pass .report-stat-number { color: #0e6e5a; }
-        .report-stat-fail { border-color: #7a0906; background-color: #fde8e7; }
-        .report-stat-fail .report-stat-number { color: #7a0906; }
-        .report-stat-recovery { border-color: #0e6e5a; background-color: #e4f5f0; }
-        .report-stat-recovery .report-stat-number { color: #0e6e5a; }
-        .report-stat-forfeit { border-color: #7a0906; background-color: #fde8e7; }
-        .report-stat-forfeit .report-stat-number { color: #7a0906; }
+        .report-stat-pass, .report-stat-fail, .report-stat-recovery, .report-stat-forfeit { /* inherits base card styling */ }
         .report-table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
         .report-table th { text-align: left; font-weight: 600; color: #595959; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 8px; border-bottom: 2px solid #d9d9d9; }
         .report-table td { padding: 6px 8px; border-bottom: 1px solid #d9d9d9; }
@@ -86,18 +79,13 @@
         .col-amount { text-align: right; }
         .report-code { font-size: 9pt; background-color: #f5f3ee; padding: 1px 4px; font-family: monospace; }
         .report-badge { display: inline-block; font-size: 8pt; font-weight: 500; padding: 1px 6px; text-transform: uppercase; letter-spacing: 0.02em; }
-        .report-badge-pass { background: #e4f5f0; color: #0e6e5a; }
-        .report-badge-fail { background: #fde8e7; color: #7a0906; }
-        .report-badge-warn { background: #fdeee0; color: #7a3d10; }
-        .report-check-pass { color: #0e6e5a; font-size: 10pt; }
-        .report-check-fail { color: #7a0906; font-size: 10pt; }
+        .report-badge-pass, .report-badge-fail, .report-badge-warn { background: #1f2e7a; color: #ffffff; }
+        .report-check-pass, .report-check-fail { color: #0d0d0d; font-size: 10pt; }
         .report-chart { margin: 16pt 0; page-break-inside: avoid; }
         .report-chart-title { font-family: 'Playfair Display', Georgia, serif; font-size: 14pt; font-weight: 700; color: #0d0d0d; margin-bottom: 8pt; }
         .report-svg-chart { width: 100%; max-width: 600px; height: auto; }
-        .report-recovery-box { background-color: #e4f5f0; border-left: 3px solid #0e6e5a; padding: 10px 14px; margin: 12pt 0; }
-        .report-recovery-text { font-size: 11pt; color: #0e6e5a; margin: 0; }
-        .report-forfeit-box { background-color: #fde8e7; border-left: 3px solid #7a0906; padding: 10px 14px; margin: 12pt 0; }
-        .report-forfeit-text { font-size: 11pt; color: #7a0906; margin: 0; }
+        .report-recovery-box, .report-forfeit-box { background-color: #ffffff; border-left: 3px solid #1f2e7a; padding: 10px 14px; margin: 12pt 0; }
+        .report-recovery-text, .report-forfeit-text { font-size: 11pt; color: #0d0d0d; margin: 0; }
         .report-section { page-break-inside: avoid; margin-bottom: 12pt; }
         .section-divider { border: none; border-top: 1px solid #d9d9d9; margin: 20pt 0; }
     </style>
