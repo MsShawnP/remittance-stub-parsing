@@ -197,6 +197,12 @@ Each entry:
 - **Scope:** All route error handlers, especially report.py PDF generation
 - **Do not:** Include `str(e)` or `repr(e)` in HTTP response bodies
 
+### 2026-06-25 — No traffic-light color signaling anywhere in the tool
+
+- **Why:** The Lailara design system does not use color to signal good/bad, pass/fail, or safe/danger. Teal backgrounds for "verified/recovery/pass" and pink/red backgrounds for "flagged/forfeit/fail" read as green-means-good / red-means-bad regardless of the actual hex codes. The word on the badge or the label text communicates the status, not the color. Removed 6 CSS variables (--pass-bg, --pass-text, --fail-bg, --fail-text, --warn-bg, --warn-text) and unified all stat cards, badges, callout boxes, check indicators, field states, and progress dots to navy/ink/white.
+- **Scope:** Global — main.css, case_study_pdf.html, all templates that use status badges, stat cards, callout boxes, check marks, or field states
+- **Do not:** Reintroduce colored backgrounds or text that signal good/bad. No green family for "pass," no red family for "fail," no amber for "warning." All badges use navy bg + white text. All stat cards use white bg + navy left border + ink text. All callout boxes use white bg + navy left border + ink text.
+
 ---
 
 ## Visualization

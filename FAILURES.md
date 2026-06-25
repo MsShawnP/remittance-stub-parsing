@@ -107,6 +107,18 @@ quarto" or "scope, scrollytelling, decoration"]
 
 **Tags:** fly-io, deploy, health-check, suspended-app, trade-spend-leakage
 
+### 2026-06-25 — Fly.io depot builder timed out twice before succeeding on third attempt
+
+**Attempted:** `fly deploy --remote-only` to deploy 4 commits (reason codes, factual fix, color audit, wrap files).
+
+**Why it didn't work:** Fly.io's remote depot builder returned "context deadline exceeded" after waiting ~2 minutes. Happened twice in a row. No code or config change between attempts — infrastructure issue on Fly's side.
+
+**What we tried instead:** Ran `fly deploy --remote-only` a third time ~20 minutes later. Succeeded without changes. Alternative if depot keeps failing: `fly deploy` (no `--remote-only`) builds Docker locally and pushes the image.
+
+**Status:** Resolved.
+
+**Tags:** fly-io, deploy, depot-builder, timeout, infrastructure
+
 ### 2026-06-08 — BaseHTTPMiddleware silently drops response headers through uvicorn
 
 **Attempted:** Used Starlette's `BaseHTTPMiddleware` to add Content-Security-Policy header via `response.headers["Content-Security-Policy"] = CSP` in the `dispatch` method.

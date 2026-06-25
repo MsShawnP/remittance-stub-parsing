@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-06-25 — Session wrap: reason code panel, factual fix, traffic-light color elimination
+
+**Started from:** Prior session's /wrap was incomplete (compacted mid-wrap). HANDOFF/FAILURES needed updating.
+
+**Did:** Completed prior /wrap. Added reason code reference panel + instructional hints to review queue. Fixed factual error in case study closing section ($207K breakdown). Full traffic-light color audit and elimination — removed all semantic green/red color signaling, deleted 6 CSS variables, unified all elements to navy/ink/white. Deployed to Fly.io (third attempt after two depot builder timeouts).
+
+**State:** 206 tests passing. All commits pushed and deployed at remittance.lailarallc.com. No active arc. Zero traffic-light color signaling remaining.
+
+**Next:** No planned work. Next /improve due 2026-07-08.
+
+---
+
 ## 2026-06-24 — Session wrap: exec-readiness fixes + case study copy improvements
 
 **Started from:** Project built, deployed, reviewed. All 206 tests passing. No active arc — polish pass for exec readiness.
