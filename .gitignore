@@ -24,3 +24,6 @@ stubs/
 .env.*
 *.pem
 secrets.*
+
+# Verify run artifacts
+screenshots/

@@ -1,0 +1,79 @@
+project: remittance-stub-parsing
+base_url: https://remittance.lailarallc.com
+
+routes:
+  - path: /
+    name: Landing Page
+  - path: /explore
+    name: Explore Stubs
+  - path: /tour
+    name: Guided Tour
+  - path: /review
+    name: Review Queue
+
+forbidden_content:
+  - pattern: "TODO|FIXME|HACK|XXX"
+    severity: warning
+    reason: Dev markers in production code
+  - pattern: "password\\s*=|api_key\\s*=|secret\\s*="
+    severity: fail
+    reason: Possible hardcoded credentials
+    exclude:
+      - "*.md"
+
+dom_checks:
+  - route: /
+    elements:
+      - selector: "h1.hero-title"
+        label: Hero heading present
+      - selector: ".format-grid"
+        label: Format cards rendered
+      - selector: ".btn-primary"
+        label: CTA button present
+      - selector: ".site-footer"
+        label: Footer present
+    absent:
+      - selector: ".error-state"
+        label: No error state shown
+  - route: /explore
+    elements:
+      - selector: "h1.section-title"
+        label: Page heading present
+      - selector: ".explore-grid"
+        label: Stub grid rendered
+      - selector: ".explore-results"
+        label: Results section present
+    absent:
+      - selector: ".error-state"
+        label: No error state shown
+  - route: /tour
+    elements:
+      - selector: "h1.section-title"
+        label: Page heading present
+      - selector: "#tour-nav"
+        label: Tour nav rendered
+      - selector: "#run-step-btn"
+        label: Run Pipeline button present
+    absent:
+      - selector: ".error-state"
+        label: No error state shown
+  - route: /review
+    elements:
+      - selector: "h1.section-title"
+        label: Page heading present
+      - selector: ".review-empty, .review-list"
+        label: Review content rendered (empty state or list)
+
+layout:
+  - route: /
+    assertions:
+      - type: no_horizontal_scroll
+  - route: /explore
+    assertions:
+      - type: no_horizontal_scroll
+  - route: /tour
+    assertions:
+      - type: no_horizontal_scroll
+  - route: /review
+    assertions:
+      - type: no_horizontal_scroll
