@@ -65,7 +65,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 
 **Synthetic stubs**
 - R1. Generate synthetic remittance stubs for four retailer/distributor formats: Walmart, Costco, UNFI, KeHE — all native-text PDFs
-- R2. Stubs must reconcile against the Cinderhaven SSOT in Postgres (3,363 chargebacks, ~$3.6M/yr all-in trade spend, 11.0% of scan revenue) — parsed totals must not drift from canonical figures
+- R2. Stubs must reconcile against the Cinderhaven SSOT in Postgres (3,357 chargebacks, ~$3.6M/yr all-in trade spend, 11.0% of scan revenue) — parsed totals must not drift from canonical figures
 - R3. Include intentionally broken stubs (mismatched amounts, unmapped reason codes) that fail deterministic validation and route to the review queue
 - R11. Reason codes must be correct per source — UNFI promo codes differ from KeHE codes differ from Walmart codes; incorrect codes are an instant credibility loss with AP practitioners
 - R12. Stubs must be realistically ugly — multi-page, inconsistent headers, inconsistent column naming, reason codes that don't map cleanly to the ERP
@@ -150,7 +150,7 @@ The Lailara portfolio already proves the practice can analyze structured data (S
 ## Dependencies / Assumptions
 
 - Cinderhaven SSOT in Postgres is accessible and contains the invoice/AR/chargeback records needed to build synthetic stubs and reconcile the output ledger
-- The 3,363 chargebacks and ~$3.6M/yr all-in trade spend figures are current and canonical (per CINDERHAVEN_CANONICAL.md)
+- The 3,357 chargebacks and ~$3.6M/yr all-in trade spend figures are current and canonical (per CINDERHAVEN_CANONICAL.md)
 - Existing Cinderhaven retailers (Walmart, Costco, UNFI, KeHE) have enough data to support realistic synthetic stubs per format
 
 ---

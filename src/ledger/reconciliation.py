@@ -14,7 +14,7 @@ from src.models import ReconciliationMatch, ReconciliationResult, RemittanceStub
 
 # Cinderhaven canonical figures
 ANNUAL_TRADE_SPEND = Decimal("3600000")  # ~$3.6M/yr
-TOTAL_CHARGEBACKS = 3363
+TOTAL_CHARGEBACKS = 3357
 DISPUTE_WINDOW_DAYS = 90  # standard dispute window
 
 

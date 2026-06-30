@@ -190,7 +190,7 @@ async def test_report_includes_cinderhaven_context(client):
     response = await client.get("/report?show_all=true")
     text = response.text
     # Should reference the annual trade spend and chargebacks
-    assert "3,363" in text
+    assert "3,357" in text
     assert "3.6M" in text or "3,600,000" in text
 
 
