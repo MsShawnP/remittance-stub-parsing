@@ -15,7 +15,7 @@ approved phrasings.
 | Context | Exact phrasing |
 |---------|----------------|
 | Trade context (annual) | "~$3.6M/yr all-in trade spend, 11.0% of scan revenue (trailing 52 weeks)" |
-| Recoverable layer | "~$380K/yr operational deduction waste; 3,363 chargebacks (2,879 retailer + 484 distributor) over 36 months" |
+| Recoverable layer | "~$380K/yr operational deduction waste; 3,357 chargebacks (2,873 retailer + 484 distributor) over 36 months" |
 | 36-mo total | "[36mo total deferred — recompute from updated SSOT]" |
 
 ---
