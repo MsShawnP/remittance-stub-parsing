@@ -17,6 +17,13 @@ ANNUAL_TRADE_SPEND = Decimal("3600000")  # ~$3.6M/yr
 TOTAL_CHARGEBACKS = 3357
 DISPUTE_WINDOW_DAYS = 90  # standard dispute window
 
+# End of the synthetic Cinderhaven data window — the most recent remittance
+# payment date across stubs/. Dispute-window math is measured as of this date
+# so the demo stays stable instead of drifting past every 2025-26 reference
+# date as the real calendar advances (which made every deduction read as
+# "0 days remaining" and future-dated stubs show an impossible >90 days).
+AS_OF_DATE = date(2026, 7, 30)
+
 
 def reconcile_stub(
     stub: RemittanceStub,
@@ -30,14 +37,15 @@ def reconcile_stub(
         stub: The remittance stub to reconcile.
         reference_invoices: Dict mapping invoice_number -> {"amount": Decimal, "date": date}.
         stub_id: Identifier for this stub. Defaults to check_number.
-        as_of_date: Date to calculate dispute window from. Defaults to today.
+        as_of_date: Date to calculate the dispute window from. Defaults to
+            AS_OF_DATE (the end of the data window), not the live calendar.
 
     Returns:
         ReconciliationResult with match status, matched/unmatched amounts,
         and days remaining in the dispute window.
     """
     effective_id = stub_id or stub.check_number
-    today = as_of_date or date.today()
+    as_of = as_of_date or AS_OF_DATE
 
     matched_amount = Decimal("0")
     unmatched_amount = Decimal("0")
@@ -58,13 +66,17 @@ def reconcile_stub(
                     f"matches reference exactly"
                 )
             else:
-                # Partial match — amounts differ
+                # Partial match — amounts differ. Recoverable (unmatched) is
+                # only the portion of the deduction NOT backed by the reference
+                # invoice. When the reference amount exceeds the deduction, the
+                # whole deduction is covered, so nothing is unmatched — adding
+                # abs(deduction - ref) here would overstate recoverable dollars.
                 matched_amount += min(deduction.amount, ref_amount)
-                diff = abs(deduction.amount - ref_amount)
-                unmatched_amount += diff
+                unmatched_portion = max(Decimal("0"), deduction.amount - ref_amount)
+                unmatched_amount += unmatched_portion
                 details.append(
                     f"PARTIAL: {invoice_key} — deduction ${deduction.amount} "
-                    f"vs reference ${ref_amount} (diff ${diff})"
+                    f"vs reference ${ref_amount} (unmatched ${unmatched_portion})"
                 )
         else:
             unmatched_amount += deduction.amount
@@ -76,8 +88,13 @@ def reconcile_stub(
         # Calculate dispute window from deduction date
         deduction_date = deduction.deduction_date or stub.payment_date
         if deduction_date:
-            days_elapsed = (today - deduction_date).days
-            days_remaining = max(0, DISPUTE_WINDOW_DAYS - days_elapsed)
+            days_elapsed = (as_of - deduction_date).days
+            # Clamp to [0, DISPUTE_WINDOW_DAYS]: a deduction dated after the
+            # as-of date must never report more than a full window remaining.
+            days_remaining = min(
+                DISPUTE_WINDOW_DAYS,
+                max(0, DISPUTE_WINDOW_DAYS - days_elapsed),
+            )
             if min_days_remaining is None or days_remaining < min_days_remaining:
                 min_days_remaining = days_remaining
 

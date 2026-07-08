@@ -337,6 +337,23 @@ class TestReconciliation:
         assert result.matched_amount == Decimal("480.00")  # min of the two
         assert result.unmatched_amount == Decimal("20.00")  # difference
 
+    def test_no_unmatched_when_reference_exceeds_deduction(self):
+        """Reference invoice larger than the deduction: whole deduction is
+        covered, so recoverable (unmatched) is zero — not abs(diff)."""
+        stub = _make_stub(
+            deductions=[
+                ("WM-100001", "22", "500.00"),
+            ],
+        )
+        reference = {
+            "WM-100001": {"amount": Decimal("600.00"), "date": date(2025, 6, 1)},
+        }
+
+        result = reconcile_stub(stub, reference, stub_id="rec-ref-bigger")
+
+        assert result.matched_amount == Decimal("500.00")  # full deduction
+        assert result.unmatched_amount == Decimal("0")  # nothing recoverable
+
     def test_mixed_matched_and_unmatched(self):
         """One deduction matches, one has no reference — partial overall."""
         stub = _make_stub(
