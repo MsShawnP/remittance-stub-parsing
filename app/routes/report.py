@@ -23,6 +23,7 @@ from fastapi.templating import Jinja2Templates
 from src.extraction.pipeline import extract
 from src.ledger.reconciliation import (
     ANNUAL_TRADE_SPEND,
+    AS_OF_DATE,
     DISPUTE_WINDOW_DAYS,
     TOTAL_CHARGEBACKS,
     reconcile_stub,
@@ -120,11 +121,12 @@ def _process_stubs(filenames: list[str]) -> dict:
         # Validate
         validation = validate_stub(stub, stub_id=filename)
 
-        # Reconcile
+        # Reconcile against the pinned data-window date, not the live calendar.
         reconciliation = reconcile_stub(
             stub,
             reference_invoices,
             stub_id=filename,
+            as_of_date=AS_OF_DATE,
         )
 
         # Track formats
@@ -192,6 +194,11 @@ def _process_stubs(filenames: list[str]) -> dict:
     # Total deduction count
     total_deduction_count = len(all_deductions)
 
+    # Recoverable (unreconciled) total: the two dispute-window buckets by
+    # construction. The closing section is driven off this so its parts always
+    # foot against the stated total (within_window + past_window == this).
+    recoverable_total = within_window + past_window
+
     return {
         "stubs_data": stubs_data,
         "stub_count": len(stubs_data),
@@ -206,6 +213,7 @@ def _process_stubs(filenames: list[str]) -> dict:
         "all_deductions": all_deductions,
         "within_window": within_window,
         "past_window": past_window,
+        "recoverable_total": recoverable_total,
         "dispute_window_days": DISPUTE_WINDOW_DAYS,
         "annual_trade_spend": ANNUAL_TRADE_SPEND,
         "total_chargebacks": TOTAL_CHARGEBACKS,
