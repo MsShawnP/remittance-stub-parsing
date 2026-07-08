@@ -25,7 +25,7 @@ TOUR_STEPS = [
         "step": 1,
         "retailer": "Walmart",
         "filename": "walmart_stub_01.pdf",
-        "description": "Table-heavy layout with promotional allowances, freight claims, and compliance fines. Reason codes mapped to 12 deduction categories.",
+        "description": "Table-heavy layout with promotional allowances, freight claims, and compliance fines. 9 reason codes mapped across 5 deduction categories.",
     },
     {
         "step": 2,
