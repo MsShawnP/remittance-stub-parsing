@@ -37,7 +37,7 @@
             {% for sd in stubs_data %}
             <tr>
                 <td><code class="report-code">{{ sd.filename }}</code></td>
-                <td>{{ sd.stub.retailer.value | title }}</td>
+                <td>{{ sd.stub.retailer.display_name }}</td>
                 <td>
                     {% if sd.validation.status.value == "verified" %}
                     <span class="report-badge report-badge-pass">VERIFIED</span>

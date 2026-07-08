@@ -15,6 +15,20 @@ class RetailerFormat(str, Enum):
     UNFI = "unfi"
     KEHE = "keHE"
 
+    @property
+    def display_name(self) -> str:
+        """Human-facing retailer name.
+
+        Jinja's ``|title`` filter mangles the acronym/camelCase retailers
+        ("unfi" -> "Unfi", "keHE" -> "Kehe"), so templates use this instead.
+        """
+        return {
+            "walmart": "Walmart",
+            "costco": "Costco",
+            "unfi": "UNFI",
+            "keHE": "KeHE",
+        }[self.value]
+
 
 class DeductionCategory(str, Enum):
     PROMOTIONAL = "promotional"

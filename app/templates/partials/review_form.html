@@ -1,7 +1,7 @@
 <div class="review-form" id="review-form-{{ filename }}">
     <div class="review-form-header">
         <h3 class="review-form-title">
-            {{ stub.retailer.value | title }} &mdash; Check #{{ stub.check_number }}
+            {{ stub.retailer.display_name }} &mdash; Check #{{ stub.check_number }}
         </h3>
         <span class="status-badge status-{{ validation.status.value }}">
             {{ validation.status.value | upper }}

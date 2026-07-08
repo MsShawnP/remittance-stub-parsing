@@ -24,7 +24,7 @@
     {% for item in flagged_stubs %}
     <a href="/review/{{ item.filename }}"
        class="review-list-item {% if active_stub and active_stub.filename == item.filename %}review-list-item-active{% endif %}">
-        <span class="review-list-retailer">{{ item.stub.retailer.value | title }}</span>
+        <span class="review-list-retailer">{{ item.stub.retailer.display_name }}</span>
         <span class="review-list-check">Check #{{ item.stub.check_number }}</span>
         <span class="review-list-issues">{{ item.validation.details | length }} issue{{ 's' if item.validation.details | length != 1 else '' }}</span>
         <span class="status-badge status-{{ item.validation.status.value }}">

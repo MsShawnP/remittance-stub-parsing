@@ -1,6 +1,6 @@
 <div class="stub-card" id="result-{{ filename }}">
     <div class="stub-card-header">
-        <h3 class="stub-card-title">{{ stub.retailer.value | title }} &mdash; Check #{{ stub.check_number }}</h3>
+        <h3 class="stub-card-title">{{ stub.retailer.display_name }} &mdash; Check #{{ stub.check_number }}</h3>
         <span class="status-badge status-{{ validation.status.value }}">
             {{ validation.status.value | upper }}
         </span>

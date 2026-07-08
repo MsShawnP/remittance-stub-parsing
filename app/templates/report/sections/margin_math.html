@@ -57,7 +57,7 @@
             {% for sd in stubs_data %}
             <tr>
                 <td><code class="report-code">{{ sd.filename }}</code></td>
-                <td>{{ sd.stub.retailer.value | title }}</td>
+                <td>{{ sd.stub.retailer.display_name }}</td>
                 <td>
                     {% if sd.reconciliation.match_status.value == "matched" %}
                     <span class="report-badge report-badge-pass">MATCHED</span>
