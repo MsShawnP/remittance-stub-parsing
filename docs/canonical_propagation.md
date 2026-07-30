@@ -136,7 +136,7 @@ all-in $3,556,609.29/yr (11.00%) · structural $3,177,050.51 (9.83%) · op waste
 
 ## 8. dimension-weight-integrity — DONE (verified 2026-07-30)
 
-**Status: CLEAN — grep of build_spec_dimension_integrity.md for 464 / $5.4M / 3,363 returns empty; the stale passages were removed in the July 2026 canonical sweep. Nothing to do.**
+**Status: CLEAN — grep of build_spec_dimension_integrity.md for 464 / $5.4M / 3,357 returns empty; the stale passages were removed in the July 2026 canonical sweep. Nothing to do.**
 
 ---
 
@@ -146,20 +146,20 @@ all-in $3,556,609.29/yr (11.00%) · structural $3,177,050.51 (9.83%) · op waste
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
-| portfolio_project_brief_remittance_parsing.md:44 | "$5.4M all-in trade cost" | "~$380K/yr operational deduction waste (3,363 chargebacks)" | DONE (Phase 5 + v3 update) |
-| portfolio_project_brief_remittance_parsing.md:49 | "464 chargebacks / 18 months, $5.4M all-in trade cost" | "3,363 chargebacks / 36 months, ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:44 | "$5.4M all-in trade cost" | "~$380K/yr operational deduction waste (3,357 chargebacks (2,873 retailer + 484 distributor))" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:49 | "464 chargebacks / 18 months, $5.4M all-in trade cost" | "3,357 chargebacks (2,873 retailer + 484 distributor) / 36 months, ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
 | portfolio_project_brief_remittance_parsing.md:51 | "quantify against the $5.4M base" | "quantify against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
-| portfolio_project_brief_remittance_parsing.md:180 | "464 chargebacks, $5.4M all-in trade cost" | "3,363 chargebacks, ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
+| portfolio_project_brief_remittance_parsing.md:180 | "464 chargebacks, $5.4M all-in trade cost" | "3,357 chargebacks (2,873 retailer + 484 distributor), ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
 | portfolio_project_brief_remittance_parsing.md:189 | "canonical $5.4M" | "canonical ~$3.6M/yr" | DONE (Phase 5 + v3 update) |
-| docs/brainstorms/...requirements.md:68 | "464 chargebacks, $5.4M all-in trade cost" | "3,363 chargebacks, ~$3.6M/yr all-in trade spend, 11.0% of scan revenue" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:68 | "464 chargebacks, $5.4M all-in trade cost" | "3,357 chargebacks (2,873 retailer + 484 distributor), ~$3.6M/yr all-in trade spend, 11.0% of scan revenue" | DONE (Phase 5 + v3 update) |
 | docs/brainstorms/...requirements.md:96 | "anchored against the $5.4M all-in trade cost" | "anchored against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
 | docs/brainstorms/...requirements.md:112 | "Cinderhaven canonical $5.4M all-in trade cost" | "Cinderhaven canonical ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
-| docs/brainstorms/...requirements.md:153 | "464 chargebacks and $5.4M all-in trade cost figures" | "3,363 chargebacks and ~$3.6M/yr all-in trade spend figures" | DONE (Phase 5 + v3 update) |
+| docs/brainstorms/...requirements.md:153 | "464 chargebacks and $5.4M all-in trade cost figures" | "3,357 chargebacks (2,873 retailer + 484 distributor) and ~$3.6M/yr all-in trade spend figures" | DONE (Phase 5 + v3 update) |
 | docs/plans/...plan.md:29 | "$5.4M all-in trade cost" | "~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
-| docs/plans/...plan.md:137 | "464 chargebacks / $5.4M base" | "3,363 chargebacks / ~$380K/yr recoverable base" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:137 | "464 chargebacks / $5.4M base" | "3,357 chargebacks (2,873 retailer + 484 distributor) / ~$380K/yr recoverable base" | DONE (Phase 5 + v3 update) |
 | docs/plans/...plan.md:453 | "anchored against the $5.4M base" | "anchored against the ~$380K/yr operational deduction waste" | DONE (Phase 5 + v3 update) |
 | docs/plans/...plan.md:465 | "Cinderhaven $5.4M canonical figure" | "Cinderhaven canonical ~$3.6M/yr all-in trade spend" | DONE (Phase 5 + v3 update) |
-| docs/plans/...plan.md:671 | "$5.4M all-in trade cost, 464 chargebacks" | "~$3.6M/yr all-in trade spend, 3,363 chargebacks" | DONE (Phase 5 + v3 update) |
+| docs/plans/...plan.md:671 | "$5.4M all-in trade cost, 464 chargebacks" | "~$3.6M/yr all-in trade spend, 3,357 chargebacks (2,873 retailer + 484 distributor)" | DONE (Phase 5 + v3 update) |
 
 ### History/context docs (stale figures documented as wrong — preserve)
 
@@ -183,7 +183,7 @@ all-in $3,556,609.29/yr (11.00%) · structural $3,177,050.51 (9.83%) · op waste
 | short-ship-cost | DONE 2026-07-30 | None | 381 → 2,873 (measured) |
 | chargeback-prediction-model | CLEAN | None | No action |
 | dimension-weight-integrity | DONE (verified) | None | Stale passages already removed |
-| remittance-stub-parsing | DONE | None live | Phase 5 + v3 update; plan doc 3,363→3,357 (2026-07-30) |
+| remittance-stub-parsing | DONE | None live | Phase 5 + v3 update; plan doc 3,357→3,357 (2026-07-30) |
 
 ## Follow-up checklist (per-repo sessions)
 
