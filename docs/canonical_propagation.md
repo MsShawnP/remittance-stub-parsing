@@ -5,7 +5,8 @@ One row per file:line. Correct replacements from CINDERHAVEN_CANONICAL.md
 approved phrasings.
 
 **Created:** 2026-06-04
-**Source of truth:** `cinderhaven-data-platform/CINDERHAVEN_CANONICAL.md`
+**Last verified:** 2026-07-30 (against platform `360df16`, post trade re-rate)
+**Source of truth:** `cinderhaven-data-platform/CINDERHAVEN_CANONICAL.md` + `reference/canonical_values.yml`
 **Methodology:** grep across all local repos for superseded values.
 
 ---
@@ -16,15 +17,19 @@ approved phrasings.
 |---------|----------------|
 | Trade context (annual) | "~$3.6M/yr all-in trade spend, 11.0% of scan revenue (trailing 52 weeks)" |
 | Recoverable layer | "~$380K/yr operational deduction waste; 3,357 chargebacks (2,873 retailer + 484 distributor) over 36 months" |
-| 36-mo total | "[36mo total deferred — recompute from updated SSOT]" |
+| 36-mo total | "$10.7M all-in trade over 36 months" |
+
+Measured values behind the phrasings (2026-07-30 re-rate, `trade.*` in canonical_values.yml):
+all-in $3,556,609.29/yr (11.00%) · structural $3,177,050.51 (9.83%) · op waste $379,558.78/yr (1.17%) ·
+36-mo all-in total $10,669,827.88 · scan t52w denominator $32,323,139.62.
 
 ---
 
-## 1. trade-spend-data-diagnostic — REACHABLE (requires Postgres re-export)
+## 1. trade-spend-data-diagnostic — DONE (rebuilt 2026-07-30)
 
-**Status: BLOCKED — needs flyctl proxy session to re-export SQLite, rebuild workbook, then update narrative docs with actual new figures. Do NOT manually swap numbers; the workbook computes them from data.**
+**Status: REBUILT — workbook regenerated 59/59 from the 2026-07-30 prod extract (repo commit `cea84f6`). Grep of EXECUTIVE_MEMO.md, DEFENSIBILITY.md, walkthrough.md, sql/, and validate_workbook.py for every stale value below returns empty; narrative and validation bounds now derive from the rebuilt workbook. Remaining hits live only in DECISIONS.md/HANDOFF.md (history — preserve).**
 
-### Hardcoded narrative refs (update AFTER re-export + rebuild)
+### Hardcoded narrative refs (all resolved by the 2026-07-30 rebuild)
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
@@ -83,15 +88,13 @@ approved phrasings.
 
 ---
 
-## 3. retailer-deduction-recovery — REACHABLE
+## 3. retailer-deduction-recovery — DONE (2026-07-30)
 
-**Status: LOW PRIORITY — "18 months" refs are in data gen schema docs describing OLD generation targets. Project uses its own data pipeline.**
+**Status: FIXED — lines 319/321 no longer exist (removed in an earlier schema rewrite). Line 308 read "24-month window (Nov 2023 → Sep 2025)" and is now "36-month window (Jan 2023 → Jan 2026)", matching the live export (16,917 deductions, measured window 2023-01-23 → 2026-01-02).**
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
-| data/schema.md:308 | "18-month window (Dec 2024 → May 2026)" | "36-month window (Jan 2024 → Jan 2027)" | FIX |
-| data/schema.md:319 | "per retailer × 18 months" | "per retailer × 36 months" | FIX |
-| data/schema.md:321 | "over 18 months" | "over 36 months" | FIX |
+| data/schema.md:308 | "24-month window (Nov 2023 → Sep 2025)" | "36-month window (Jan 2023 → Jan 2026)" | DONE 2026-07-30 |
 
 ---
 
@@ -117,11 +120,11 @@ approved phrasings.
 
 ## 6. short-ship-cost (150 Cases) — REACHABLE
 
-**Status: NEAR-CLEAN — one stale table row count, explicitly marked as unused.**
+**Status: DONE (2026-07-30) — stale row count fixed. Note: the manifest's earlier "864" suggestion was itself stale; the 2026-07-30 prod extract measures 2,873 chargebacks (= canonical retailer count).**
 
 | File:Line | Current (stale) | Replacement | Action |
 |-----------|----------------|-------------|--------|
-| docs/cost-engine-docs.md:30 | "chargebacks \| 381" | "chargebacks \| 864" (or 690 retailer-only) | LOW — cost engine uses fallback rates, not this table |
+| docs/cost-engine-docs.md:30 | "chargebacks \| 381" | "chargebacks \| 2,873" | DONE 2026-07-30 — cost engine uses fallback rates, not this table |
 
 ---
 
@@ -131,14 +134,9 @@ approved phrasings.
 
 ---
 
-## 8. dimension-weight-integrity — REACHABLE
+## 8. dimension-weight-integrity — DONE (verified 2026-07-30)
 
-**Status: FIX NOW — 2 references cite dead 464 / $5.4M figures.**
-
-| File:Line | Current (stale) | Replacement | Action |
-|-----------|----------------|-------------|--------|
-| build_spec_dimension_integrity.md:91 | "464 chargebacks" and "$5.4M all-in trade" | "3,363 chargebacks" and "~$3.6M/yr all-in trade spend, 11.0% of scan revenue (trailing 52 weeks)" | FIX |
-| build_spec_dimension_integrity.md:296 | "464" and "$5.4M all-in trade / 464-chargeback canon" | "3,363" and "~$3.6M/yr all-in trade / 3,363-chargeback canon" | FIX |
+**Status: CLEAN — grep of build_spec_dimension_integrity.md for 464 / $5.4M / 3,363 returns empty; the stale passages were removed in the July 2026 canonical sweep. Nothing to do.**
 
 ---
 
@@ -177,19 +175,19 @@ approved phrasings.
 
 | Repo | Status | Stale refs | Action |
 |------|--------|-----------|--------|
-| trade-spend-data-diagnostic | BLOCKED | 15+ narrative + validate script | Needs Postgres re-export session |
+| trade-spend-data-diagnostic | DONE 2026-07-30 | History docs only | Rebuilt 59/59 from prod extract (`cea84f6`) |
 | trade-spend-leakage | LOW | Vendored submodule only | Update when submodule updates |
-| retailer-deduction-recovery | FIX | 3 refs in schema.md | Fix "18 months" → "36 months" |
+| retailer-deduction-recovery | DONE 2026-07-30 | None | schema.md window fixed to 36-month |
 | contract-to-cash | CLEAN | History docs only | No action |
 | where-the-money-comes-from | CLEAN | None | No action |
-| short-ship-cost | LOW | 1 unused table count | Fix 381 → 864 when convenient |
+| short-ship-cost | DONE 2026-07-30 | None | 381 → 2,873 (measured) |
 | chargeback-prediction-model | CLEAN | None | No action |
-| dimension-weight-integrity | FIX NOW | 2 refs in build_spec | Fix 464→3,363, $5.4M→~$3.6M/yr |
-| remittance-stub-parsing | DONE | 14 refs in brief/reqs/plan | Fixed per Phase 5 + v3 canonical update |
+| dimension-weight-integrity | DONE (verified) | None | Stale passages already removed |
+| remittance-stub-parsing | DONE | None live | Phase 5 + v3 update; plan doc 3,363→3,357 (2026-07-30) |
 
 ## Follow-up checklist (per-repo sessions)
 
-- [ ] **trade-spend-data-diagnostic**: flyctl proxy → re-export SQLite → python build_workbook.py → update all AFTER-REBUILD rows above → update validate_workbook.py bounds → git tag cinderhaven-data-v2
-- [ ] **trade-spend-leakage**: update cinderhaven-data submodule to current platform HEAD
-- [ ] **retailer-deduction-recovery**: update data/schema.md generation targets (3 lines)
-- [ ] **short-ship-cost**: update cost-engine-docs.md chargeback table count (1 line)
+- [x] **trade-spend-data-diagnostic**: rebuilt 2026-07-30 from prod extract; workbook 59/59; validate bounds regenerated (`cea84f6`)
+- [ ] **trade-spend-leakage**: update cinderhaven-data submodule to current platform HEAD (LOW — dashboard queries Postgres directly)
+- [x] **retailer-deduction-recovery**: schema.md window → 36-month (Jan 2023 → Jan 2026), 2026-07-30
+- [x] **short-ship-cost**: cost-engine-docs.md chargeback count → 2,873, 2026-07-30

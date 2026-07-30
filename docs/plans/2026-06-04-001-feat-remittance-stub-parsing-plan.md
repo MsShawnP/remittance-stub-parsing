@@ -26,7 +26,7 @@ Carried from origin requirements doc. R-IDs match origin.
 
 **Synthetic stubs**
 - R1. Generate synthetic stubs for Walmart, Costco, UNFI, KeHE — all native-text PDFs
-- R2. Stubs reconcile against Cinderhaven SSOT (~$3.6M/yr all-in trade spend, 3,363 chargebacks)
+- R2. Stubs reconcile against Cinderhaven SSOT (~$3.6M/yr all-in trade spend, 3,357 chargebacks)
 - R3. Include intentionally broken stubs (mismatched amounts, unmapped reason codes)
 - R11. Reason codes correct per source (UNFI ≠ KeHE ≠ Walmart)
 - R12. Realistically ugly — multi-page, inconsistent headers, messy column naming
@@ -134,7 +134,7 @@ Carried from origin requirements doc. R-IDs match origin.
 
 - **Per-format pdfplumber settings:** Each retailer format may need different `table_settings` (snap_tolerance, strategies). Tuning happens against actual synthetic stubs during U3/U4.
 - **Reason-code taxonomy:** The specific reason codes per retailer (UNFI promo codes vs KeHE codes vs Walmart codes) need domain research to get right. Build a starter set, refine during U2.
-- **Recoverable dollar figure:** The specific recovery rate and dollar amount derived from the 3,363 chargebacks / ~$380K/yr recoverable base during U5.
+- **Recoverable dollar figure:** The specific recovery rate and dollar amount derived from the 3,357 chargebacks / ~$380K/yr recoverable base during U5.
 - **Guided tour sequence:** The specific progression order (which stub first, which last) tuned during U8 based on which formats tell the most compelling story.
 - **Chart library for case study visualizations:** SVG generation approach (matplotlib SVG export, inline SVG templates, or lightweight JS charting) decided during U8 based on what visualizations the case study needs.
 
@@ -668,7 +668,7 @@ graph TD
 - **State lifecycle risks:** SQLite WAL mode for read concurrency during SSE streaming. Single-writer constraint enforced by `fly scale count 1`. Generated stubs are static files (no state). Session state for "which stubs has this visitor explored" stored server-side (in-memory or SQLite)
 - **API surface parity:** No external API consumers — this is a demo application. Internal API is FastAPI routes consumed by HTMX
 - **Integration coverage:** The critical cross-layer scenario is the full pipeline: stub upload → extraction → validation → ledger → reconciliation → report. This must be tested end-to-end, not just per-unit
-- **Unchanged invariants:** Cinderhaven SSOT figures (~$3.6M/yr all-in trade spend, 3,363 chargebacks) are read-only inputs — this project never writes to the SSOT
+- **Unchanged invariants:** Cinderhaven SSOT figures (~$3.6M/yr all-in trade spend, 3,357 chargebacks) are read-only inputs — this project never writes to the SSOT
 
 ---
 
