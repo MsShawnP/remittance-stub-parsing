@@ -1,0 +1,18 @@
+# Lailara LLC — Engagement config (DEMO). Canonical demo identity; demo: true so
+# the deploy guard ignores it. A real client run uses engagement.yml with the
+# client's own reference ledger and (if new formats) format_config_dir.
+client:
+  name: "Cinderhaven Provisions (demo)"
+engagement:
+  id: "CINDERHAVEN-DEMO"
+# Reconciliation anchor = the demo data-window end (matches AS_OF_DATE in
+# reconciliation.py). Never today's date.
+as_of_date: "2026-07-30"
+prepared_by: "Lailara LLC"
+demo: true
+basis:
+  dispute_window_days: 90
+  window_label: "90-day dispute window"
+reference_ledger: "data/cinderhaven_reference.json"
+# format_config_dir defaults to the built-in src/config; a client points this at
+# their own dir to add new remittance formats as config drop-ins.
