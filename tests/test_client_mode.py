@@ -84,6 +84,24 @@ def test_clean_run_parity_with_golden(demo_stub_dir, tmp_path):
     assert "2026-07-30" in html                       # as_of printed
 
 
+def test_dispute_window_label_tracks_config_not_hardcoded(demo_stub_dir, tmp_path):
+    """The rendered dispute window ('N days', 'N-day window') must come from
+    basis.dispute_window_days, not a hardcoded 90. The parity test asserts only
+    the demo's own '90 days' — a positive-only check a hardcoded 90 would also
+    pass, the gap that let trade-spend quote 26 weeks as 'trailing 52 weeks'.
+
+    Both halves: feed a distinctive window and assert it tracks, AND assert the
+    demo default is absent."""
+    text = (_DEMO_CONFIG.replace("dispute_window_days: 90", "dispute_window_days: 45")
+                        .replace('window_label: "90-day dispute window"',
+                                 'window_label: "45-day dispute window"'))
+    result = client_mode.run(_cfg(tmp_path, text), str(demo_stub_dir), str(tmp_path / "out"))
+    assert result["status"] == "ok"
+    html = open(result["report"], encoding="utf-8").read()
+    assert "45 days" in html and "45-day" in html
+    assert "90 days" not in html and "90-day" not in html     # demo default must not survive
+
+
 def test_unrecognized_pdf_blocks(tmp_path):
     d = tmp_path / "stubs"
     d.mkdir()
