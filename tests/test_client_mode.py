@@ -21,7 +21,7 @@ pytest.importorskip("lailara_engagement")
 import client_mode  # noqa: E402
 from src.stub_generator import generate_all_stubs  # noqa: E402
 
-REPO = Path(__file__).resolve().parent
+REPO = Path(__file__).resolve().parent.parent
 
 _DEMO_CONFIG = f"""
 client: {{name: "Cinderhaven Provisions (demo)"}}
