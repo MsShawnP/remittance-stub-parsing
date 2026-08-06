@@ -197,7 +197,8 @@ def run(config_path: str, input_path: str, out_dir: str, *, final: bool = False)
     for pdf in pdfs:
         plugin = detect_plugin(_first_page_text(pdf), config_dir)
         stub = extract_with_plugin(pdf, plugin)
-        recon = reconcile_stub(stub, ledger, stub_id=pdf.name, as_of_date=as_of)
+        recon = reconcile_stub(stub, ledger, dispute_window_days=dispute_window,
+                               stub_id=pdf.name, as_of_date=as_of)
         stub_count += 1
         fmt = retailer_display_name(stub.retailer)
         by_format[fmt]["stubs"] += 1

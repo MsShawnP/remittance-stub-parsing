@@ -28,6 +28,8 @@ AS_OF_DATE = date(2026, 7, 30)
 def reconcile_stub(
     stub: RemittanceStub,
     reference_invoices: dict,
+    *,
+    dispute_window_days: int,
     stub_id: str = "",
     as_of_date: date | None = None,
 ) -> ReconciliationResult:
@@ -36,6 +38,13 @@ def reconcile_stub(
     Args:
         stub: The remittance stub to reconcile.
         reference_invoices: Dict mapping invoice_number -> {"amount": Decimal, "date": date}.
+        dispute_window_days: REQUIRED, keyword-only — the dispute window (days) the
+            "days remaining" math is measured against. Deliberately has no default:
+            this value also drives the rendered window label in the caller, and a
+            defaulted parameter is exactly how a caption ("45-day window") and its
+            math (a hardcoded 90) silently diverge. Forgetting to pass it is a loud
+            TypeError, not a wrong number. ``DISPUTE_WINDOW_DAYS`` is the standard
+            value callers pass when they have no per-engagement override.
         stub_id: Identifier for this stub. Defaults to check_number.
         as_of_date: Date to calculate the dispute window from. Defaults to
             AS_OF_DATE (the end of the data window), not the live calendar.
@@ -89,11 +98,13 @@ def reconcile_stub(
         deduction_date = deduction.deduction_date or stub.payment_date
         if deduction_date:
             days_elapsed = (as_of - deduction_date).days
-            # Clamp to [0, DISPUTE_WINDOW_DAYS]: a deduction dated after the
+            # Clamp to [0, dispute_window_days]: a deduction dated after the
             # as-of date must never report more than a full window remaining.
+            # The window is the caller-supplied value, NOT the module constant —
+            # so the split this feeds matches the window the caller labels.
             days_remaining = min(
-                DISPUTE_WINDOW_DAYS,
-                max(0, DISPUTE_WINDOW_DAYS - days_elapsed),
+                dispute_window_days,
+                max(0, dispute_window_days - days_elapsed),
             )
             if min_days_remaining is None or days_remaining < min_days_remaining:
                 min_days_remaining = days_remaining

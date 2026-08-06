@@ -125,6 +125,7 @@ def _process_stubs(filenames: list[str]) -> dict:
         reconciliation = reconcile_stub(
             stub,
             reference_invoices,
+            dispute_window_days=DISPUTE_WINDOW_DAYS,
             stub_id=filename,
             as_of_date=AS_OF_DATE,
         )

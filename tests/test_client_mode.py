@@ -102,6 +102,26 @@ def test_dispute_window_label_tracks_config_not_hardcoded(demo_stub_dir, tmp_pat
     assert "90 days" not in html and "90-day" not in html     # demo default must not survive
 
 
+def test_dispute_window_split_tracks_config_end_to_end(demo_stub_dir, tmp_path):
+    """End-to-end guard that client_mode passes the CONFIG window to
+    reconcile_stub, so the within/past SPLIT responds to config — not a hardcoded
+    90. (The caption test above only proves the label; a caption-only check
+    passed while the split silently used 90 — the defect this closes.)
+
+    At the demo's 90-day window, $181,164.64 sits past-window; at a 10-year
+    window every deduction is within it, so past-window collapses to $0 and the
+    whole recoverable is 'within'. recoverable_total is invariant — the window
+    re-partitions the same dollars, it doesn't change what's recoverable. If
+    client_mode passed a literal 90 to reconcile, this split would NOT move."""
+    text = _DEMO_CONFIG.replace("dispute_window_days: 90", "dispute_window_days: 3650")
+    result = client_mode.run(_cfg(tmp_path, text), str(demo_stub_dir), str(tmp_path / "out"))
+    assert result["status"] == "ok"
+    assert Decimal(result["recoverable"]) == Decimal("207338.44")   # invariant total
+    s = json.load(open(result["summary_json"], encoding="utf-8"))
+    assert s["past_window"] == "0"              # 90-day golden had 181164.64 past-window
+    assert s["within_window"] == "207338.44"    # a 10-year window makes it all disputable
+
+
 def test_unrecognized_pdf_blocks(tmp_path):
     d = tmp_path / "stubs"
     d.mkdir()
