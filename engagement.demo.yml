@@ -5,9 +5,12 @@ client:
   name: "Cinderhaven Provisions (demo)"
 engagement:
   id: "CINDERHAVEN-DEMO"
-# Reconciliation anchor = the demo data-window end (matches AS_OF_DATE in
-# reconciliation.py). Never today's date.
-as_of_date: "2026-07-30"
+# data_as_of = the deduction ledger's data-window end (canonical Jan 2023 – Jan 2026).
+# report_date = when the reconciliation was authored; it is also the "as of now" the
+# dispute-window math measures against (2025 deductions -> days remaining to dispute as
+# of this date). Split from one conflated as_of_date (0.d). Never today's live clock.
+data_as_of: "2026-01-31"
+report_date: "2026-07-30"
 prepared_by: "Lailara LLC"
 demo: true
 basis:

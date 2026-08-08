@@ -42,7 +42,7 @@ from lailara_engagement.provenance import InputRef, Provenance
 
 from src.extraction.pdf_extractor import extract_with_plugin
 from src.extraction.plugins import DEFAULT_CONFIG_DIR, detect_plugin, discover_plugins
-from src.ledger.reconciliation import DISPUTE_WINDOW_DAYS, reconcile_stub
+from src.ledger.reconciliation import reconcile_stub
 from src.models import DeductionCategory, retailer_display_name
 
 TOOL = "remittance-stub-parsing"
@@ -184,8 +184,10 @@ def run(config_path: str, input_path: str, out_dir: str, *, final: bool = False)
                              title="Remittance Data Readiness Report")
         return {"status": "blocked", "readiness_report": paths["html"]}
 
-    as_of = config.as_of_date
-    dispute_window = int(config.basis.get("dispute_window_days") or DISPUTE_WINDOW_DAYS)
+    # Dispute-window math is "as of now" = the reconciliation/report date; an old
+    # as_of_date-only config falls back to its (data) date, preserving prior behavior.
+    as_of = config.report_date or config.as_of_date
+    dispute_window = int(config.basis["dispute_window_days"])
 
     total_deductions = Decimal("0")
     within_window = Decimal("0")
@@ -216,7 +218,9 @@ def run(config_path: str, input_path: str, out_dir: str, *, final: bool = False)
 
     recoverable = within_window + past_window
     summary = {
-        "as_of_date": as_of.isoformat(),
+        "data_as_of": config.as_of_date.isoformat(),
+        "report_date": config.report_date.isoformat() if config.report_date else "",
+        "computed_as_of": as_of.isoformat(),
         "dispute_window_days": dispute_window,
         "window_label": config.basis.get("window_label", ""),
         "stub_count": stub_count,
@@ -263,7 +267,8 @@ def _summary_html(config, s, provenance: Provenance, *, draft: bool) -> str:
   <div class=ll-client>
     <div><span class=ll-k>Client</span> {esc(config.client_name)}</div>
     <div><span class=ll-k>Engagement</span> {esc(config.engagement_id)}</div>
-    <div><span class=ll-k>As of</span> {esc(s['as_of_date'])}</div>
+    <div><span class=ll-k>Data as of</span> {esc(s['data_as_of'])}</div>
+    <div><span class=ll-k>Reconciled as of</span> {esc(s['computed_as_of'])}</div>
     <div><span class=ll-k>Dispute window</span> {s['dispute_window_days']} days{(' · ' + esc(wl)) if wl else ''}</div>
   </div>
 </header>
@@ -282,8 +287,9 @@ def _summary_html(config, s, provenance: Provenance, *, draft: bool) -> str:
   <table class=ll-table><thead><tr><th>Category</th><th>Amount</th></tr></thead>
   <tbody>{cat_rows}</tbody></table>
   <p class=ll-note>Recoverable = unreconciled deductions across both dispute-window
-  buckets; measured as of {esc(s['as_of_date'])} against a {s['dispute_window_days']}-day
-  window (from config, not the wall clock).</p>
+  buckets. Dispute windows computed as of {esc(s['computed_as_of'])} (the report date —
+  not the {esc(s['data_as_of'])} data-window end, and not the wall clock) against a
+  {s['dispute_window_days']}-day window from config.</p>
 </section>
 {provenance.to_html()}
 </main></body></html>"""

@@ -26,7 +26,8 @@ REPO = Path(__file__).resolve().parent.parent
 _DEMO_CONFIG = f"""
 client: {{name: "Cinderhaven Provisions (demo)"}}
 engagement: {{id: CINDERHAVEN-DEMO}}
-as_of_date: "2026-07-30"
+data_as_of: "2026-01-31"
+report_date: "2026-07-30"
 demo: true
 basis: {{dispute_window_days: 90, window_label: "90-day dispute window"}}
 reference_ledger: "{(REPO / 'data' / 'cinderhaven_reference.json').as_posix()}"
@@ -81,7 +82,26 @@ def test_clean_run_parity_with_golden(demo_stub_dir, tmp_path):
     assert "Cinderhaven Provisions (demo)" in html
     assert "#f5f3ee" in html and "SHA-256" in html and "DRAFT" in html
     assert "90 days" in html                          # dispute window printed
-    assert "2026-07-30" in html                       # as_of printed
+    # 0.d split: the data-window end and the reconciliation date are distinct + labeled
+    assert "2026-01-31" in html                        # data_as_of (data-window end)
+    assert "2026-07-30" in html                        # report / reconciliation date
+    assert "computed as of 2026-07-30" in html         # dispute windows keyed to report date
+
+
+def test_as_of_date_only_config_still_renders_identically(demo_stub_dir, tmp_path):
+    """Back-compat (ground rule 5): a config with only as_of_date (no data_as_of /
+    report_date) keeps working and produces the SAME numbers — the dispute-window math
+    falls back to as_of_date (config, not the removed AS_OF_DATE module constant)."""
+    text = _DEMO_CONFIG.replace(
+        'data_as_of: "2026-01-31"\nreport_date: "2026-07-30"', 'as_of_date: "2026-07-30"')
+    result = client_mode.run(_cfg(tmp_path, text), str(demo_stub_dir), str(tmp_path / "out-bc"))
+    assert result["status"] == "ok"
+    s = json.load(open(result["summary_json"], encoding="utf-8"))
+    assert s["within_window"] == "26173.80"            # identical to the split config
+    assert s["past_window"] == "181164.64"
+    assert Decimal(result["recoverable"]) == Decimal("207338.44")
+    html = open(result["report"], encoding="utf-8").read()
+    assert "2026-07-30" in html                        # the single date still renders
 
 
 def test_dispute_window_label_tracks_config_not_hardcoded(demo_stub_dir, tmp_path):

@@ -297,6 +297,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-full")
 
         assert result.match_status == ReconciliationMatch.MATCHED
@@ -316,6 +317,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-none")
 
         assert result.match_status == ReconciliationMatch.UNMATCHED
@@ -334,6 +336,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-partial")
 
         assert result.match_status == ReconciliationMatch.PARTIAL
@@ -353,6 +356,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-ref-bigger")
 
         assert result.matched_amount == Decimal("500.00")  # full deduction
@@ -371,6 +375,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-mixed")
 
         assert result.match_status == ReconciliationMatch.PARTIAL
@@ -444,6 +449,14 @@ class TestReconciliation:
         with pytest.raises(TypeError):
             reconcile_stub(stub, {}, stub_id="rec-noarg")
 
+    def test_as_of_date_is_required(self):
+        """Omitting as_of_date is a loud TypeError, not a silent fallback to a module
+        constant (the AS_OF_DATE hardcode removed in the 0.d split) — same fail-closed
+        reasoning as dispute_window_days."""
+        stub = _make_stub(deductions=[("WM-100001", "22", "500.00")])
+        with pytest.raises(TypeError):
+            reconcile_stub(stub, {}, dispute_window_days=DISPUTE_WINDOW_DAYS)
+
     def test_details_describe_each_deduction(self):
         """Details list has one entry per deduction describing the match."""
         stub = _make_stub(
@@ -457,6 +470,7 @@ class TestReconciliation:
         }
 
         result = reconcile_stub(stub, reference, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30),
                                 stub_id="rec-details")
 
         assert len(result.details) == 2
@@ -466,7 +480,8 @@ class TestReconciliation:
     def test_uses_check_number_when_no_stub_id(self):
         """Default stub_id falls back to check_number."""
         stub = _make_stub(check_number="CHK-FALLBACK")
-        result = reconcile_stub(stub, {}, dispute_window_days=DISPUTE_WINDOW_DAYS)
+        result = reconcile_stub(stub, {}, dispute_window_days=DISPUTE_WINDOW_DAYS,
+                                as_of_date=date(2026, 7, 30))
         assert result.stub_id == "CHK-FALLBACK"
 
     def test_empty_deductions_is_unmatched(self):
@@ -477,7 +492,7 @@ class TestReconciliation:
             deductions=[],
         )
         result = reconcile_stub(stub, {}, dispute_window_days=DISPUTE_WINDOW_DAYS,
-                                stub_id="rec-empty")
+                                as_of_date=date(2026, 7, 30), stub_id="rec-empty")
 
         assert result.match_status == ReconciliationMatch.UNMATCHED
         assert result.matched_amount == Decimal("0")
